@@ -1,3 +1,5 @@
+# Work in progress - this app is still being built
+
 # buefy_test
 
 ## Project setup
