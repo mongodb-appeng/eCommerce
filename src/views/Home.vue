@@ -40,7 +40,7 @@ export default {
       this.$emit("user-logged-in", user)
     }
   },
-  mounted() {
+  mounted() { 
   }
 }
 </script>

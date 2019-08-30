@@ -31,7 +31,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="field is-horizontal">
                 <div class="field-label is-normal">
                     <label class="label">Contact</label>
@@ -40,7 +39,7 @@
                     <div class="field is-expanded">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input v-model="localCustomer.contact.phone.mobile" class="input" type="tel" placeholder="Moile phone number">
+                                <input v-model="localCustomer.contact.phone.mobile" class="input" type="tel" placeholder="Mobile phone number">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -50,14 +49,134 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="localCustomer.contact.email" class="input" type="email" placeholder="Email">
+                            <input v-model="localCustomer.contact.phone.home" class="input" type="tel" placeholder="Home phone number">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-phone"></i>
+                            </span>
+                        </p>
+                        <p class="help">Include +CC</p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label"></label>
+                </div>
+                <div class="field-body">
+                    <div class="field is-expanded">
+                        <div class="field">
+                            <p class="control is-expanded has-icons-left">
+                                <input v-model="localCustomer.contact.phone.work" class="input" type="tel" placeholder="Work phone number">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <p class="help">Include +CC</p>
+                    </div>
+                    <div class="field is-expanded">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.email" class="input" type="email" placeholder="Email" :disabled="localCustomer.contact.email">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-envelope"></i>
                             </span>
                         </p>
                     </div>
                 </div>
+            </div> 
+             <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Delivery address</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.deliveryAddress.number" class="input" type="text" placeholder="House name or number">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-home"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.deliveryAddress.street" class="input" type="text" placeholder="Street name">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-road"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+             </div>
+             <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label"></label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.deliveryAddress.city" class="input" type="text" placeholder="Town or city">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-building"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.deliveryAddress.state" class="input" type="text" placeholder="State">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-map"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+             </div>
+             <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label"></label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.contact.deliveryAddress.postalCode" class="input" type="text" placeholder="Postal code">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-map-pin"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <div class="control is-expanded has-icons-left">
+                            <div class="select">
+                                <select v-model="localCustomer.contact.deliveryAddress.country" class="input" type="text" placeholder="Country">
+                                    <option selected value>Country</option>
+                                    <option v-for="country in countries" v-bind:key="country.name">{{ country.name }}</option>
+                                </select>
+                            </div>
+                            <div class="icon is-small is-left">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Marketing preferences</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <label class="checkbox">
+                            <input v-model="localCustomer.marketingPreferences.email" type="checkbox">
+                            I agree to receive notifications by email
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label class="checkbox">
+                            <input v-model="localCustomer.marketingPreferences.sms" type="checkbox">
+                            I agree to receive notifications by SMS text message
+                        </label>
+                    </div>
+                </div>
+             </div>
             <div class="field is-grouped is-grouped-centered">
                 <p class="control">
                     <button v-on:click="saveProfile" class="button is-success">
@@ -90,7 +209,8 @@ export default {
       "database",
       "userLoggedIn",
       "userFirstName",
-      "customer"
+      "customer",
+      "user"
     ],
     components: {
         MyHeader
@@ -107,10 +227,21 @@ export default {
                 },
                 name: {}
             },
-            originalEmail: ''
+            originalEmail: '',
+            countries: []
         }
     },
     methods: {
+        getCountriesList () {
+            this.$props.stitchClient.callFunction("getCountriesList")
+            .then ((results) => {
+                this.countries = results;
+            },
+            (err) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+                console.error(`Error: failed to fetch country list: ${err.message}`);
+            })
+        },
         setLocalCustomer (customer) {
             this.customer = customer;
         },
@@ -120,7 +251,7 @@ export default {
         fetchCustomer () {
             this.progress = 'Looking for existing user profile.';
             this.database.collection("customers")
-            .findOne({})
+            .findOne({"contact.email": this.user.profile.data.email}) 
             .then (customerDoc => {
                     if (customerDoc) {
                     this.localCustomer = customerDoc
@@ -140,7 +271,8 @@ export default {
             })
         },
         saveProfile ()
-        {
+        {   
+            // TODO check that email address is unique (will be caught with a duplicate key error)
             this.progress = 'Writing profile to database.';
             this.error = '';
             this.success = '';
@@ -165,8 +297,10 @@ export default {
         }
     },
     mounted() {
+        this.getCountriesList();
         if (this.userLoggedIn) {
             this.localCustomer = this.$props.customer;
+            this.localCustomer.owner_id = this.$props.stitchClient.auth.user.id;
             this.fetchCustomer();
             this.originalEmail = this.localCustomer.contact.email;
         } else {

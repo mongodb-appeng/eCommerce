@@ -9,6 +9,7 @@
       v-bind:stitchClient="stitchClient" 
       v-bind:database="database" v-on:setDatabase="setDatabase"
       v-bind:userLoggedIn="userLoggedIn" v-on:user-logged-in="setUserLoggedIn"
+      v-bind:user="user"
       v-bind:userFirstName="userFirstName" v-on:setUserFirstName="setUserFirstName"
       v-bind:customer="customer" v-on:setCustomer="setCustomer">
     </router-view>
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+// TODO check if the user already has an entry in the 
 import Vue from 'vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
@@ -44,7 +46,7 @@ export default {
             work: '',
             mobile: ''
           },
-          devileryAddress: {
+          deliveryAddress: {
             number: '',
             street: '',
             city: '',
@@ -53,7 +55,10 @@ export default {
             country: ''
           }
         },
-        marketingPreferences: []
+        marketingPreferences: {
+          email: false,
+          sms: false
+        }
       }
     }
   },
@@ -66,6 +71,34 @@ export default {
       } else if (user.profile.email) {
         this.userFirstName = user.profile.email
       }
+      // TODO check if the customer already has an entry in the database
+      // and use the document to populate the customer and userFirstName values.
+      try {
+        this.database.collection("customers")
+        .findOne({"contact.email": this.user.profile.data.email}) 
+        .then (customerDoc => {
+                if (customerDoc) {
+                this.customer = customerDoc;
+                this.userFirstName = customerDoc.name.first;
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+                console.log('Read a customer document from the database.');
+            } else {
+                // No record found for this customer – doesn't mean that it's a problem
+                this.progress = ''
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+                console.log('No matching customer document found in the database.');
+            }
+        }, (err) => {
+            
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+            console.error(`Error: attempt to read customer document failed: ${err.message}`);
+        }) 
+      }
+      catch (err) {
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+        console.error(`Error: Call to fetch customer document failed: ${err.message}`);
+      }
+
     },
     setDatabase (database) {
       this.database = database;
@@ -75,6 +108,9 @@ export default {
     },
     setCustomer (customer) {
       this.customer = customer;
+      if (customer.name.first) {
+        this.userFirstName = customer.name.first
+      }
       // TODO update userFirstName
     }
   },
