@@ -23,8 +23,13 @@
                 <a class="navbar-item">
                 Examples
                 </a>
-                <a class="navbar-item" v-if="userLoggedIn">
-                    <span v-on:click="gotoProfile">Hi {{userFirstName}}</span>
+                <a class="navbar-item" v-if="customer.mugshotURL">
+                    <figure class="image is-24x24">
+                        <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
+                    </figure>
+                </a>
+                <a class="navbar-item">
+                    <span >Hi {{userFirstName}}</span>
                 </a>
                 <a class="navbar-item" v-if="!userLoggedIn">
                     <span v-on:click="showLoginModal">Login/Register</span>
@@ -81,7 +86,8 @@ export default {
     props: [
         "userLoggedIn",
         "userFirstName",
-        "stitchClient"
+        "stitchClient",
+        "customer"
     ], 
     components: {
         UserLogin

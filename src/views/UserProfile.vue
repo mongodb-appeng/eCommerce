@@ -3,6 +3,7 @@
     <MyHeader 
         v-bind:stitchClient="stitchClient"
         v-bind:userLoggedIn="userLoggedIn"
+        v-bind:customer="customer"
         v-bind:userFirstName="userFirstName">
     </MyHeader>
     <div class="section">
@@ -176,7 +177,35 @@
                         </label>
                     </div>
                 </div>
-             </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field">
+                    <div class="file has-name">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" v-on:change="uploadMugshot">
+                            <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Upload a mugshot image…
+                            </span>
+                            </span>
+                            <span class="file-name">
+                                {{mugshotFile.name}}
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <p class="control is-expanded has-icons-left">
+                        <input v-model="localCustomer.mugshotURL" class="input" type="url" placeholder="Mugshot image URL">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-link"></i>
+                        </span>
+                    </p>
+                </div>
+            </div>
             <div class="field is-grouped is-grouped-centered">
                 <p class="control">
                     <button v-on:click="saveProfile" class="button is-success">
@@ -201,6 +230,11 @@
 <script>
 
 import MyHeader from '../components/Header.vue'
+import {
+  AwsServiceClient,
+  AwsRequest
+} from 'mongodb-stitch-browser-services-aws'
+import BSON from 'bson'
 
 export default {
     name: 'profile',
@@ -225,10 +259,12 @@ export default {
                     deliveryAddress: {},
                     phone: {}
                 },
-                name: {}
+                mugshotURL: '',
+                name: {},
             },
             originalEmail: '',
-            countries: []
+            countries: [],
+            mugshotFile: {}
         }
     },
     methods: {
@@ -287,13 +323,64 @@ export default {
                     this.$emit("setUserFirstName", this.localCustomer.name.first)
                 }
                 this.success = "User profile updated.";
-                //TODO propagate the user name back up to the header and app
             }, (err) => {
                 this.progress = '';
                 this.error = `Error: Writing profile to the database - ${err.message}`;
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                 console.error(this.error);
             })
+        },
+        convertImageToBSON (file) {
+            return new Promise(
+                resolve => {
+                    const fileReader = new FileReader;
+                    fileReader.onload = event => {
+                        const eventBinary = new BSON.Binary(new Uint8Array(event.target.result));
+                        resolve(eventBinary);
+                    }
+                    fileReader.readAsArrayBuffer(file);
+                }
+            )
+        },
+        uploadMugshot (event) {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+            console.log("Attempting to upload file");
+            this.error = '';
+            this.progress = '';
+            this.success = '';
+            const files = event.target.files || event.dataTransfer.files;
+            if (files.length) {
+                this.mugshotFile = files[0];
+                const s3 = this.$props.stitchClient.getServiceClient(AwsServiceClient.factory, "AWS");
+                this.convertImageToBSON (this.mugshotFile)
+                .then ((bsonFile) => {
+                        let now = Date.now();
+                    const s3Args = { 
+                        ACL: "public-read",
+                        Bucket: "clusterdb-ecommerce-mugshots",
+                        ContentType: this.mugshotFile.type,
+                        Key: `mug_${this.localCustomer.contact.email}_${now}`,
+                        Body: bsonFile
+                    };
+                    const request = new AwsRequest.Builder()
+                        .withService("s3")
+                        .withAction("PutObject")
+                        .withArgs(s3Args);
+                    s3.execute(request.build())
+                    .then (() => {
+                        // TODO include timestamp in the URL
+                        this.localCustomer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${this.localCustomer.contact.email}_${now}`
+                    },
+                    (error) => {
+                        this.error = `Failed to upload image file: ${error.message}`;
+                    })
+                },
+                (error) => {
+                    this.error = `Error: Failed to convert image file: ${error.messahge}.`;
+                })
+            } else {
+                this.error = "Failed to select a file";
+            }
         }
     },
     mounted() {

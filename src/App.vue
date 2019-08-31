@@ -111,7 +111,9 @@ export default {
       if (customer.name.first) {
         this.userFirstName = customer.name.first
       }
-      // TODO update userFirstName
+    },
+    setMugshotURL(url) {
+      this.mugshotURL = url
     }
   },
   created() {

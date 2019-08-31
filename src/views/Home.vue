@@ -3,6 +3,7 @@
     <MyHeader
       v-bind:stitchClient="stitchClient"
       v-bind:database="database"
+      v-bind:customer="customer"
       v-bind:userLoggedIn="userLoggedIn" v-on:user-logged-in="setUserLoggedIn"
       v-bind:userFirstName="userFirstName">
     </MyHeader>
@@ -22,7 +23,8 @@ export default {
     "stitchClient",
     "database",
     "userLoggedIn",
-    "userFirstName"
+    "userFirstName",
+    "customer"
   ],
   components: {
     AnonymousAuth,

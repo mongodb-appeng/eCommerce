@@ -3,6 +3,7 @@
     <MyHeader
         v-bind:stitchClient="stitchClient"
         v-bind:userLoggedIn="userLoggedIn" v-on:user-logged-in="setUserLoggedIn"
+        v-bind:customer="customer"
         v-bind:userFirstName="userFirstName"></MyHeader>
     <div class="section">
         <h1 class="title is-2">Register new user</h1>
@@ -73,7 +74,8 @@ export default {
     props: [
         "stitchClient",
         "userLoggedIn",
-        "userFirstName"
+        "userFirstName",
+        "customer"
     ],
     components: {
         MyHeader
