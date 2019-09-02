@@ -179,31 +179,41 @@
                 </div>
             </div>
             <div class="field is-horizontal">
-                <div class="field">
-                    <div class="file has-name">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="resume" v-on:change="uploadMugshot">
-                            <span class="file-cta">
-                            <span class="file-icon">
-                                <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label">
-                                Upload a mugshot image…
-                            </span>
-                            </span>
-                            <span class="file-name">
-                                {{mugshotFile.name}}
-                            </span>
-                        </label>
-                    </div>
+                <div class="field-label is-normal">
+                    <label class="label">Headshot</label>
                 </div>
-                <div class="field">
-                    <p class="control is-expanded has-icons-left">
-                        <input v-model="localCustomer.mugshotURL" class="input" type="url" placeholder="Mugshot image URL">
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-link"></i>
-                        </span>
-                    </p>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="file has-name">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="resume" v-on:change="uploadMugshot">
+                                <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Upload a mugshot image…
+                                </span>
+                                </span>
+                                <span class="file-name">
+                                    {{mugshotFile.name}}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <p class="control is-expanded has-icons-left">
+                            <input v-model="localCustomer.mugshotURL" class="input" type="url" placeholder="Mugshot image URL">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-link"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field" v-if="localCustomer.mugshotURL">
+                        <figure class="image is-128x128">
+                            <img :src="localCustomer.mugshotURL">
+                        </figure>
+                    </div>
                 </div>
             </div>
             <div class="field is-grouped is-grouped-centered">

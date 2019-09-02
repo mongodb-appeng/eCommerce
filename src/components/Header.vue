@@ -28,7 +28,7 @@
                         <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
                     </figure>
                 </a>
-                <a class="navbar-item">
+                <a class="navbar-item" v-on:click="gotoProfile">
                     <span >Hi {{userFirstName}}</span>
                 </a>
                 <a class="navbar-item" v-if="!userLoggedIn">
@@ -112,7 +112,9 @@ export default {
             this.loginModalVisible = false;
         },
         gotoProfile () {
-            this.$router.push({name: 'profile'})
+            if (this.$props.userLoggedIn) {
+                this.$router.push({name: 'profile'})
+            }
         }
     },
     created() {
