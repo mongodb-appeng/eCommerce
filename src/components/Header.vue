@@ -17,8 +17,9 @@
             </div>
             <div id="navbarMenuHeroB" class="navbar-menu">
             <div class="navbar-end">
-                <a class="navbar-item is-active">
-                Home
+                <!-- <a class="navbar-item is-active"> -->
+                <a class="navbar-item" v-on:click="gotoHome">
+                    Home
                 </a>
                 <a class="navbar-item">
                 Examples
@@ -115,10 +116,12 @@ export default {
             if (this.$props.userLoggedIn) {
                 this.$router.push({name: 'profile'})
             }
+        },
+        gotoHome () {
+            this.$router.push({name: 'home'})
         }
     },
     created() {
-
   }
 }
 </script>

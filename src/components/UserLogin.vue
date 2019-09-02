@@ -17,7 +17,12 @@
                     <div class="field is-expanded">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input v-model="password" class="input" type="password" placeholder="Password">
+                                <input 
+                                    v-model="password" 
+                                    class="input" 
+                                    type="password" 
+                                    placeholder="Password"
+                                     v-on:keyup.enter="Login">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-key"></i>
                                 </span>
