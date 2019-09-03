@@ -1,10 +1,12 @@
 <template>
   <div class="register">
-    <MyHeader
+    <MyHeader></MyHeader>
+    <!-- <MyHeader
         v-bind:stitchClient="stitchClient"
         v-bind:userLoggedIn="userLoggedIn" v-on:user-logged-in="setUserLoggedIn"
         v-bind:customer="customer"
-        v-bind:userFirstName="userFirstName"></MyHeader>
+        v-bind:userFirstName="userFirstName"> -->
+    <!-- </MyHeader> -->
     <div class="section">
         <h1 class="title is-2">Register new user</h1>
         <div class="field is-horizontal">
@@ -68,14 +70,14 @@
 
 import MyHeader from '../components/Header.vue'
 import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk"
+import { 
+    mapState, 
+    mapMutations 
+    } from 'vuex';
 
 export default {
     name: 'register',
     props: [
-        "stitchClient",
-        "userLoggedIn",
-        "userFirstName",
-        "customer"
     ],
     components: {
         MyHeader
@@ -89,7 +91,15 @@ export default {
             password2: ''
         }
     },
+    computed: {
+        ...mapState([
+        "setUser"
+    ]),
+    },
     methods: {
+        ...mapMutations([
+            'incrTest'
+        ]),
         register() {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.log('Registering user');
@@ -113,7 +123,7 @@ export default {
             }
         },
         setUserLoggedIn(user) {
-            this.$emit("user-logged-in", user)
+            this.setUser(user);
         }
     },
     mounted() {

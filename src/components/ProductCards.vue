@@ -5,12 +5,15 @@
           v-for="productId in productIds"
           v-bind:key="productId">
             <ProductCard
+              v-bind:productId="productId">
+            </ProductCard>            
+            <!-- <ProductCard
               v-bind:stitchClient="stitchClient"
               v-bind:database="database"
               v-bind:customer="customer"
               v-bind:userFirstName="userFirstName"
               v-bind:productId="productId">,
-            </ProductCard>
+            </ProductCard> -->
         </li>
       </ul>
 
@@ -35,7 +38,7 @@ export default {
     data() {
         return {
           // TODO this should probably be $props
-          productIds: [1234567,9999]
+          productIds: [1234567, 7654321]
         }
     },
     methods: {

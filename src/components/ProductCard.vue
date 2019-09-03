@@ -49,16 +49,20 @@
 </template>
 
 <script>
+import { 
+    mapState, 
+    // mapMutations 
+    } from 'vuex';
 
 export default {
     name: "ProductCard",
     props: [
-        "userLoggedIn",
-        "userFirstName",
-        "stitchClient",
-        "customer",
+        // "userLoggedIn",
+        // "userFirstName",
+        // "stitchClient",
+        // "customer",
         "productId",
-        "database"
+        // "database"
     ], 
     components: {
     },
@@ -73,12 +77,15 @@ export default {
                 price: {
                 }
             },
-            productSummary: "",
-            localDatabase: {}
+            productSummary: ""
         }
     },
+    computed: {
+        ...mapState([
+            'database'
+        ]),
+    },
     methods: {
-        // TODO Fetch the product data from Stitch
         fetchProductDetails (database) {
             this.error = '';
             this.success = '';
@@ -87,9 +94,9 @@ export default {
             database.collection("products")
             .findOne({"productID": this.$props.productId}) 
             .then (productDoc => {
-                    if (productDoc) {
+                if (productDoc) {
                     this.productDetails = productDoc;
-                    this.productSummary = productDoc.description.substring(0 ,125) + '...';
+                    this.productSummary = productDoc.description.substring(0 ,252) + '...';
                     this.progress = ''
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                     console.log('Read a product document from the database.');
@@ -99,18 +106,19 @@ export default {
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                     console.error(`No matching product document found in the database for productID: ${this.$props.productId}.`);
                 }
-            }, (err) => {
+            }, 
+            (err) => {
                 this.progress = ''
                 this.error = `Error: attempt to read product document failed: ${err.message}`
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                 console.error(this.error);
             })
-
         }
     },
     mounted() {
-        this.localDatabase = this.$props.database;
-        this.fetchProductDetails(this.localDatabase);
+        // this.localDatabase = this.$props.database;
+        // this.fetchProductDetails(this.localDatabase);
+        this.fetchProductDetails(this.database);
   }
 }
 </script>

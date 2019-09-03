@@ -9,7 +9,7 @@
         </div>
         <div v-if="cta" class="notification is-primary">
             <div class="content">
-                {{ primary }}                
+                {{ cta }}                
             </div>
         </div>
     </div>
@@ -19,11 +19,12 @@
 import {
     UserPasswordAuthProviderClient
 } from "mongodb-stitch-browser-sdk"
+import { mapState } from 'vuex';
 
 export default {
     name: "ConfirmStitchEmail",
     props: [
-        "stitchClient"
+        // "stitchClient"
     ], 
     data() {
         return {
@@ -31,6 +32,11 @@ export default {
             success:'',
             cta: ''
         }
+    },
+    computed: {
+        ...mapState([
+            'stitchClient'
+        ]),
     },
   created() {
     let token, tokenId = '';

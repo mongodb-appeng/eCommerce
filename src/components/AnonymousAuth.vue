@@ -6,50 +6,84 @@
 
 <script>
 import {
+    Stitch,
     AnonymousCredential,
     RemoteMongoClient
 } from "mongodb-stitch-browser-sdk"
+import { 
+    mapState, 
+    mapMutations 
+    } from 'vuex';
 
 export default {
     name: "AnonymousAuth",
-    props: ["stitchClient"], 
+    // props: ["stitchClient"], 
     data() {
         return {
-            error:'',
-
+            error: '',
+            localStitchClient: {}
         }
+    },
+    computed: {
+        ...mapState([
+            'sitchClient'
+        ]),
     },
     methods: {
+        ...mapMutations([
+            'setDatabase',
+            'setStitchClient'
+        ]),
         anonymousLogin() {
-        if (!this.stitchClient.auth.isLoggedIn) {
-            this.stitchClient.auth.loginWithCredential(new AnonymousCredential())
-            .then(() => {
-            })
-            .catch(err => {
-                this.error = `Anonymous Stitch authentication failed: ${err.message}`;
-            });
+            if (this.localStitchClient) {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.log(`stitchClient is set`);
+            }
+            else {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.log(`stitchClient isn't set`);
+            }
+            if (!this.localStitchClient.auth.isLoggedIn) {
+                this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
+                .then(() => {
+                })
+                .catch(err => {
+                    this.error = `Anonymous Stitch authentication failed: ${err.message}`;
+                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                    console.error(this.error);
+                });
+            }
+        },
+        connectDatabase() {
+            try {
+                const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db("ecommerce");
+                this.setDatabase(database);
+                // this.$emit('setDatabase', database);
+            }
+            catch (err) {
+                this.error = `Failed to connect to the database: ${err.message}`;
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(this.error);
+            }
         }
     },
-    connectDatabase() {
-        try {
-            const database = this.stitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db("ecommerce");
-            this.$emit('setDatabase', database);
+    mounted() {
+        this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+        if (this.localStitchClient.auth) {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.log('In try, auth set');
+        } else {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.log('In try, auth not set');
         }
-        catch (err) {
-            this.error = `Failed to connect to the database: ${err.message}`;
-            /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+        this.setStitchClient(this.localStitchClient);
+        this.anonymousLogin();
+        if (this.error) {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.error(this.error);
+        } else {
+            this.connectDatabase();
         }
     }
-  },
-  created() {
-    this.anonymousLogin();
-    if (this.error) {
-        /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
-        console.error(this.error);
-    } else {
-        this.connectDatabase();
-    }
-  }
 }
 </script>

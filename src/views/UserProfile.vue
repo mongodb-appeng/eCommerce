@@ -1,11 +1,12 @@
 <template>
   <div class="profile">
-    <MyHeader 
+    <MyHeader></MyHeader>
+    <!-- <MyHeader 
         v-bind:stitchClient="stitchClient"
         v-bind:userLoggedIn="userLoggedIn"
         v-bind:customer="customer"
         v-bind:userFirstName="userFirstName">
-    </MyHeader>
+    </MyHeader> -->
     <div class="section">
         <div class="container">
             <h1 class="title is-2">User Profile</h1>
@@ -245,16 +246,20 @@ import {
   AwsRequest
 } from 'mongodb-stitch-browser-services-aws'
 import BSON from 'bson'
+import { 
+    mapState, 
+    mapMutations 
+    } from 'vuex';
 
 export default {
     name: 'profile',
     props: [
-      "stitchClient",
-      "database",
-      "userLoggedIn",
-      "userFirstName",
-      "customer",
-      "user"
+    //   "stitchClient",
+    //   "database",
+    //   "userLoggedIn",
+    //   "userFirstName",
+    //   "customer"
+    // //   "user"
     ],
     components: {
         MyHeader
@@ -264,6 +269,7 @@ export default {
             error: '',
             success: '',
             progress: '',
+            // TODO: is localCustomer needed?
             localCustomer: {
                 contact: {
                     deliveryAddress: {},
@@ -272,14 +278,27 @@ export default {
                 mugshotURL: '',
                 name: {},
             },
-            originalEmail: '',
+            // originalEmail: '',
             countries: [],
             mugshotFile: {}
         }
     },
+    computed: {
+        ...mapState([
+            "stitchClient",
+            "database",
+            "userLoggedIn",
+            "userFirstName",
+            "customer"
+        ])
+    },
     methods: {
+        ...mapMutations([
+            'setCustomer',
+            'setUserFirstName'
+        ]),
         getCountriesList () {
-            this.$props.stitchClient.callFunction("getCountriesList")
+            this.stitchClient.callFunction("getCountriesList")
             .then ((results) => {
                 this.countries = results;
             },
@@ -288,12 +307,12 @@ export default {
                 console.error(`Error: failed to fetch country list: ${err.message}`);
             })
         },
-        setLocalCustomer (customer) {
-            this.customer = customer;
-        },
-        propBackCustomer () {
-            this.$emit("setCustomer", this.localCustomer);
-        },
+        // setLocalCustomer (customer) {
+        //     this.customer = customer;
+        // },
+        // propBackCustomer () {
+        //     this.$emit("setCustomer", this.localCustomer);
+        // },
         fetchCustomer () {
             this.progress = 'Looking for existing user profile.';
             this.database.collection("customers")
@@ -311,7 +330,6 @@ export default {
                     console.log('No matching customer document found in the database.');
                 }
             }, (err) => {
-                
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                 console.error(`Error: attempt to read customer document failed: ${err.message}`);
             })
@@ -328,9 +346,10 @@ export default {
                 {upsert: true}
             ).then (() => {
                 this.progress = '';
-                this.propBackCustomer();
+                this.setCustomer(this.localCustomer);
+                // this.propBackCustomer();
                 if (this.localCustomer.name.first) {
-                    this.$emit("setUserFirstName", this.localCustomer.name.first)
+                    this.setUserFirstName(this.localCustomer.name.first)
                 }
                 this.success = "User profile updated.";
             }, (err) => {
@@ -361,12 +380,13 @@ export default {
             const files = event.target.files || event.dataTransfer.files;
             if (files.length) {
                 this.mugshotFile = files[0];
-                const s3 = this.$props.stitchClient.getServiceClient(AwsServiceClient.factory, "AWS");
+                const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, "AWS");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
                         let now = Date.now();
                     const s3Args = { 
                         ACL: "public-read",
+                        // TODO: Make configurable
                         Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,
                         Key: `mug_${this.localCustomer.contact.email}_${now}`,
@@ -396,10 +416,10 @@ export default {
     mounted() {
         this.getCountriesList();
         if (this.userLoggedIn) {
-            this.localCustomer = this.$props.customer;
+            this.localCustomer = this.customer;
             this.localCustomer.owner_id = this.$props.stitchClient.auth.user.id;
             this.fetchCustomer();
-            this.originalEmail = this.localCustomer.contact.email;
+            // this.originalEmail = this.localCustomer.contact.email;
         } else {
             this.error = "Cannot access customer profile until user is logged in";
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   

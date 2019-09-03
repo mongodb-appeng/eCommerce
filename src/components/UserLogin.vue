@@ -63,38 +63,69 @@
 
 <script>
 import { UserPasswordCredential } from "mongodb-stitch-browser-sdk"
+import {
+    mapState,
+    mapMutations,
+    mapActions
+    } from 'vuex'
 
 export default {
     name: "UserLogin",
     props: [
-        "stitchClient"
+        // "stitchClient"
     ], 
     data() {
         return {
             error: '',
             success: '',
             email: '',
-            password: '',
-            user: null
+            password: ''
+            // localUser: null
         }
     },
+    computed: {
+        ...mapState([
+            'sitchClient'
+        ]),
+    },
     methods: {
+        ...mapMutations([
+            // 'setUser'
+        ]),
+        ...mapActions([
+            'setUserLoggedIn'
+        ]),
         Login() {
             const credential = new UserPasswordCredential(this.email, this.password);
-            this.stitchClient.auth.loginWithCredential(credential)
+            this.sitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
+                
+                this.error = '';
+                // this.user = authedUser;
+                // this.setUser(authedUser);
+                // TODO: should change the action to return a promise.
+                this.$store.dispatch('setUserLoggedIn', authedUser)
+                .then (() => {     
                     this.success = `Successfully logged in with id: ${authedUser.id}`;
-                    this.error = '';
-                    this.user = authedUser;
-                    this.$emit('user-logged-in', this.user);
+                    // this.$emit('user-logged-in', this.user);
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.log(this.success);
+                    const _this = this;
+                    setTimeout(function(){
+                        _this.$emit("close-modal");
+                    }, 2000);
                 },
-                (err) => {
-                    this.error = `Failed to log in user: ${err.message}`;
+                (error => {
+                    this.error = `Failed to log in user: ${error.message}`;
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.error(this.error);
-                })
+                }))
+            },
+            (error) => {
+                this.error = `Failed to log in user: ${error.message}`;
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(this.error);
+            })
         }
     },
     created() {

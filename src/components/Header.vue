@@ -21,8 +21,8 @@
                 <a class="navbar-item" v-on:click="gotoHome">
                     Home
                 </a>
-                <a class="navbar-item">
-                Examples
+                <a class="navbar-item" v-on:click="incrTest">
+                    Test: {{ test }}
                 </a>
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">
@@ -66,11 +66,12 @@
         <div v-if="loginModalVisible" class="modal is-active">
             <div class="modal-background"></div>
             <div class="modal-content">
-                <UserLogin 
+                <UserLogin v-on:close-modal="hideLoginModal"></UserLogin>
+                <!-- <UserLogin 
                     v-bind:stitchClient="stitchClient"
                     v-on:setDatabase="setDatabase"
                     v-on:user-logged-in="setUserLoggedIn">
-                </UserLogin>
+                </UserLogin> -->
                 <button class="modal-close is-large" aria-label="close" v-on:click="hideLoginModal"></button>
             </div>
         </div>
@@ -81,14 +82,18 @@
 
 <script>
 import UserLogin from "../components/UserLogin.vue"
+import { 
+    mapState, 
+    mapMutations 
+    } from 'vuex';
 
 export default {
     name: "Header",
     props: [
-        "userLoggedIn",
-        "userFirstName",
-        "stitchClient",
-        "customer"
+        // "userLoggedIn",
+        // "userFirstName",
+        // "stitchClient",
+        // "customer"
     ], 
     components: {
         UserLogin
@@ -98,14 +103,25 @@ export default {
             loginModalVisible: false
         }
     },
+    computed: {
+        ...mapState([
+            'test',
+            'customer',
+            'userFirstName',
+            'userLoggedIn'
+        ]),
+    },
     methods: {
-        setUserLoggedIn (user) {
-            this.$emit("user-logged-in", user);
-            this.hideLoginModal();
-        },
-        setDatabase (db) {
-            this.$emit("setDatabase", db)
-        },
+        ...mapMutations([
+            'incrTest'
+        ]),
+        // setUserLoggedIn (user) {
+        //     this.$emit("user-logged-in", user);
+        //     this.hideLoginModal();
+        // },
+        // setDatabase (db) {
+        //     this.$emit("setDatabase", db)
+        // },
         showLoginModal () {
             this.loginModalVisible = true;
         },
