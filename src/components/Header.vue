@@ -129,7 +129,7 @@ export default {
             this.loginModalVisible = false;
         },
         gotoProfile () {
-            if (this.$props.userLoggedIn) {
+            if (this.userLoggedIn) {
                 this.$router.push({name: 'profile'})
             }
         },

@@ -98,8 +98,6 @@ export default {
                     this.productDetails = productDoc;
                     this.productSummary = productDoc.description.substring(0 ,252) + '...';
                     this.progress = ''
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.log('Read a product document from the database.');
                 } else {
                     this.progress = ''
                     this.error = 'Error: Product not found.'

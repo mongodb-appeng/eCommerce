@@ -55,6 +55,9 @@
         <div v-if="error" class="notification is-danger">
             <strong>{{ error }}</strong>
         </div>
+        <div v-if="error" class="notification is-primary">
+            <strong>{{ progress }}</strong>
+        </div>
         <div v-if="success" class="notification is-success">
             {{ success }}
         </div>
@@ -78,6 +81,7 @@ export default {
         return {
             error: '',
             success: '',
+            progress: '',
             email: '',
             password: ''
             // localUser: null
@@ -85,7 +89,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'sitchClient'
+            'stitchClient'
         ]),
     },
     methods: {
@@ -96,16 +100,18 @@ export default {
             'setUserLoggedIn'
         ]),
         Login() {
+            this.error = '';
+            this.success = '';
+            this.progress = 'Attempting to log you in...'
             const credential = new UserPasswordCredential(this.email, this.password);
-            this.sitchClient.auth.loginWithCredential(credential)
+            this.stitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
-                
-                this.error = '';
                 // this.user = authedUser;
                 // this.setUser(authedUser);
                 // TODO: should change the action to return a promise.
                 this.$store.dispatch('setUserLoggedIn', authedUser)
-                .then (() => {     
+                .then (() => {
+                    this.progress = 'This window will close in 2 seconds';
                     this.success = `Successfully logged in with id: ${authedUser.id}`;
                     // this.$emit('user-logged-in', this.user);
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
@@ -116,6 +122,7 @@ export default {
                     }, 2000);
                 },
                 (error => {
+                    this.progress = '';
                     this.error = `Failed to log in user: ${error.message}`;
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.error(this.error);
@@ -123,6 +130,7 @@ export default {
             },
             (error) => {
                 this.error = `Failed to log in user: ${error.message}`;
+                this.progress = '';
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                 console.error(this.error);
             })

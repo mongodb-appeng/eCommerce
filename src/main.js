@@ -21,7 +21,7 @@ const store = new Vuex.Store({
   // TODO: turn this back on
   // plugins: [createPersistedState()],
   state: {
-    sitchClient: {},
+    stitchClient: {},
     database: null,
     userLoggedIn: false,
     userFirstName: "Guest",
@@ -48,7 +48,7 @@ const store = new Vuex.Store({
           country: ''
         }
       },
-      tmarketingPreferences: {
+      marketingPreferences: {
         email: false,
         sms: false
       }
@@ -77,7 +77,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     incrTest (state) {state.test++;},
-    setStitchClient (state, payload) {state.sitchClient = payload},
+    setStitchClient (state, payload) {state.stitchClient = payload},
     setDatabase (state, payload) {state.database = payload},
     setLoggedIn (state, payload) {state.userLoggedIn = payload},
     setUserFirstName (state, payload) {state.userFirstName = payload},

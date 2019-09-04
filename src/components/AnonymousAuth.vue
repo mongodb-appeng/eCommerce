@@ -26,7 +26,8 @@ export default {
     },
     computed: {
         ...mapState([
-            'sitchClient'
+            'stitchClient',
+            'database'
         ]),
     },
     methods: {
@@ -35,14 +36,6 @@ export default {
             'setStitchClient'
         ]),
         anonymousLogin() {
-            if (this.localStitchClient) {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.log(`stitchClient is set`);
-            }
-            else {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.log(`stitchClient isn't set`);
-            }
             if (!this.localStitchClient.auth.isLoggedIn) {
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
@@ -68,21 +61,16 @@ export default {
         }
     },
     mounted() {
-        this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
-        if (this.localStitchClient.auth) {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.log('In try, auth set');
-        } else {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.log('In try, auth not set');
-        }
-        this.setStitchClient(this.localStitchClient);
-        this.anonymousLogin();
-        if (this.error) {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.error(this.error);
-        } else {
-            this.connectDatabase();
+        if (!this.database) {
+            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+            this.setStitchClient(this.localStitchClient);
+            this.anonymousLogin();
+            if (this.error) {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(this.error);
+            } else {
+                this.connectDatabase();
+            }
         }
     }
 }

@@ -1,12 +1,6 @@
 <template>
   <div class="register">
     <MyHeader></MyHeader>
-    <!-- <MyHeader
-        v-bind:stitchClient="stitchClient"
-        v-bind:userLoggedIn="userLoggedIn" v-on:user-logged-in="setUserLoggedIn"
-        v-bind:customer="customer"
-        v-bind:userFirstName="userFirstName"> -->
-    <!-- </MyHeader> -->
     <div class="section">
         <h1 class="title is-2">Register new user</h1>
         <div class="field is-horizontal">
@@ -62,6 +56,9 @@
         <div v-if="success" class="notification is-success">
             {{ success }}
         </div>
+        <div v-if="progress" class="notification is-primary">
+            {{ progress }}
+        </div>
     </div>
 </div>
 </template>
@@ -86,6 +83,7 @@ export default {
         return {
             error: '',
             success: '',
+            progress: '',
             email: '',
             password: '',
             password2: ''
@@ -93,7 +91,7 @@ export default {
     },
     computed: {
         ...mapState([
-        "setUser"
+        'stitchClient'
     ]),
     },
     methods: {
@@ -104,18 +102,24 @@ export default {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.log('Registering user');
             this.error = '';
+            this.progress = '';
             if (this.password != this.password2)
             {
                 this.error = 'Error, passwords must match.';
             } else {
+                this.progress = `Registering ${this.email}`;
                 const emailPassClient = this.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
-                emailPassClient.registerWithEmail(this.email, "this.password")
+                emailPassClient.registerWithEmail(this.email, this.password)
                 .then(() => {
                     this.success = "Registration request being processed – check your inbox";
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.log("Successfully sent account confirmation email!");
+                    this.progress = 'Retturning to main page in 2 seconds';
+                    let _this = this;
+                    setTimeout(function(){
+                        _this.$router.push({name: 'home'});
+                    }, 2000);
                 },
                 (err) => {
+                    this.progress = '';
                     this.error = `Could not register user: ${err.message}`;
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                     console.error(this.error);
