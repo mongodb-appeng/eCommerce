@@ -11,7 +11,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.name.first" class="input" type="name" placeholder="First">
+                            <input v-model="localCustomer.name.first" class="input" type="name" placeholder="First">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -19,7 +19,7 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.name.last" class="input" type="name" placeholder="Last">
+                            <input v-model="localCustomer.name.last" class="input" type="name" placeholder="Last">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-user"></i>
                             </span>
@@ -35,7 +35,7 @@
                     <div class="field is-expanded">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input v-model="customer.contact.phone.mobile" class="input" type="tel" placeholder="Mobile phone number">
+                                <input v-model="localCustomer.contact.phone.mobile" class="input" type="tel" placeholder="Mobile phone number">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.phone.home" class="input" type="tel" placeholder="Home phone number">
+                            <input v-model="localCustomer.contact.phone.home" class="input" type="tel" placeholder="Home phone number">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-phone"></i>
                             </span>
@@ -62,7 +62,7 @@
                     <div class="field is-expanded">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input v-model="customer.contact.phone.work" class="input" type="tel" placeholder="Work phone number">
+                                <input v-model="localCustomer.contact.phone.work" class="input" type="tel" placeholder="Work phone number">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="field is-expanded">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.email" class="input" type="email" placeholder="Email" :disabled="customer.contact.email">
+                            <input v-model="localCustomer.contact.email" class="input" type="email" placeholder="Email" :disabled="localCustomer.contact.email">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-envelope"></i>
                             </span>
@@ -87,7 +87,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.deliveryAddress.number" class="input" type="text" placeholder="House name or number">
+                            <input v-model="localCustomer.contact.deliveryAddress.number" class="input" type="text" placeholder="House name or number">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-home"></i>
                             </span>
@@ -95,7 +95,7 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.deliveryAddress.street" class="input" type="text" placeholder="Street name">
+                            <input v-model="localCustomer.contact.deliveryAddress.street" class="input" type="text" placeholder="Street name">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-road"></i>
                             </span>
@@ -110,7 +110,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.deliveryAddress.city" class="input" type="text" placeholder="Town or city">
+                            <input v-model="localCustomer.contact.deliveryAddress.city" class="input" type="text" placeholder="Town or city">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-building"></i>
                             </span>
@@ -118,7 +118,7 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.deliveryAddress.state" class="input" type="text" placeholder="State">
+                            <input v-model="localCustomer.contact.deliveryAddress.state" class="input" type="text" placeholder="State">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-map"></i>
                             </span>
@@ -133,7 +133,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.contact.deliveryAddress.postalCode" class="input" type="text" placeholder="Postal code">
+                            <input v-model="localCustomer.contact.deliveryAddress.postalCode" class="input" type="text" placeholder="Postal code">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-map-pin"></i>
                             </span>
@@ -142,7 +142,7 @@
                     <div class="field">
                         <div class="control is-expanded has-icons-left">
                             <div class="select">
-                                <select v-model="customer.contact.deliveryAddress.country" class="input" type="text" placeholder="Country">
+                                <select v-model="localCustomer.contact.deliveryAddress.country" class="input" type="text" placeholder="Country">
                                     <option selected value>Country</option>
                                     <option v-for="country in countries" v-bind:key="country.name">{{ country.name }}</option>
                                 </select>
@@ -161,13 +161,13 @@
                 <div class="field-body">
                     <div class="field">
                         <label class="checkbox">
-                            <input v-model="customer.marketingPreferences.email" type="checkbox">
+                            <input v-model="localCustomer.marketingPreferences.email" type="checkbox">
                             I agree to receive notifications by email
                         </label>
                     </div>
                     <div class="field">
                         <label class="checkbox">
-                            <input v-model="customer.marketingPreferences.sms" type="checkbox">
+                            <input v-model="localCustomer.marketingPreferences.sms" type="checkbox">
                             I agree to receive notifications by SMS text message
                         </label>
                     </div>
@@ -198,15 +198,15 @@
                     </div>
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input v-model="customer.mugshotURL" class="input" type="url" placeholder="Mugshot image URL">
+                            <input v-model="localCustomer.mugshotURL" class="input" type="url" placeholder="Mugshot image URL">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-link"></i>
                             </span>
                         </p>
                     </div>
-                    <div class="field" v-if="customer.mugshotURL">
+                    <div class="field" v-if="localCustomer.mugshotURL">
                         <figure class="image is-128x128">
-                            <img :src="customer.mugshotURL">
+                            <img :src="localCustomer.mugshotURL">
                         </figure>
                     </div>
                 </div>
@@ -248,12 +248,6 @@ import {
 export default {
     name: 'profile',
     props: [
-    //   "stitchClient",
-    //   "database",
-    //   "userLoggedIn",
-    //   "userFirstName",
-    //   "customer"
-    // //   "user"
     ],
     components: {
         MyHeader
@@ -263,20 +257,7 @@ export default {
             error: '',
             success: '',
             progress: '',
-            // TODO: is localCustomer needed?
-            // localCustomer: {
-            //     // contact: {
-            //     //     deliveryAddress: {},
-            //     //     phone: {}
-            //     // },
-            //     // mugshotURL: '',
-            //     // name: {},
-            //     // marketingPreferences: {
-            //     //     email: false,
-            //     //     sms: false
-            //     // }
-            // },
-            // originalEmail: '',
+            localCustomer: {},
             countries: [],
             mugshotFile: {}
         }
@@ -306,27 +287,17 @@ export default {
                 console.error(`Error: failed to fetch country list: ${err.message}`);
             })
         },
-        // setLocalCustomer (customer) {
-        //     this.customer = customer;
-        // },
-        // propBackCustomer () {
-        //     this.$emit("setCustomer", this.localCustomer);
-        // },
         fetchCustomer () {
             this.progress = 'Looking for existing user profile.';
             this.database.collection("customers")
             .findOne({"contact.email": this.user.profile.data.email}) 
             .then (customerDoc => {
                     if (customerDoc) {
-                    this.customer = customerDoc
-                    this.progress = ''
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.log('Read a customer document from the database.');
+                    this.localCustomer = customerDoc;
+                    this.progress = '';
                 } else {
                     // No record found for this customer – doesn't mean that it's a problem
                     this.progress = ''
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.log('No matching customer document found in the database.');
                 }
             }, (err) => {
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
@@ -340,15 +311,14 @@ export default {
             this.error = '';
             this.success = '';
             this.database.collection("customers").updateOne(
-                {"contact.email": this.customer.contact.email},
-                this.customer,
+                {"contact.email": this.localCustomer.contact.email},
+                this.localCustomer,
                 {upsert: true}
             ).then (() => {
                 this.progress = '';
-                this.setCustomer(this.customer);
-                // this.propBackCustomer();
-                if (this.customer.name.first) {
-                    this.setUserFirstName(this.customer.name.first)
+                this.setCustomer(this.localCustomer);
+                if (this.localCustomer.name.first) {
+                    this.setUserFirstName(this.localCustomer.name.first)
                 }
                 this.success = "User profile updated.";
             }, (err) => {
@@ -371,8 +341,6 @@ export default {
             )
         },
         uploadMugshot (event) {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.log("Attempting to upload file");
             this.error = '';
             this.progress = '';
             this.success = '';
@@ -415,13 +383,11 @@ export default {
     created() {
         this.getCountriesList();
         if (this.userLoggedIn) {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.log('User logged in');
-            // this.localCustomer = this.customer;
-            this.customer.owner_id = this.stitchClient.auth.user.id;
-            this.customer.contact.email = this.user.profile.data.email;
+            this.localCustomer = this.customer;
+            this.localCustomer.owner_id = this.stitchClient.auth.user.id;
+            this.localCustomer.contact.email = this.user.profile.data.email;
             this.fetchCustomer();
-            // this.originalEmail = this.localCustomer.contact.email;
+            this.originalEmail = this.localCustomer.contact.email;
         } else {
             this.error = "Cannot access customer profile until user is logged in";
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
