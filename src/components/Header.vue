@@ -35,6 +35,9 @@
                 <a class="navbar-item" v-if="!userLoggedIn">
                     <span v-on:click="showLoginModal">Login/Register</span>
                 </a>
+                <a class="navbar-item" v-if="userLoggedIn">
+                    <span v-on:click="logout">Sign out</span>
+                </a>
                 <span class="navbar-item">
                 <a class="button is-info is-inverted">
                     <span class="icon">
@@ -67,11 +70,6 @@
             <div class="modal-background"></div>
             <div class="modal-content">
                 <UserLogin v-on:close-modal="hideLoginModal"></UserLogin>
-                <!-- <UserLogin 
-                    v-bind:stitchClient="stitchClient"
-                    v-on:setDatabase="setDatabase"
-                    v-on:user-logged-in="setUserLoggedIn">
-                </UserLogin> -->
                 <button class="modal-close is-large" aria-label="close" v-on:click="hideLoginModal"></button>
             </div>
         </div>
@@ -90,10 +88,6 @@ import {
 export default {
     name: "Header",
     props: [
-        // "userLoggedIn",
-        // "userFirstName",
-        // "stitchClient",
-        // "customer"
     ], 
     components: {
         UserLogin
@@ -106,6 +100,7 @@ export default {
     computed: {
         ...mapState([
             'test',
+            'stitchClient',
             'customer',
             'userFirstName',
             'userLoggedIn'
@@ -113,15 +108,9 @@ export default {
     },
     methods: {
         ...mapMutations([
-            'incrTest'
+            'incrTest',
+            'signout'
         ]),
-        // setUserLoggedIn (user) {
-        //     this.$emit("user-logged-in", user);
-        //     this.hideLoginModal();
-        // },
-        // setDatabase (db) {
-        //     this.$emit("setDatabase", db)
-        // },
         showLoginModal () {
             this.loginModalVisible = true;
         },
@@ -135,6 +124,18 @@ export default {
         },
         gotoHome () {
             this.$router.push({name: 'home'})
+        },
+        logout () {
+            this.stitchClient.auth.logout()
+            .then (() => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+                console.log('Logged out');
+                this.signout();
+            },
+            (error) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+                console.error(`Error: Failed to sign out ${error.message}`);
+            })
         }
     },
     created() {
