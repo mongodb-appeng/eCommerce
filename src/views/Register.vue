@@ -112,7 +112,7 @@ export default {
                 emailPassClient.registerWithEmail(this.email, this.password)
                 .then(() => {
                     this.success = "Registration request being processed – check your inbox";
-                    this.progress = 'Retturning to main page in 2 seconds';
+                    this.progress = 'Returning to main page in 2 seconds';
                     let _this = this;
                     setTimeout(function(){
                         _this.$router.push({name: 'home'});
