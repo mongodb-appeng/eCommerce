@@ -142,7 +142,8 @@
                     <div class="field">
                         <div class="control is-expanded has-icons-left">
                             <div class="select">
-                                <select v-model="localCustomer.contact.deliveryAddress.country" class="input" type="text" placeholder="Country">
+                                <select v-model="localCustomer.contact.deliveryAddress.country" 
+                                    class="input" type="text" placeholder="Country">
                                     <option selected value>Country</option>
                                     <option v-for="country in countries" v-bind:key="country.name">{{ country.name }}</option>
                                 </select>

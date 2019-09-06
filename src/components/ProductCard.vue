@@ -4,15 +4,19 @@
             <article class="media">
                 <div class="media-left">
                     <figure class="image is-128x128">
-                        <img :src="productDetails.productThumbnails[0]" alt="product thumbnail">
+                        <img :src="product.productImages[0]">
                     </figure>
                 </div>
                 <div class="media-content">
                     <div class="content">
-                        <h5 class="title is-5">{{ productDetails.productName }}</h5>
-                        <small>{{ productDetails.category }}</small>
-                        <h6 class="title is-6">{{ productDetails.price.value }} {{ productDetails.price.currency }}</h6>
-                        <p>{{ productSummary }}</p>
+                        <h6 class="title is-6">{{ product.productName }}</h6>
+                        <span class="tag">{{ product.category }}</span>
+                        <p><strong>${{ product.price.sale }}</strong>
+                        <span v-if="product.price.list > product.price.sale">
+                            <small> Reduced from ${{ product.price.list }}</small>
+                        </span>
+                        <br>
+                        {{ productSummary }}</p>
                     </div>
                     <nav class="level is-mobile">
                         <div class="level-left">
@@ -57,12 +61,7 @@ import {
 export default {
     name: "ProductCard",
     props: [
-        // "userLoggedIn",
-        // "userFirstName",
-        // "stitchClient",
-        // "customer",
-        "productId",
-        // "database"
+        'product',
     ], 
     components: {
     },
@@ -73,53 +72,57 @@ export default {
             error: '',
             productDetails: {
                 productName: "Loading...",
-                productThumbnails: [],
-                price: {
-                }
+                productImages: [],
+                price: '--'
             },
             productSummary: ""
         }
     },
     computed: {
         ...mapState([
-            'database'
+            // 'database'
         ]),
     },
     methods: {
-        fetchProductDetails (database) {
-            this.error = '';
-            this.success = '';
-            this.progress = "Fetching product data";
+        prepareProductData () {
+            this.productSummary = this.product.description.substring(0 ,252) + '...';
+        },
+        // fetchProductDetails (database) {
+        //     this.error = '';
+        //     this.success = '';
+        //     this.progress = "Fetching product data";
 
-            database.collection("products")
-            .findOne({"productID": this.$props.productId}) 
-            .then (productDoc => {
-                if (productDoc) {
-                    this.productDetails = productDoc;
-                    this.productSummary = productDoc.description.substring(0 ,252) + '...';
-                    this.progress = ''
-                } else {
-                    this.progress = ''
-                    this.error = 'Error: Product not found.'
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.error(`No matching product document found in the database for productID: ${this.$props.productId}.`);
-                }
-            }, 
-            (err) => {
-                this.progress = ''
-                this.error = `Error: attempt to read product document failed: ${err.message}`
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(this.error);
-            })
-        }
+        //     database.collection("products")
+        //     .findOne({"productID": this.$props.productId}) 
+        //     .then (productDoc => {
+        //         if (productDoc) {
+        //             this.productDetails = productDoc;
+        //             this.productSummary = productDoc.description.substring(0 ,252) + '...';
+        //             this.progress = ''
+        //         } else {
+        //             this.progress = ''
+        //             this.error = 'Error: Product not found.'
+        //             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+        //             console.error(`No matching product document found in the database for productID: ${this.$props.productId}.`);
+        //         }
+        //     }, 
+        //     (err) => {
+        //         this.progress = ''
+        //         this.error = `Error: attempt to read product document failed: ${err.message}`
+        //         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+        //         console.error(this.error);
+        //     })
+        // }
     },
-    mounted() {
-        // this.localDatabase = this.$props.database;
-        // this.fetchProductDetails(this.localDatabase);
-        this.fetchProductDetails(this.database);
+    // TODO: Should this have been "mounted"?
+    created() {
+        // this.fetchProductDetails(this.database);
+        this.prepareProductData();
   }
 }
 </script>
-
 <style scoped>
+    .title.is-6 {
+        margin-bottom: 0px;
+    }
 </style>

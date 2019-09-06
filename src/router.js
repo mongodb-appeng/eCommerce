@@ -4,6 +4,8 @@ import Home from './views/Home.vue'
 import ConfirmEmail from './views/Confirm.vue'
 import Register from './views/Register.vue'
 import UserProfile from './views/UserProfile.vue'
+import Test from './views/Test.vue'
+
 
 Vue.use(Router)
 
@@ -26,10 +28,17 @@ export default new Router({
       name: 'register',
       component: Register, 
       props: true
-    },    {
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: UserProfile, 
+      props: true
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test, 
       props: true
     },
     // {

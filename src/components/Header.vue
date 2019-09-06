@@ -128,8 +128,6 @@ export default {
         logout () {
             this.stitchClient.auth.logout()
             .then (() => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.log('Logged out');
                 this.signout();
             },
             (error) => {
@@ -144,4 +142,9 @@ export default {
 </script>
 
 <style scoped>
+    /* .hero {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    } */
 </style>
