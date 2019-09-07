@@ -78,7 +78,8 @@ export default {
               category: 1,
               productImages: 1,
               price: 1,
-              "reviews.averageReviewScore": 1
+              "reviews.averageReviewScore": 1,
+              "reviews.numberOfReviews": 1,
             },
             // TODO should probably find something better to sort on (like) review scores
             // but need to figure out how to not break the efficient pagination
@@ -107,7 +108,7 @@ export default {
       },
       scroll () {
         window.onscroll = () => {
-          const position = 50 + Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight;
+          const position = 750 + Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight;
           const height = document.documentElement.offsetHeight;
           if (position >= height) {
             if (this.bouncable) {

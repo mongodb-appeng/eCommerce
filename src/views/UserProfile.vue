@@ -139,6 +139,17 @@
                             </span>
                         </p>
                     </div>
+
+                    <div class="dropdown is-active">
+                        <div class="dropdown-trigger">
+                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span>Country</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="field">
                         <div class="control is-expanded has-icons-left">
                             <div class="select">

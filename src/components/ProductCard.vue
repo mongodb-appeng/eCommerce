@@ -17,6 +17,18 @@
                         </span>
                         <br>
                         {{ productSummary }}</p>
+                        <div v-if="product.reviews.numberOfReviews > 0" class="columns">
+                            <!-- <div class="column is-narrow">Rating: </div> -->
+                            <div class="column">
+                                <progress class="progress is-warning" :value="product.reviews.averageReviewScore"
+                            max="5"></progress>
+                            </div>
+                            <div class="column is-narrow">
+                                <small>{{ product.reviews.averageReviewScore }}/5 ({{ product.reviews.numberOfReviews  }} review<span v-if="product.reviews.numberOfReviews > 1">s</span>) </small>
+                            </div>
+                        </div>
+                        <!-- <progress v-if="product.reviews.numberOfReviews > 0" class="progress is-warning" :value="product.reviews.averageReviewScore"
+                            max="5"></progress> -->
                     </div>
                     <nav class="level is-mobile">
                         <div class="level-left">
@@ -87,36 +99,8 @@ export default {
         prepareProductData () {
             this.productSummary = this.product.description.substring(0 ,252) + '...';
         },
-        // fetchProductDetails (database) {
-        //     this.error = '';
-        //     this.success = '';
-        //     this.progress = "Fetching product data";
-
-        //     database.collection("products")
-        //     .findOne({"productID": this.$props.productId}) 
-        //     .then (productDoc => {
-        //         if (productDoc) {
-        //             this.productDetails = productDoc;
-        //             this.productSummary = productDoc.description.substring(0 ,252) + '...';
-        //             this.progress = ''
-        //         } else {
-        //             this.progress = ''
-        //             this.error = 'Error: Product not found.'
-        //             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        //             console.error(`No matching product document found in the database for productID: ${this.$props.productId}.`);
-        //         }
-        //     }, 
-        //     (err) => {
-        //         this.progress = ''
-        //         this.error = `Error: attempt to read product document failed: ${err.message}`
-        //         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        //         console.error(this.error);
-        //     })
-        // }
     },
-    // TODO: Should this have been "mounted"?
     created() {
-        // this.fetchProductDetails(this.database);
         this.prepareProductData();
   }
 }
