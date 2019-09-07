@@ -10,7 +10,7 @@
                 <div class="media-content">
                     <div class="content">
                         <h6 class="title is-6">{{ product.productName }}</h6>
-                        <span class="tag">{{ product.category }}</span>
+                        <span class="tag" v-if="product.category">{{ product.category }}</span>
                         <p><strong>${{ product.price.sale }}</strong>
                         <span v-if="product.price.list > product.price.sale">
                             <small> Reduced from ${{ product.price.list }}</small>
