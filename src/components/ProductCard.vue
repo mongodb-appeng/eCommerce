@@ -19,7 +19,7 @@
                         {{ productSummary }}</p>
                         <div v-if="product.reviews.numberOfReviews > 0" class="columns">
                             <!-- <div class="column is-narrow">Rating: </div> -->
-                            <div class="column">
+                            <div class="column" id="review-bar">
                                 <progress class="progress is-warning" :value="product.reviews.averageReviewScore"
                             max="5"></progress>
                             </div>
@@ -108,5 +108,9 @@ export default {
 <style scoped>
     .title.is-6 {
         margin-bottom: 0px;
+    }
+
+    #review-bar {
+        padding-top: 17px;
     }
 </style>
