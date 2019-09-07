@@ -97,7 +97,7 @@ export default {
           // Wait 2 seconds before allowing a request to fetch more products
           setTimeout(function(){        
               _this.bouncable = true;
-            }, 2000);
+            }, 500);
         },
         (error) => {
           this.progress = '';
