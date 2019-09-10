@@ -1,0 +1,15 @@
+{
+  "name": "buildtree",
+  "version": "1.0.0",
+  "description": "bleh",
+  "main": "buildCategoryTree.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Andrew Morgan",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "mongodb": "^3.3.2"
+  }
+}

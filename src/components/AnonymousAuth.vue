@@ -51,7 +51,6 @@ export default {
             try {
                 const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db("ecommerce");
                 this.setDatabase(database);
-                // this.$emit('setDatabase', database);
             }
             catch (err) {
                 this.error = `Failed to connect to the database: ${err.message}`;

@@ -9,7 +9,7 @@
                 v-bind:product="product">
               </ProductCard>            
           </li>
-      </ul>      
+        </ul>    
       </section>
 
       <br>
@@ -30,17 +30,12 @@
 import ProductCard from "../components/ProductCard.vue"
 import { 
     mapState, 
-    // mapMutations 
+    mapMutations 
     } from 'vuex';
 
 export default {
     name: "ProductCards",
     props: [
-        // "userLoggedIn",
-        // "userFirstName",
-        // "stitchClient",
-        // "customer",
-        // "database"
     ], 
     components: {
         ProductCard
@@ -57,10 +52,14 @@ export default {
     },
     computed: {
       ...mapState([
-          'database'
+          'database',
+          'firstRodeo'
       ]),
     },
     methods: {
+      ...mapMutations([
+            'notFirstRodeo'
+        ]),
       fetchProductList () {
         this.error = '';
         this.success = '';
@@ -116,10 +115,26 @@ export default {
             }
           }
         }
+      },
+      safeFetchProductList () {
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+        console.log(`firstRodeo: ${this.firstRodeo}`);
+        if (this.firstRodeo) {
+          let _this = this;
+          this.progress = 'Waiting to connect with the backend service.';
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+          console.log('Waiting');
+          setTimeout(function(){
+              _this.fetchProductList();
+            }, 1000);
+        } else {
+          this.notFirstRodeo();
+          this.fetchProductList();
+        }
       }
     },
     mounted() {
-      this.fetchProductList();
+      this.safeFetchProductList();
       this.scroll();
   }
 }

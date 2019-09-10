@@ -44,7 +44,8 @@ export default {
   },
   computed: {
       ...mapState([
-          'userLoggedIn'
+          'userLoggedIn',
+          'stitchClient'
       ]),
   },
   methods: {

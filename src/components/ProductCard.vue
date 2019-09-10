@@ -18,7 +18,6 @@
                         <br>
                         {{ productSummary }}</p>
                         <div v-if="product.reviews.numberOfReviews > 0" class="columns">
-                            <!-- <div class="column is-narrow">Rating: </div> -->
                             <div class="column" id="review-bar">
                                 <progress class="progress is-warning" :value="product.reviews.averageReviewScore"
                             max="5"></progress>
@@ -27,8 +26,6 @@
                                 <small>{{ product.reviews.averageReviewScore }}/5 ({{ product.reviews.numberOfReviews  }} review<span v-if="product.reviews.numberOfReviews > 1">s</span>) </small>
                             </div>
                         </div>
-                        <!-- <progress v-if="product.reviews.numberOfReviews > 0" class="progress is-warning" :value="product.reviews.averageReviewScore"
-                            max="5"></progress> -->
                     </div>
                     <nav class="level is-mobile">
                         <div class="level-left">

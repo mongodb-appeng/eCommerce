@@ -10,6 +10,7 @@
   "dependencies": {
     "buefy": "^0.8.2",
     "core-js": "^2.6.5",
+    "mongodb": "^3.3.2",
     "mongodb-stitch-browser-sdk": "^4.5.0",
     "mongodb-stitch-browser-services-aws": "^4.5.0",
     "vue": "^2.6.10",
