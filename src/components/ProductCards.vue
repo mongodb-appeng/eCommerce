@@ -118,7 +118,7 @@ export default {
       },
       safeFetchProductList () {
         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        console.log(`firstRodeo: ${this.firstRodeo}`);
+        console.log(`firstRodeo: ${this.firstRodeo}`)
         if (this.firstRodeo) {
           let _this = this;
           this.progress = 'Waiting to connect with the backend service.';

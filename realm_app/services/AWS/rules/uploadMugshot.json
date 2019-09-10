@@ -1,0 +1,6 @@
+{
+    "name": "uploadMugshot",
+    "actions": [
+        "s3:PutObject"
+    ]
+}

@@ -1,6 +1,15 @@
 <template>
     <div>
-
+      <!-- TODO: Move these to a status component -->
+      <div v-if="error" class="notification is-danger">
+          <strong>{{ error }}</strong>
+      </div>
+      <div v-if="success" class="notification is-success">
+          {{ success }}
+      </div>
+      <div v-if="progress" class="notification is-primary">
+          {{ progress }}
+      </div>
     </div>
 </template>
 
@@ -17,10 +26,11 @@ import {
 
 export default {
     name: "AnonymousAuth",
-    // props: ["stitchClient"], 
     data() {
         return {
             error: '',
+            progress: '',
+            success: '',
             localStitchClient: {}
         }
     },
@@ -37,10 +47,13 @@ export default {
         ]),
         anonymousLogin() {
             if (!this.localStitchClient.auth.isLoggedIn) {
+                this.progress = 'Authing app...'
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
+                    this.progress = '';
                 })
                 .catch(err => {
+                    this.progress = '';
                     this.error = `Anonymous Stitch authentication failed: ${err.message}`;
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.error(this.error);
