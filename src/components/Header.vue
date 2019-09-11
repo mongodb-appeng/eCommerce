@@ -22,7 +22,7 @@
                     Home
                 </a>
                 <a class="navbar-item" v-on:click="incrTest">
-                    Test: {{ test }}
+                    ClickMe: {{ test }}
                 </a>
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">

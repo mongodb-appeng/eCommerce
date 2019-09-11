@@ -55,8 +55,11 @@ client.connect(function (err) {
     .then(() => {
       console.log('Done');
       console.log(categoryTree);
-      // TODO: Store in the database
       const db = client.db(dbName);
+      if (categoryTree.children) {
+        // TODO test this
+        categoryTree.children[0].name = "Categories"
+      }
       db.collection('meta').replaceOne({ name: 'categoryTree' }, categoryTree, { upsert: true });
     });
 

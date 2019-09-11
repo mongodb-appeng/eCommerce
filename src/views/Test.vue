@@ -1,142 +1,85 @@
 <template>
 <div>
-  <div v-if="!userLoggedIn">
+  <!-- <div v-if="!userLoggedIn">
     <AnonymousAuth></AnonymousAuth>
   </div>
-  <ul id="category-list">
-  <li
-    v-for="category in categories"
-    v-bind:key="category">
-      {{category}}           
-  </li>
-</ul> 
+  <div>
+    <ul class="category-list level-1">
+      <li v-for="category in categoryTree.children[0].children" v-bind:key="category.name">
+        {{category.name}}
+        <ul v-if="category.children" class="category-list level-2">
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div v-if="error" class="notification is-danger">
+      <strong>{{ error }}</strong>
+  </div>
+  <div v-if="success" class="notification is-success">
+      {{ success }}
+  </div>
+  <div v-if="progress" class="notification is-primary">
+      {{ progress }}
+  </div> -->
 </div>
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
-// import MyHeader from '../components/Header.vue'
-import AnonymousAuth from '../components/AnonymousAuth.vue'
-// import ProductCards from '../components/ProductCards.vue'
+// import {
+//     mapState,
+//     // mapMutations
+//     } from 'vuex';
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 
 export default {
   name: 'test',
   props: [
   ],
   components: {
-    AnonymousAuth,
-    // MyHeader,
-    // ProductCards
+    // AnonymousAuth
   },
   data() {
     return {
-      categories: ['numpty', 'fish'],
-      categoryHierarchies: []
+    // error: '',
+    // progress: '',
+    // success: '',
+    // categoryTree: null
     }
   },
   computed: {
-      ...mapState([
-        'userLoggedIn',
-        'database'
-      ]),
+      // ...mapState([
+      //   // 'userLoggedIn',
+      //   // 'database'
+      // ]),
   },
   methods: {
-    // populateCategories () {
-    //   const products = this.database.collection("products");
-    //   // const meta = database.collection("meta");
-
-    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-    //   console.log(`Fetching product categories`);
-    //   try {
-    //     products.find(
-    //       {},
-    //       {projection:
-    //         {category: 1}
-    //       }).toArray()
-    //     .then ((docArray) => {
-    //       // this.categories.push(docArray[3].category);
-    //       /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-    //       console.log(`${docArray.length} elements`);
-    //       docArray.forEach((item) => {
-    //         this.categories.push(item.category);
-    //       },
-    //       (error) => {
-    //         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-    //         console.error(`Processing product failed: ${error.message}`); 
-    //       });
+    // fetchTree() {
+    //   if (!this.categoryTree) {
+    //     this.progress = 'Fetching product categories';
+    //     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+    //     console.log('Fetching category tree');
+    //     this.database.collection('meta').findOne({name: 'categoryTree'})
+    //     .then ((tree) => {
+    //       this.progress = '';
+    //       this.categoryTree = tree;
     //     },
     //     (error) => {
-    //       /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-    //       console.error(`Find failed: ${error.message}`);        
+    //       this.progress = '';
+    //       this.error = `Failed to fetch the product categories: ${error.message}`;
+    //       /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
+    //       console.error(this.error);
     //     })
     //   }
-    //   catch (error) {
-    //     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-    //     console.error (`Failed building category tree: ${error.message}`);
-    //   }
-    // },
-    populateCategoryTree () {
-      const products = this.database.collection("products");
-      // const meta = database.collection("meta");
-
-      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-      console.log(`Fetching product categories`);
-      try {
-        products.find(
-          {},
-          {projection:
-            {categoryHierarchy: 1}
-          }).toArray()
-        .then ((docArray) => {
-          // this.categories.push(docArray[3].category);
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.log(`${docArray.length} elements`);
-          docArray.forEach((item) => {
-            this.categoryHierarchies.push(item.categoryHierarchy);
-          },
-          (error) => {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.error(`Processing product failed: ${error.message}`); 
-          });
-        },
-        (error) => {
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.error(`Find failed: ${error.message}`);        
-        })
-      }
-      catch (error) {
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-        console.error (`Failed building category tree: ${error.message}`);
-      }
-    }
+    // } 
   },
   
   mounted() {
-    // this.populateCategories();
-    this.populateCategoryTree();
+    // this.fetchTree();
   }
 }
 </script>
 
 <style scoped>
-  /* .columns {
-    height: 100%;
-    margin-top: 0;
-    margin-bottom: 0;
-  } */
-  .column.no-scroll {
-    /* overflow: auto; */
-    overflow:visible;
-    position:sticky;
-    top: 3.2rem;
-  }
 
-  .column.scroll {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   }
 </style>

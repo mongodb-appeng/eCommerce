@@ -36,9 +36,10 @@ import {
 export default {
     name: "ProductCards",
     props: [
+      'path'
     ], 
     components: {
-        ProductCard
+        ProductCard,
     },
     data() {
         return {
@@ -56,6 +57,15 @@ export default {
           'firstRodeo'
       ]),
     },
+    watch: {
+      path: function () {
+        console.log(`path: ${this.path}`);
+        this.lastProductID = '';
+        this.products = [];
+        this.fetchProductList();
+      }
+
+    },
     methods: {
       ...mapMutations([
             'notFirstRodeo'
@@ -65,9 +75,22 @@ export default {
         this.success = '';
         this.progress = "Fetching product list";
         this.bouncable = false;
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+        console.log('Fetching more products');
+        let query = {productID: {$gt: this.lastProductID}};
+        if (this.path.length > 0) {
+          query.categoryHierarchy = {$all: this.path};
+        }
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+        console.log(`Query: ${String(query)}`);
         this.database.collection("products")
         .find(
-          {productID: {$gt: this.lastProductID}},
+          query,
+          // {
+          //   productID: {$gt: this.lastProductID},
+          //   categoryHierarchy: {$all: ['clothing']}
+          //   // categoryHierarchy: {$all: this.path}
+          // },
           {
             projection: {
               _id: 0,
@@ -87,16 +110,23 @@ export default {
           }
         ).toArray()
         .then ((docArray) => {
-          this.lastProductID = docArray[docArray.length - 1].productID;
-          docArray.forEach((item) => {
-            this.products.push(item);
-          })
-          this.progress = '';
-          const _this = this;
-          // Wait 2 seconds before allowing a request to fetch more products
-          setTimeout(function(){        
-              _this.bouncable = true;
-            }, 500);
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.log(`${docArray.length} new products`);
+          if (docArray.length > 0) {
+            this.lastProductID = docArray[docArray.length - 1].productID;
+            docArray.forEach((item) => {
+              this.products.push(item);
+            })
+            this.progress = '';
+            const _this = this;
+            // Wait 2 seconds before allowing a request to fetch more products
+            setTimeout(function(){        
+                _this.bouncable = true;
+              }, 500);
+            } else {
+              this.progress = '';
+              this.success = 'No more matching products.';
+            }
         },
         (error) => {
           this.progress = '';

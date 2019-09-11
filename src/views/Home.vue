@@ -7,11 +7,16 @@
     <section class="section">
       <div class="columns">
         <div class="column is-3 no-scroll">
-          <!-- TODO: the category menu goes here -->
+          <div class="container">
+            <CategoryMenu v-on:set-category-filter="setCategoryFilter"></CategoryMenu>
+          </div>
         </div>
         <div class="column scroll" id="products">
           <div class="container">
-            <ProductCards></ProductCards>           
+            <ProductCards
+              v-bind:path="path"
+            >
+            </ProductCards>           
           </div>
         </div>
       </div>
@@ -28,6 +33,7 @@ import {
 import MyHeader from '../components/Header.vue'
 import AnonymousAuth from '../components/AnonymousAuth.vue'
 import ProductCards from '../components/ProductCards.vue'
+import CategoryMenu from "../components/CategoryMenu.vue"
 
 export default {
   name: 'home',
@@ -36,10 +42,12 @@ export default {
   components: {
     AnonymousAuth,
     MyHeader,
-    ProductCards
+    ProductCards,
+    CategoryMenu
   },
   data() {
     return {
+      path: []
     }
   },
   computed: {
@@ -49,6 +57,9 @@ export default {
       ]),
   },
   methods: {
+    setCategoryFilter(path) {
+      this.path = path;
+    }
   },
   mounted() {
   }
