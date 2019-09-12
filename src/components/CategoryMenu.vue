@@ -67,7 +67,7 @@ export default {
           this.progress = '';
           // Root node just identifies that the tree contains
           // categories
-          if (tree.children) {
+          if (tree && tree.children) {
             tree = tree.children[0];
             // tree.name = 'Categories';
           }
