@@ -84,8 +84,9 @@ export default {
             matchCategories.push(clause);
           }
           query.$and = [
-            {categoryHierarchy: {$all: this.categoryFilter}},
-            {$and: matchCategories}
+            // {categoryHierarchy: {$all: this.categoryFilter}},
+            {$and: matchCategories},
+            {categoryHierarchy: 'sale'}
             // {categoryHierarchy: {$size: this.categoryFilter.length + 1}}
           ];
           // query.categoryHierarchy = {$all: this.categoryFilter};

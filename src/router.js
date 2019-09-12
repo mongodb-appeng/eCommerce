@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import ConfirmEmail from './views/Confirm.vue'
 import Register from './views/Register.vue'
 import UserProfile from './views/UserProfile.vue'
+import Product from './views/Product.vue'
 import Test from './views/Test.vue'
 
 
@@ -33,6 +34,12 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: UserProfile, 
+      props: true
+    },
+    {
+      path: '/product',
+      name: 'product',
+      component: Product, 
       props: true
     },
     {
