@@ -53,8 +53,7 @@ export default {
     },
     computed: {
       ...mapState([
-          'database',
-          'firstRodeo'
+          'database'
       ]),
     },
     watch: {
@@ -68,7 +67,6 @@ export default {
     },
     methods: {
       ...mapMutations([
-            'notFirstRodeo'
         ]),
       fetchProductList () {
         this.error = '';
@@ -145,26 +143,10 @@ export default {
             }
           }
         }
-      },
-      safeFetchProductList () {
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        console.log(`firstRodeo: ${this.firstRodeo}`)
-        if (this.firstRodeo) {
-          let _this = this;
-          this.progress = 'Waiting to connect with the backend service.';
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.log('Waiting');
-          setTimeout(function(){
-              _this.fetchProductList();
-            }, 1000);
-        } else {
-          this.notFirstRodeo();
-          this.fetchProductList();
-        }
       }
     },
     mounted() {
-      this.safeFetchProductList();
+      this.fetchProductList();
       this.scroll();
   }
 }

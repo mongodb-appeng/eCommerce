@@ -35,6 +35,7 @@ const store = new Vuex.Store({
   // TODO: turn this back on
   // plugins: [createPersistedState()],
   state: {
+    stitchClient: null,
     database: null,
     userLoggedIn: false,
     userFirstName: "Guest",
@@ -66,8 +67,7 @@ const store = new Vuex.Store({
         sms: false
       }
     },
-    test: 42,
-    firstRodeo: true
+    test: 42
   },
   getters: {
     // stitchClient: state => {

@@ -50,7 +50,11 @@ export default {
                 this.progress = 'Authing app...'
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
+                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                    console.log('Authed');
                     this.progress = '';
+                    this.connectDatabase();
+                    this.setStitchClient(this.localStitchClient);
                 })
                 .catch(err => {
                     this.progress = '';
@@ -58,6 +62,9 @@ export default {
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.error(this.error);
                 });
+            } else {
+                this.setStitchClient(this.localStitchClient);
+                this.connectDatabase();
             }
         },
         connectDatabase() {
@@ -73,16 +80,14 @@ export default {
         }
     },
     mounted() {
-        if (!this.database) {
-            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+        if (this.database) {
+            // Not strictly needed but helps clean things up during development
+            // TODO Remove this for production
+            this.localStitchClient = Stitch.getAppClient("ecommerce-iukkg");
             this.setStitchClient(this.localStitchClient);
+        } else {
+            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
             this.anonymousLogin();
-            if (this.error) {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(this.error);
-            } else {
-                this.connectDatabase();
-            }
         }
     }
 }
