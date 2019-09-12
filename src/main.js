@@ -65,8 +65,9 @@ const store = new Vuex.Store({
       marketingPreferences: {
         email: false,
         sms: false
-      }
+      },
     },
+    categoryFilter: [],
     test: 42
   },
   getters: {
@@ -82,6 +83,7 @@ const store = new Vuex.Store({
     setUserFirstName (state, payload) {state.userFirstName = payload},
     setUser (state, payload) {state.user = payload},
     setCustomer (state, payload) {state.customer = payload},
+    setCategoryFilter (state, payload) {state.categoryFilter = payload},
     signout (state) {
       state.customer = nullCustomer;
       state.user = null;
@@ -89,9 +91,8 @@ const store = new Vuex.Store({
       state.userFirstName = 'Guest';
       state.stitchClient = null;
       state.database = null;
-    },
-    notFirstRodeo (state) {state.firstRodeo = false}
-
+      state.categoryFilter = [];
+    }
   },
   actions: {
     setUserLoggedIn ({commit, state}, user) {

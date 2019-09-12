@@ -29,14 +29,13 @@
 <script>
 import ProductCard from "../components/ProductCard.vue"
 import { 
-    mapState, 
-    mapMutations 
+    mapState
+    // mapMutations 
     } from 'vuex';
 
 export default {
     name: "ProductCards",
     props: [
-      'path'
     ], 
     components: {
         ProductCard,
@@ -53,20 +52,21 @@ export default {
     },
     computed: {
       ...mapState([
-          'database'
+          'database',
+          'categoryFilter'
       ]),
     },
     watch: {
-      path: function () {
-        console.log(`path: ${this.path}`);
+      categoryFilter: function () {
+        console.log(`categoryFilter: ${this.categoryFilter}`);
         this.lastProductID = '';
         this.products = [];
         this.fetchProductList();
       }
     },
     methods: {
-      ...mapMutations([
-        ]),
+      // ...mapMutations([
+      //   ]),
       fetchProductList () {
         this.error = '';
         this.success = '';
@@ -75,20 +75,20 @@ export default {
         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
         console.log('Fetching more products');
         let query = {productID: {$gt: this.lastProductID}};
-        if (this.path.length > 0) {
+        if (this.categoryFilter.length > 0) {
           let matchCategories = [];
-          for (let i = 0; i < this.path.length; i++) {
+          for (let i = 0; i < this.categoryFilter.length; i++) {
             let fieldName = `categoryHierarchy.${i+1}`;
             let clause = {};
-            clause[fieldName] = this.path[i];
+            clause[fieldName] = this.categoryFilter[i];
             matchCategories.push(clause);
           }
           query.$and = [
-            {categoryHierarchy: {$all: this.path}},
+            {categoryHierarchy: {$all: this.categoryFilter}},
             {$and: matchCategories}
-            // {categoryHierarchy: {$size: this.path.length + 1}}
+            // {categoryHierarchy: {$size: this.categoryFilter.length + 1}}
           ];
-          // query.categoryHierarchy = {$all: this.path};
+          // query.categoryHierarchy = {$all: this.categoryFilter};
         }
         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
         console.log(`Query: ${String(query)}`);
@@ -98,7 +98,7 @@ export default {
           // {
           //   productID: {$gt: this.lastProductID},
           //   categoryHierarchy: {$all: ['clothing']}
-          //   // categoryHierarchy: {$all: this.path}
+          //   // categoryHierarchy: {$all: this.categoryFilter}
           // },
           {
             projection: {

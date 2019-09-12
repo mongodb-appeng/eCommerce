@@ -33,8 +33,8 @@
 
 <script>
 import {
-  mapState
-  // mapMutations
+  mapState,
+  mapMutations
 } from "vuex";
 
 export default {
@@ -77,12 +77,12 @@ export default {
     }
   },
   methods: {
+      ...mapMutations([
+        'setCategoryFilter'
+      ]),
       categoryClicked() {
         this.showChildren = !this.showChildren;
         this.$emit('set-category-filter', this.newPath);
-      },
-      setCategoryFilter(path) {
-        this.$emit('set-category-filter', path);
       }
   },
 

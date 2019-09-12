@@ -8,7 +8,7 @@
       <div v-if="stitchReady" class="columns">
         <div class="column is-3 half-height">
           <div class="container">
-            <CategoryMenu v-on:set-category-filter="setCategoryFilter"></CategoryMenu>
+            <CategoryMenu></CategoryMenu>
           </div>
         </div>
         <div class="column scroll" id="products">

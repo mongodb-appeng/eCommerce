@@ -10,7 +10,6 @@
       v-bind:count="saleCategoryTree.count"
       v-bind:depth="0"
       v-bind:path="[]"
-      v-on:set-category-filter="setCategoryFilter"
     >
     </CategoryNode>
   </div>
@@ -21,7 +20,6 @@
       v-bind:count="categoryTree.count"
       v-bind:depth="0"
       v-bind:path="[]"
-      v-on:set-category-filter="setCategoryFilter"
     >
     </CategoryNode>
   </div>
@@ -118,9 +116,6 @@ export default {
           console.error(this.error);
         })
       }
-    },
-    setCategoryFilter(path) {
-        this.$emit('set-category-filter', path);
     }
   },
   mounted() {
