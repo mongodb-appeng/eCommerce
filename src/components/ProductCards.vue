@@ -63,7 +63,6 @@ export default {
         this.products = [];
         this.fetchProductList();
       }
-
     },
     methods: {
       ...mapMutations([

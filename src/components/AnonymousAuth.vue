@@ -80,15 +80,30 @@ export default {
         }
     },
     mounted() {
-        if (this.database) {
-            // Not strictly needed but helps clean things up during development
-            // TODO Remove this for production
+        try {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.log(`Trying to get app client`);
             this.localStitchClient = Stitch.getAppClient("ecommerce-iukkg");
-            this.setStitchClient(this.localStitchClient);
-        } else {
-            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
-            this.anonymousLogin();
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.log('Got the client');
         }
+        catch {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.log(`Caught no default client`);
+            // The default client hasn't been set yet
+            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+        }
+        this.anonymousLogin();
+        
+        // if (this.database) {
+        //     // Not strictly needed but helps clean things up during development
+        //     // TODO Remove this for production
+        //     this.localStitchClient = Stitch.getAppClient("ecommerce-iukkg");
+        //     this.setStitchClient(this.localStitchClient);
+        // } else {
+        //     this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+        //     this.anonymousLogin();
+        // }
     }
 }
 </script>

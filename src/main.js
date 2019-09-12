@@ -87,6 +87,8 @@ const store = new Vuex.Store({
       state.user = null;
       state.userLoggedIn = false;
       state.userFirstName = 'Guest';
+      state.stitchClient = null;
+      state.database = null;
     },
     notFirstRodeo (state) {state.firstRodeo = false}
 
