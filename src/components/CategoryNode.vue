@@ -10,7 +10,7 @@
             <span class="icon is-small">
               <i v-if="nodes.length > 0" v-bind:class="iconClasses"></i>
             </span>
-            <span>{{ name }}</span>
+            <span>{{ name }} </span><span v-if="count"><small>&nbsp; ({{ count }})</small></span>
           </a>
         </div>
       </div>
@@ -19,6 +19,7 @@
             v-for="node in nodes"
             v-bind:key="node.name"
             v-bind:name="node.name"
+            v-bind:count="node.count"
             v-bind:nodes="node.children"
             v-bind:depth="depth + 1"
             v-bind:path="newPath"
@@ -41,6 +42,7 @@ export default {
   props: [
       "nodes",
       "name",
+      'count',
       "depth",
       "path"
       ],

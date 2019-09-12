@@ -6,7 +6,7 @@
     </div>
     <section class="section">
       <div v-if="stitchReady" class="columns">
-        <div class="column is-3 no-scroll">
+        <div class="column is-3 half-height">
           <div class="container">
             <CategoryMenu v-on:set-category-filter="setCategoryFilter"></CategoryMenu>
           </div>
@@ -80,5 +80,8 @@ export default {
 </script>
 
 <style scoped>
-
+.half-height {
+  height: 50vh;
+  overflow: scroll;
+}
 </style>

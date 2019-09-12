@@ -76,7 +76,19 @@ export default {
         console.log('Fetching more products');
         let query = {productID: {$gt: this.lastProductID}};
         if (this.path.length > 0) {
-          query.categoryHierarchy = {$all: this.path};
+          let matchCategories = [];
+          for (let i = 0; i < this.path.length; i++) {
+            let fieldName = `categoryHierarchy.${i+1}`;
+            let clause = {};
+            clause[fieldName] = this.path[i];
+            matchCategories.push(clause);
+          }
+          query.$and = [
+            {categoryHierarchy: {$all: this.path}},
+            {$and: matchCategories}
+            // {categoryHierarchy: {$size: this.path.length + 1}}
+          ];
+          // query.categoryHierarchy = {$all: this.path};
         }
         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
         console.log(`Query: ${String(query)}`);

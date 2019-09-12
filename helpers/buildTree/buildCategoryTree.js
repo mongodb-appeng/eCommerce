@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const url = 'mongodb+srv://billy:password@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority';
+// TODO remove password
+const url = 'mongodb+srv://billy:billy@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority';
 const dbName = 'ecommerce';
 
 // Create a new MongoClient
@@ -11,7 +12,13 @@ let categoryTree = {
   children: []
 };
 
+let saleCategoryTree = {
+  name: 'saleCategoryTree',
+  children: []
+};
+
 function pushNode(branch, path) {
+  branch.count++;
   if (path.length > 0) {
     if (branch.children.length >= 0) {
       let index = branch.children.findIndex(node => node.name === path[0]);
@@ -25,7 +32,8 @@ function pushNode(branch, path) {
         // Need to push a new node
         let newNode = {
           name: path[0],
-          children: []
+          children: [],
+          count: 0
         }
         pushNode(newNode, path.slice(1, path.length));
         branch.children.push(newNode);
@@ -34,6 +42,12 @@ function pushNode(branch, path) {
   };
 }
 
+function sorted(branch) {
+    if (branch.children.length >= 0) {
+      branch.children.sort((a,b) => b.count - a.count);
+      branch.children.forEach((child) => sorted(child));
+    }
+}
 // Use connect method to connect to the Server
 client.connect(function (err) {
   assert.equal(null, err);
@@ -44,7 +58,8 @@ client.connect(function (err) {
     {},
     {
       projection: { _id: 0, categoryHierarchy: 1 },
-      limit: 50
+      sort: {categoryHierarchy: 1}
+      // limit: 50
     }
   ).toArray()
     .then((prodArray) => {
@@ -53,15 +68,39 @@ client.connect(function (err) {
       });
     })
     .then(() => {
+      sorted(categoryTree);
       console.log('Done');
       console.log(categoryTree);
       const db = client.db(dbName);
       if (categoryTree.children) {
-        // TODO test this
-        categoryTree.children[0].name = "Categories"
+        categoryTree.children[0].name = "All categories"
       }
       db.collection('meta').replaceOne({ name: 'categoryTree' }, categoryTree, { upsert: true });
     });
+
+    prodArray = db.collection('products').find(
+      {categoryHierarchy: 'sale'},
+      {
+        projection: { _id: 0, categoryHierarchy: 1 },
+        // sort: {categoryHierarchy: 1}
+        // limit: 50
+      }
+    ).toArray()
+      .then((prodArray) => {
+        prodArray.forEach((doc) => {
+          pushNode(saleCategoryTree, doc.categoryHierarchy);
+        });
+      })
+      .then(() => {
+        sorted(saleCategoryTree);
+        console.log('Done');
+        console.log(saleCategoryTree);
+        const db = client.db(dbName);
+        if (saleCategoryTree.children) {
+          saleCategoryTree.children[0].name = "Sale items"
+        }
+        db.collection('meta').replaceOne({ name: 'saleCategoryTree' }, saleCategoryTree, { upsert: true });
+      });
 
   // client.close();
 });

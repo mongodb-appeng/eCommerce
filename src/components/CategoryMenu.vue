@@ -3,10 +3,22 @@
   <!-- <div v-if="!userLoggedIn">
     <AnonymousAuth></AnonymousAuth>
   </div> -->
-  <div v-if="categoryTree">
+  <div v-if="saleCategoryTree">
+    <CategoryNode
+      v-bind:nodes="saleCategoryTree.children"
+      v-bind:name="saleCategoryTree.name"
+      v-bind:count="saleCategoryTree.count"
+      v-bind:depth="0"
+      v-bind:path="[]"
+      v-on:set-category-filter="setCategoryFilter"
+    >
+    </CategoryNode>
+  </div>
+    <div v-if="categoryTree">
     <CategoryNode
       v-bind:nodes="categoryTree.children"
       v-bind:name="categoryTree.name"
+      v-bind:count="categoryTree.count"
       v-bind:depth="0"
       v-bind:path="[]"
       v-on:set-category-filter="setCategoryFilter"
@@ -45,7 +57,8 @@ export default {
     error: '',
     progress: '',
     success: '',
-    categoryTree: null
+    categoryTree: null,
+    saleCategoryTree: null
     }
   },
   computed: {
@@ -69,7 +82,7 @@ export default {
           // categories
           if (tree && tree.children) {
             tree = tree.children[0];
-            // tree.name = 'Categories';
+            // tree.children.sort((a,b) => b.count - a.count);
           }
           this.categoryTree = tree;
         },
@@ -81,12 +94,37 @@ export default {
         })
       }
     },
+    fetchSaleTree() {
+      if (!this.saleCategoryTree) {
+        this.progress = 'Fetching sales product categories';
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+        console.log('Fetching sales category tree');
+        this.database.collection('meta').findOne(
+          {name: 'saleCategoryTree'}
+        )
+        .then ((tree) => {
+          this.progress = '';
+          // Root node just identifies that the tree contains
+          // categories
+          if (tree && tree.children) {
+            tree = tree.children[0];
+          }
+          this.saleCategoryTree = tree;
+        },
+        (error) => {
+          this.progress = '';
+          this.error = `Failed to fetch the sales product categories: ${error.message}`;
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
+          console.error(this.error);
+        })
+      }
+    },
     setCategoryFilter(path) {
         this.$emit('set-category-filter', path);
     }
   },
-  
   mounted() {
+    this.fetchSaleTree();
     this.fetchTree();
   }
 }
