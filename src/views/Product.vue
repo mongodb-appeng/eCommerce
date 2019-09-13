@@ -13,7 +13,7 @@
             ></ImageBox>
           </div>
         </div>
-        <div class="column is-5">
+        <div class="column is-4">
           <div class="container">
             <ProductSummary
               v-bind:productName="product.productName"
@@ -26,7 +26,7 @@
             ></ProductSummary>
           </div>
         </div>
-        <div class="column is-2">
+        <div class="column is-3">
           <div class="container">
             <PurchaseBox
             ></PurchaseBox>
@@ -35,7 +35,7 @@
       </div>
       <div v-if="stitchReady && product">
         <ProductReviews
-            v-if="product.reviews && product.reviews.recentReviews"
+            v-if="product.reviews && product.reviews.recentReviews && product.reviews.recentReviews.length > 0"
             v-bind:reviews="product.reviews.recentReviews"
         ></ProductReviews>
       </div>

@@ -21,9 +21,6 @@
                 <a class="navbar-item" v-on:click="gotoHome">
                     Home
                 </a>
-                <a class="navbar-item" v-on:click="incrTest">
-                    ClickMe: {{ test }}
-                </a>
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">
                         <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
@@ -39,11 +36,11 @@
                     <span v-on:click="logout">Sign out</span>
                 </a>
                 <span class="navbar-item">
-                <a class="button is-info is-inverted">
+                <a class="button is-black">
                     <span class="icon">
-                    <i class="fab fa-github"></i>
+                        <i class="fab fa-github"></i>
                     </span>
-                    <span>Download</span>
+                    <span>Source</span>
                 </a>
                 </span>
             </div>
@@ -99,7 +96,6 @@ export default {
     },
     computed: {
         ...mapState([
-            'test',
             'stitchClient',
             'customer',
             'userFirstName',
@@ -108,7 +104,6 @@ export default {
     },
     methods: {
         ...mapMutations([
-            'incrTest',
             'signout'
         ]),
         showLoginModal () {

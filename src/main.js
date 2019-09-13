@@ -69,8 +69,7 @@ const store = new Vuex.Store({
         sms: false
       },
     },
-    categoryFilter: [],
-    test: 42
+    categoryFilter: []
   },
   getters: {
     // stitchClient: state => {
@@ -78,7 +77,6 @@ const store = new Vuex.Store({
     // },
   },
   mutations: {
-    incrTest (state) {state.test++;},
     setStitchClient (state, payload) {state.stitchClient = payload},
     setDatabase (state, payload) {state.database = payload},
     setLoggedIn (state, payload) {state.userLoggedIn = payload},

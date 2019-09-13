@@ -18,6 +18,9 @@ $primary: $mongo-forest;
 $text: $mongo-lead;
 $success: $mongo-leaf;
 $title-color: $mongo-lead;
+$table-cell-border: none;
+$table-cell-padding: .2em;
+
 // $family-primary: "courier";
 
 @import "../node_modules/bulma/sass/utilities/_all";
