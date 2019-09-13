@@ -17,15 +17,11 @@
                         </span>
                         <br>
                         {{ productSummary }}</p>
-                        <div v-if="product.reviews.numberOfReviews > 0" class="columns">
-                            <div class="column" id="review-bar">
-                                <progress class="progress is-warning" :value="product.reviews.averageReviewScore"
-                            max="5"></progress>
-                            </div>
-                            <div class="column is-narrow">
-                                <small>{{ product.reviews.averageReviewScore }}/5 ({{ product.reviews.numberOfReviews  }} review<span v-if="product.reviews.numberOfReviews > 1">s</span>) </small>
-                            </div>
-                        </div>
+
+                        <Rank
+                            v-bind:score="product.reviews.averageReviewScore"
+                            v-bind:numberReviews="product.reviews.numberOfReviews"
+                        ></Rank>
                     </div>
                     <nav class="level is-mobile">
                         <div class="level-left">
@@ -62,6 +58,7 @@
 </template>
 
 <script>
+import Rank from './Ranking.vue';
 import { 
     mapState, 
     // mapMutations 
@@ -73,6 +70,7 @@ export default {
         'product',
     ], 
     components: {
+        Rank
     },
     data() {
         return {
@@ -105,9 +103,5 @@ export default {
 <style scoped>
     .title.is-6 {
         margin-bottom: 0px;
-    }
-
-    #review-bar {
-        padding-top: 17px;
     }
 </style>
