@@ -42,5 +42,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .box {
+        margin-bottom: .75em; 
+    }
 </style>

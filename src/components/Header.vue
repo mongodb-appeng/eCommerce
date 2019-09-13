@@ -36,7 +36,7 @@
                     <span v-on:click="logout">Sign out</span>
                 </a>
                 <span class="navbar-item">
-                <a class="button is-black">
+                <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">
                     <span class="icon">
                         <i class="fab fa-github"></i>
                     </span>

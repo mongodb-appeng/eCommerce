@@ -104,4 +104,7 @@ export default {
     .title.is-6 {
         margin-bottom: 0px;
     }
+    .box {
+        margin-bottom: .75em; 
+    }
 </style>

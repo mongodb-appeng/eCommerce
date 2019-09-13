@@ -70,6 +70,7 @@ export default {
       // ...mapMutations([
       //   ]),
       jumpToProduct(productID) {
+        window.onscroll = () => {};
         this.$router.push(
           {
             name: 'product',
