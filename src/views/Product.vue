@@ -1,25 +1,52 @@
 <template>
   <div class="home">
     <MyHeader></MyHeader>
-    <!-- Check if this v is needed -->
-    <!-- <div v-if="!userLoggedIn"> -->
     <div>
       <AnonymousAuth></AnonymousAuth>
     </div>
     <section class="section">
-      <h1 class="title is-1">Welcome to the product page for productID {{ productID }}</h1>
-      <div v-if="stitchReady" class="columns">
-        <div class="column is-3 half-height">
+      <div v-if="stitchReady && product" class="columns">
+        <div class="column is-5">
           <div class="container">
+            <ImageBox
+              v-bind:productImages="product.productImages"
+            ></ImageBox>
           </div>
         </div>
-        <div class="column scroll" id="products">
-          <div class="container">      
+        <div class="column is-5">
+          <div class="container">
+            <ProductSummary
+              v-bind:productName="product.productName"
+              v-bind:category="product.category"
+              v-bind:categoryHierarchy="product.categoryHierarchy"
+              v-bind:price="product.price"
+              v-bind:averageReviewScore="product.reviews.averageReviewScore"
+              v-bind:numberOfReviews="product.reviews.numberOfReviews"
+              v-bind:productDescription="product.description"
+            ></ProductSummary>
+          </div>
+        </div>
+        <div class="column is-2">
+          <div class="container">
+            <PurchaseBox
+            ></PurchaseBox>
           </div>
         </div>
       </div>
-
+      <div>
+        
+      </div>
     </section>
+    <!-- TODO: Move these to a status component -->
+    <div v-if="error" class="notification is-danger">
+        <strong>{{ error }}</strong>
+    </div>
+    <div v-if="success" class="notification is-success">
+        {{ success }}
+    </div>
+    <div v-if="progress" class="notification is-primary">
+        {{ progress }}
+    </div>
   </div>
 </template>
 
@@ -30,6 +57,9 @@ import {
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
 import AnonymousAuth from '../components/AnonymousAuth.vue'
+import ImageBox from '../components/Product/ImageBox.vue'
+import ProductSummary from '../components/Product/ProductSummary.vue'
+import PurchaseBox from '../components/Product/PurchaseBox.vue'
 import { setTimeout } from 'timers';
 
 export default {
@@ -38,30 +68,63 @@ export default {
   ],
   components: {
     AnonymousAuth,
-    MyHeader
+    MyHeader,
+    ImageBox,
+    ProductSummary,
+    PurchaseBox
   },
   data() {
     return {
+      error: '',
+      progress: '',
+      success: '',
       stitchReady: false,
-      productID: ''
+      productID: null,
+      product: null 
     }
   },
   computed: {
       ...mapState([
           'userLoggedIn',
-          'stitchClient'
+          'stitchClient',
+          'database'
       ]),
   },
   methods: {
+    fetchProduct() {
+      if (this.productID) {
+        this.progress = 'Fetching product details';
+        this.database.collection('products').findOne({productID: this.productID})
+        .then ((doc) => {
+          if (doc) {
+            this.progress = '';
+            this.product = doc;
+          }
+          else {
+            this.progress = '';
+            this.error = `No product found with productId ${this.productID}`;
+          }
+        },
+        (error) => {
+          this.progress = '';
+          this.error = `Error: failed to read product data: ${error.message}`;
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.error(this.error);
+        })
+      } else {
+        this.error = 'Error, no productID included in URL query parameters';
+      }
+    },
     waitUntilStitchReady() {
-       if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
-         this.stitchReady = true;
-       } else {
-         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-         console.log('Waiting');
-         let _this = this;
-         setTimeout(_this.waitUntilStitchReady, 100);
-       }
+      if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+        this.stitchReady = true;
+        this.fetchProduct();
+      } else {
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+        console.log('Waiting');
+        let _this = this;
+        setTimeout(_this.waitUntilStitchReady, 100);
+      }
     }
   },
   mounted() {

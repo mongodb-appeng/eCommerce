@@ -41,7 +41,7 @@ import {
     mapState,
     // mapMutations
     } from 'vuex';
-import CategoryNode from '../components/CategoryNode.vue'
+import CategoryNode from './CategoryNode.vue'
 
 export default {
   name: 'CategoryMenu',

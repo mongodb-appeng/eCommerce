@@ -5,11 +5,13 @@
           <li
             v-for="product in products"
             v-bind:key="product.productId">
-              <ProductCard
-                v-bind:product="product">
-              </ProductCard>            
+              <a v-on:click="jumpToProduct(product.productID)">
+                <ProductCard
+                  v-bind:product="product">
+                </ProductCard>
+              </a>
           </li>
-        </ul>    
+        </ul>
       </section>
 
       <br>
@@ -27,7 +29,7 @@
 </template>
 
 <script>
-import ProductCard from "../components/ProductCard.vue"
+import ProductCard from "./ProductCard.vue"
 import { 
     mapState
     // mapMutations 
@@ -67,6 +69,14 @@ export default {
     methods: {
       // ...mapMutations([
       //   ]),
+      jumpToProduct(productID) {
+        this.$router.push(
+          {
+            name: 'product',
+            query: {productID: productID}
+          }
+          );
+      },
       fetchProductList () {
         this.error = '';
         this.success = '';
@@ -85,8 +95,7 @@ export default {
           }
           query.$and = [
             // {categoryHierarchy: {$all: this.categoryFilter}},
-            {$and: matchCategories},
-            {categoryHierarchy: 'sale'}
+            {$and: matchCategories}
             // {categoryHierarchy: {$size: this.categoryFilter.length + 1}}
           ];
           // query.categoryHierarchy = {$all: this.categoryFilter};

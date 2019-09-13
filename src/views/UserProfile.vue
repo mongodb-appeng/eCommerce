@@ -364,6 +364,7 @@ export default {
             const files = event.target.files || event.dataTransfer.files;
             if (files.length) {
                 this.mugshotFile = files[0];
+                // TODO switch to MongoDB marketing account AWS2 / ecommerce-mongodb-mugshots
                 const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, "AWS");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
@@ -371,6 +372,7 @@ export default {
                     const s3Args = { 
                         ACL: "public-read",
                         // TODO: Make configurable
+                        // Bucket: "ecommerce-mongodb-mugshots",
                         Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,
                         Key: `mug_${this.customer.contact.email}_${now}`,
@@ -383,6 +385,7 @@ export default {
                     s3.execute(request.build())
                     .then (() => {
                         // TODO include timestamp in the URL
+                        // this.customer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
                         this.customer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
                     },
                     (error) => {

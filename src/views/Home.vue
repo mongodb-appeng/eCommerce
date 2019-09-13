@@ -32,8 +32,8 @@ import {
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
 import AnonymousAuth from '../components/AnonymousAuth.vue'
-import ProductCards from '../components/ProductCards.vue'
-import CategoryMenu from "../components/CategoryMenu.vue"
+import ProductCards from '../components/Product/ProductCards.vue'
+import CategoryMenu from "../components/Product/CategoryMenu.vue"
 import { setTimeout } from 'timers';
 
 export default {
@@ -59,9 +59,9 @@ export default {
       ]),
   },
   methods: {
-    setCategoryFilter(path) {
-      this.path = path;
-    },
+    // setCategoryFilter(path) {
+    //   this.path = path;
+    // },
     waitUntilStitchReady() {
        if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
