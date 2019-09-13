@@ -6,8 +6,8 @@
         v-on:click="categoryClicked"
       >
         <div class="control">
-          <a class="button is-small is-not-outlined">
-            <span class="icon is-small">
+          <a class="button is-not-outlined">
+            <span class="icon">
               <i v-if="nodes.length > 0" v-bind:class="iconClasses"></i>
             </span>
             <span>{{ name }} </span><span v-if="count"><small>&nbsp; ({{ count }})</small></span>
@@ -56,7 +56,7 @@ export default {
     ...mapState(["userLoggedIn", "database"]),
     indent() {
         return {
-            transform: `translate(${this.depth * 20}px)`
+            transform: `translate(${this.depth * 10}px)`
         }
     },
     labelClasses() {

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex';
 import router from './router'
+import 'bulma/css/bulma.css'
+import './main.scss'
 // TODO turn this back on
 // import createPersistedState from 'vuex-persistedstate'
 

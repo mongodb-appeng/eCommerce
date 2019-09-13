@@ -6,7 +6,7 @@
     </div>
     <section class="section">
       <div v-if="stitchReady" class="columns">
-        <div class="column is-3 half-height">
+        <div class="column is-3 restrict-height">
           <div class="container">
             <CategoryMenu></CategoryMenu>
           </div>
@@ -80,8 +80,8 @@ export default {
 </script>
 
 <style scoped>
-.half-height {
-  height: 50vh;
+.restrict-height {
+  height: 75vh;
   overflow: scroll;
 }
 </style>

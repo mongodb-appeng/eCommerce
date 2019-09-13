@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div v-if="stitchReady">
+      <div v-if="stitchReady && product">
         <ProductReviews
             v-if="product.reviews && product.reviews.recentReviews"
             v-bind:reviews="product.reviews.recentReviews"

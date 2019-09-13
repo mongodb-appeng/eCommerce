@@ -1,0 +1,28 @@
+@charset "utf-8";
+@import "../node_modules/bulma/sass/utilities/initial-variables";
+
+// @import "../node_modules/bulma/bulma.sass";
+
+$mongo-leaf: #13AA52;
+$mongo-fern: #12924F;
+$mongo-forest: #116149;
+$mongo-mint: #b8e6cb;
+$mongo-lead: #1a1a1a;
+$mongo-graphite: #21313c;
+$mongo-charcoal: #798186;
+$mongo-fog: #b8c4c2;
+$mongo-smoke: #f5f6f7;
+$mongo-cloud: #fafbfc;
+
+$primary: $mongo-forest;
+$text: $mongo-lead;
+$success: $mongo-leaf;
+$title-color: $mongo-lead;
+// $family-primary: "courier";
+
+@import "../node_modules/bulma/sass/utilities/_all";
+@import "../node_modules/bulma/sass/base/_all";
+@import "../node_modules/bulma/sass/elements/_all";
+@import "../node_modules/bulma/sass/components/_all";
+@import "../node_modules/bulma/sass/grid/_all";
+@import "../node_modules/bulma/sass/layout/_all";
