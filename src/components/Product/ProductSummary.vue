@@ -11,7 +11,7 @@
       </Rank>
       <table class="table" cellspacing="0" id="pricing">
         <tbody>
-          <tr>
+          <tr v-if="price.list">
             <td class="right">List price:</td>
             <td>${{ price.list }}</td>
           </tr>

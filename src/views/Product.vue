@@ -33,9 +33,13 @@
           </div>
         </div>
       </div>
-      <div>
-        
+      <div v-if="stitchReady">
+        <ProductReviews
+            v-if="product.reviews && product.reviews.recentReviews"
+            v-bind:reviews="product.reviews.recentReviews"
+        ></ProductReviews>
       </div>
+
     </section>
     <!-- TODO: Move these to a status component -->
     <div v-if="error" class="notification is-danger">
@@ -60,6 +64,7 @@ import AnonymousAuth from '../components/AnonymousAuth.vue'
 import ImageBox from '../components/Product/ImageBox.vue'
 import ProductSummary from '../components/Product/ProductSummary.vue'
 import PurchaseBox from '../components/Product/PurchaseBox.vue'
+import ProductReviews from '../components/Product/Reviews.vue'
 import { setTimeout } from 'timers';
 
 export default {
@@ -71,7 +76,8 @@ export default {
     MyHeader,
     ImageBox,
     ProductSummary,
-    PurchaseBox
+    PurchaseBox,
+    ProductReviews
   },
   data() {
     return {
