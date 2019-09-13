@@ -106,11 +106,6 @@ export default {
         this.database.collection("products")
         .find(
           query,
-          // {
-          //   productID: {$gt: this.lastProductID},
-          //   categoryHierarchy: {$all: ['clothing']}
-          //   // categoryHierarchy: {$all: this.categoryFilter}
-          // },
           {
             projection: {
               _id: 0,

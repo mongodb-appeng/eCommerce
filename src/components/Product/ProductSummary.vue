@@ -80,7 +80,7 @@ export default {
     calculateSaving() {
       if (this.price && this.price.sale > 0 && this.price.list > 0) {
         this.saving = (this.price.list - this.price.sale).toFixed(2);
-        this.savingPC = 100 * ((this.price.list - this.price.sale)/this.price.list).toFixed(2);
+        this.savingPC = (100 * (((this.price.list - this.price.sale)/this.price.list).toFixed(2))).toFixed(0);
         if (this.categoryHierarchy.includes('sale')) {
           this.saleTag = 'sale';
         }
