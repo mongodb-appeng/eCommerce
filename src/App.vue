@@ -9,6 +9,7 @@ import Vue from 'vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import Vuex from 'vuex'
+import config from './config.js'
 import {
     mapState, 
     mapMutations 
@@ -17,7 +18,7 @@ Vue.use(Buefy);
 Vue.use(Vuex);
 
 export default {
-  name: "mongodb-ecommerce",
+  name: config.appName,
   data() {
     return {
     }

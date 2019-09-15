@@ -59,9 +59,6 @@ export default {
       ]),
   },
   methods: {
-    // setCategoryFilter(path) {
-    //   this.path = path;
-    // },
     waitUntilStitchReady() {
        if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;

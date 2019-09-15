@@ -75,7 +75,6 @@ import {
 export default {
     name: "UserLogin",
     props: [
-        // "stitchClient"
     ], 
     data() {
         return {
@@ -84,7 +83,6 @@ export default {
             progress: '',
             email: '',
             password: ''
-            // localUser: null
         }
     },
     computed: {
@@ -106,14 +104,11 @@ export default {
             const credential = new UserPasswordCredential(this.email, this.password);
             this.stitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
-                // this.user = authedUser;
-                // this.setUser(authedUser);
                 // TODO: should change the action to return a promise.
                 this.$store.dispatch('setUserLoggedIn', authedUser)
                 .then (() => {
                     this.progress = 'This window will close in 2 seconds';
                     this.success = `Successfully logged in with id: ${authedUser.id}`;
-                    // this.$emit('user-logged-in', this.user);
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.log(this.success);
                     const _this = this;

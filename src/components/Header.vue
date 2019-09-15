@@ -137,9 +137,4 @@ export default {
 </script>
 
 <style scoped>
-    /* .hero {
-        position: fixed;
-        top: 0;
-        width: 100%;
-    } */
 </style>

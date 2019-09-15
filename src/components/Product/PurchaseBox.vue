@@ -11,7 +11,6 @@ import {
     mapState,
     // mapMutations
     } from 'vuex';
-// import ImageBox from '../components/Product/ImageBox.vue'
 
 export default {
   name: 'purchase-box',

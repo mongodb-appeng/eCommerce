@@ -21,7 +21,7 @@
           </tr>
           <tr v-if="saving > 0">
             <td class="right">You save:</td>
-            <td>${{ saving }} (%{{ savingPC }})</td>
+            <td>${{ saving }} (%{{ savingPercent }})</td>
           </tr>
         </tbody>
       </table>
@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       saving: 0,
-      savingPC: 0,
+      savingPercent: 0,
       saleTag: null
     }
   },
@@ -80,7 +80,7 @@ export default {
     calculateSaving() {
       if (this.price && this.price.sale > 0 && this.price.list > 0) {
         this.saving = (this.price.list - this.price.sale).toFixed(2);
-        this.savingPC = (100 * (((this.price.list - this.price.sale)/this.price.list).toFixed(2))).toFixed(0);
+        this.savingPercent = (100 * (((this.price.list - this.price.sale)/this.price.list).toFixed(2))).toFixed(0);
         if (this.categoryHierarchy.includes('sale')) {
           this.saleTag = 'sale';
         }

@@ -9,6 +9,7 @@ import {
     AnonymousCredential,
     RemoteMongoClient
 } from "mongodb-stitch-browser-sdk"
+import config from '../config'
 
 export default {
     name: "AnonymousAuth",
@@ -32,7 +33,7 @@ export default {
     },
     connectDatabase() {
         try {
-            this.db = this.stitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db("ecommerce");
+            this.db = this.stitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db(config.database);
             this.$emit('db', this.db);
         }
         catch (err) {
@@ -40,7 +41,7 @@ export default {
             /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
             console.error(this.error);
         }
-    }
+    } 
   },
   created() {
     this.anonymousLogin();

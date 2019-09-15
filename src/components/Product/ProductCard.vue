@@ -87,7 +87,6 @@ export default {
     },
     computed: {
         ...mapState([
-            // 'database'
         ]),
     },
     methods: {

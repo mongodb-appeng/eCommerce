@@ -256,6 +256,7 @@ import {
     mapState, 
     mapMutations 
     } from 'vuex';
+import config from '../config';
 
 export default {
     name: 'profile',
@@ -365,14 +366,14 @@ export default {
             if (files.length) {
                 this.mugshotFile = files[0];
                 // TODO switch to MongoDB marketing account AWS2 / ecommerce-mongodb-mugshots
-                const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, "AWS2");
+                const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, config.aws.serviceName);
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
                         let now = Date.now();
                     const s3Args = { 
                         ACL: "public-read",
                         // TODO: Make configurable
-                        Bucket: "ecommerce-mongodb-mugshots",
+                        Bucket: config.aws.bucket,
                         // Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,
                         Key: `mug_${this.customer.contact.email}_${now}`,
@@ -389,7 +390,7 @@ export default {
                         // this.customer.mugshotURL = `https://ecommerce-mongodb-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
                         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                         console.log('storing new url');
-                        this.localCustomer.mugshotURL = `https://ecommerce-mongodb-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
+                        this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
                         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                         console.log(`newURL = ${this.localCustomer.mugshotURL}`);
                     },

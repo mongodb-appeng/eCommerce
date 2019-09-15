@@ -1,8 +1,5 @@
 <template>
 <div>
-  <!-- <div v-if="!userLoggedIn">
-    <AnonymousAuth></AnonymousAuth>
-  </div> -->
   <div v-if="saleCategoryTree">
     <CategoryNode
       v-bind:nodes="saleCategoryTree.children"
@@ -52,11 +49,11 @@ export default {
   },
   data() {
     return {
-    error: '',
-    progress: '',
-    success: '',
-    categoryTree: null,
-    saleCategoryTree: null
+      error: '',
+      progress: '',
+      success: '',
+      categoryTree: null,
+      saleCategoryTree: null
     }
   },
   computed: {

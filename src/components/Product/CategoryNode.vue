@@ -53,7 +53,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userLoggedIn", "database"]),
+    ...mapState([
+      "userLoggedIn", 
+      "database"
+    ]),
     indent() {
         return {
             transform: `translate(${this.depth * 10}px)`

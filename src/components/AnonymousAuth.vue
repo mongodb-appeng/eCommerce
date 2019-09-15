@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import config from '../config'
 import {
     Stitch,
     AnonymousCredential,
@@ -69,7 +70,7 @@ export default {
         },
         connectDatabase() {
             try {
-                const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db("ecommerce");
+                const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db(config.database);
                 this.setDatabase(database);
             }
             catch (err) {
@@ -83,7 +84,7 @@ export default {
         try {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.log(`Trying to get app client`);
-            this.localStitchClient = Stitch.getAppClient("ecommerce-iukkg");
+            this.localStitchClient = Stitch.getAppClient(config.appId);
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.log('Got the client');
         }
@@ -91,19 +92,9 @@ export default {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.log(`Caught no default client`);
             // The default client hasn't been set yet
-            this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
+            this.localStitchClient = Stitch.initializeDefaultAppClient(config.appId);
         }
         this.anonymousLogin();
-        
-        // if (this.database) {
-        //     // Not strictly needed but helps clean things up during development
-        //     // TODO Remove this for production
-        //     this.localStitchClient = Stitch.getAppClient("ecommerce-iukkg");
-        //     this.setStitchClient(this.localStitchClient);
-        // } else {
-        //     this.localStitchClient = Stitch.initializeDefaultAppClient("ecommerce-iukkg");
-        //     this.anonymousLogin();
-        // }
     }
 }
 </script>

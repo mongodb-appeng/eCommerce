@@ -14,7 +14,7 @@
 
 <script>
 import { 
-    // mapState, 
+    mapState, 
     // mapMutations 
     } from 'vuex';
 
@@ -31,9 +31,8 @@ export default {
         }
     },
     computed: {
-        // ...mapState([
-        //     // 'database'
-        // ]),
+        ...mapState([
+        ]),
     },
     methods: {
     },
