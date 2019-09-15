@@ -17,7 +17,7 @@ Vue.use(Buefy);
 Vue.use(Vuex);
 
 export default {
-  name: "buefy_test",
+  name: "mongodb-ecommerce",
   data() {
     return {
     }

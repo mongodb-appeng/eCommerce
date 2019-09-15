@@ -1,6 +1,6 @@
-# Work in progress - this app is still being built
+# Work in progress! MongoDB eCommerce reference web app
 
-# buefy_test
+# Testing branch
 
 ## Project setup
 ```
