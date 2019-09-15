@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 // TODO remove password
-const url = 'mongodb+srv://billy:billy@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority';
+const url = 'mongodb+srv://billy:TODO@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority';
 const dbName = 'ecommerce';
 
 // Create a new MongoClient
