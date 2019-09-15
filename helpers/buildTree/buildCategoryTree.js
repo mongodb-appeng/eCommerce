@@ -1,8 +1,10 @@
+import config from '../../src/config'
+
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 // TODO remove password
-const url = 'mongodb+srv://billy:TODO@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority';
-const dbName = 'ecommerce';
+const url = `mongodb+srv://${config.dbUser}:${dbPassword}@ecommerce-nwagk.mongodb.net/test?retryWrites=true&w=majority`;
+const dbName = config.database;
 
 // Create a new MongoClient
 const client = new MongoClient(url);
@@ -81,9 +83,7 @@ client.connect(function (err) {
     prodArray = db.collection('products').find(
       {categoryHierarchy: 'sale'},
       {
-        projection: { _id: 0, categoryHierarchy: 1 },
-        // sort: {categoryHierarchy: 1}
-        // limit: 50
+        projection: { _id: 0, categoryHierarchy: 1 }
       }
     ).toArray()
       .then((prodArray) => {
