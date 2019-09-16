@@ -3,11 +3,11 @@ const config = {
     appId: 'ecommerce-iukkg',
     database: 'ecommerce',
     dbUser: 'billy',
-    dbPassword: 'TODO',
+    dbPassword: 'billy',
     aws: {
         serviceName: 'AWS2',
         bucket: 'ecommerce-mongodb-mugshots',
-        
+
 
     }
 }

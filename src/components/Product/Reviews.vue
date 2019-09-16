@@ -6,7 +6,7 @@
         <li
           v-for="review in reviews"
           v-bind:key="review">
-            <div class="box"> {{ review }}</div>
+            <div class="box"> {{ review.review }}</div>
         </li>
       </ul>
     </section>
