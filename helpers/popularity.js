@@ -79,3 +79,21 @@ db.products2.aggregate([
         }
     }
 ])
+
+db.products.aggregate([
+    {
+        $match: {productID: '96db9fcc49f7d3ed726b0caaf9cf8e5d'}
+    },
+    {
+        $set: {
+            productID: {
+                $convert: {
+                    input: '$productID',
+                    to: 'int'
+                }
+            }
+        }
+    }
+])
+
+fff1fffffffffffffffffffffffffff

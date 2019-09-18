@@ -125,7 +125,7 @@ export default {
             // TODO should probably find something better to sort on (like) review scores
             // but need to figure out how to not break the efficient pagination
             // sort: {interest: -1, productID: 1},
-            sort: {productID: 1},
+            sort: {productID: -1},
             limit: 20
           }
         ).toArray()
