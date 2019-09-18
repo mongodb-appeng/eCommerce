@@ -6,7 +6,7 @@
     </div>
     <section class="section">
       <div v-if="stitchReady && product" class="columns">
-        <div class="column is-5">
+        <div class="column is-5 restrict-height">
           <div class="container">
             <ImageBox
               v-bind:productImages="product.productImages"
@@ -141,4 +141,8 @@ export default {
 </script>
 
 <style scoped>
+.restrict-height {
+  height: 600px;
+  overflow: scroll;
+}
 </style>

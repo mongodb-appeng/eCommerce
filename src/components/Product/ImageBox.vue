@@ -2,7 +2,7 @@
   <div class>
     <section class="section">
       <div class="columns">
-        <div class="column is-2">
+        <div class="column is-2 restrict-height">
           <div class="container">
             <ul id="product-images">
               <li
@@ -68,5 +68,9 @@ export default {
 <style scoped>
 div.box {
   padding: 0.25rem
+}
+.restrict-height {
+  height: 600px;
+  overflow: scroll;
 }
 </style>

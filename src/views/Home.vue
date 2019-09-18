@@ -72,6 +72,7 @@ export default {
   },
   mounted() {
     this.waitUntilStitchReady();
+    console.log('Hi');
   }
 }
 </script>
