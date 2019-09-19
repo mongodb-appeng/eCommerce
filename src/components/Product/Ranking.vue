@@ -6,7 +6,7 @@
             max="5"></progress>
             </div>
             <div class="column is-narrow">
-                <small>{{ score }}/5 ({{ numberReviews  }} review<span v-if="numberReviews > 1">s</span>) </small>
+                <small>{{ productRating }}/5 ({{ numberReviews  }} review<span v-if="numberReviews > 1">s</span>) </small>
             </div>
         </div>
     </div>
@@ -28,6 +28,7 @@ export default {
     },
     data() {
         return {
+            productRating: 0
         }
     },
     computed: {
@@ -37,6 +38,7 @@ export default {
     methods: {
     },
     created() {
+        this.productRating = this.score.toFixed(1);
   }
 }
 </script>

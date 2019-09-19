@@ -2,53 +2,42 @@
   <div class="container">
     <section class="section">
       <h3 class="title is-3">Reviews</h3>
+      <!-- Only show if logged in. Also add a list of products that a customer has reviewed
+      to their document so the button changes to "Update review" if they've already reviewed
+      the product -->
+      <a 
+        v-if="!showReviewForm && !reviewSubmited"
+        v-on:click="exposeReviewForm"
+        v-on:reviewPosted="postedReview"
+        class="button is-success"
+      >
+        <span class="icon">
+            <i class="far fa-comment-dots"></i>
+        </span>
+        <span>Post Review</span>
+      </a>
+      <AddReview
+        v-if="showReviewForm"
+        v-bind:productID="productID"
+        v-on:reviewStats="newReviewStats"
+        v-on:review="newReview"
+      ></AddReview>
+      <br/><br/>
       <ul id="review-list">
         <li
-          v-for="review in reviews"
+          v-for="review in reviews.recentReviews"
           v-bind:key="review.review">
             <div class="box">
               {{ review.review }} <br/><br/>
                 <div class="level-left">
-                  <a class="level-item" aria-label="reply">
-                    <span v-if="review.score >= 1" class="icon is-small has-text-warning">
-                      <i class="fas fa-star" aria-hidden="true"></i>
-                    </span>
-                    <span v-else class="icon is-small has-text-warning">
-                      <i class="far fa-star" aria-hidden="true"></i>
-                    </span>
-                  </a>
-                  <a class="level-item" aria-label="reply">
-                    <span v-if="review.score >= 2" class="icon is-small has-text-warning">
-                      <i class="fas fa-star" aria-hidden="true"></i>
-                    </span>
-                    <span v-else class="icon is-small has-text-warning">
-                      <i class="far fa-star" aria-hidden="true"></i>
-                    </span>
-                  </a>
-                  <a class="level-item" aria-label="reply">
-                    <span v-if="review.score >= 3" class="icon is-small has-text-warning">
-                      <i class="fas fa-star" aria-hidden="true"></i>
-                    </span>
-                    <span v-else class="icon is-small has-text-warning">
-                      <i class="far fa-star" aria-hidden="true"></i>
-                    </span>
-                  </a>
-                  <a class="level-item" aria-label="reply">
-                    <span v-if="review.score >= 4" class="icon is-small has-text-warning">
-                      <i class="fas fa-star" aria-hidden="true"></i>
-                    </span>
-                    <span v-else class="icon is-small has-text-warning">
-                      <i class="far fa-star" aria-hidden="true"></i>
-                    </span>
-                  </a>
-                  <a class="level-item" aria-label="reply">
-                    <span v-if="review.score >= 5" class="icon is-small has-text-warning">
-                      <i class="fas fa-star" aria-hidden="true"></i>
-                    </span>
-                    <span v-else class="icon is-small has-text-warning">
-                      <i class="far fa-star" aria-hidden="true"></i>
-                    </span>
-                  </a>
+                    <a v-for="rank in [1, 2, 3, 4, 5]" v-bind:key="rank" class="level-item">
+                      <span v-if="review.score >= rank" class="icon is-small has-text-warning">
+                        <i class="fas fa-star"></i>
+                      </span>
+                      <span v-else class="icon is-small has-text-warning">
+                        <i class="far fa-star"></i>
+                      </span>
+                    </a>
                 </div>
             </div>
         </li>
@@ -58,6 +47,7 @@
 </template>
 
 <script>
+import AddReview from './addReview';
 import {
     mapState,
     // mapMutations
@@ -66,12 +56,16 @@ import {
 export default {
   name: 'product-reviews',
   props: [
-    'reviews'
+    'reviews',
+    'productID'
 ],
   components: {
+    AddReview
   },
   data() {
     return {
+      showReviewForm: false,
+      reviewSubmited: false
     }
   },
   computed: {
@@ -79,6 +73,21 @@ export default {
       ]),
   },
   methods: {
+    exposeReviewForm () {
+      this.showReviewForm = true;
+    },
+    postedReview (review) {
+      this.reviews.unshift(review);
+      this.reviewSubmited = true;
+    },
+    newReviewStats(stats) {
+      this.$emit('reviewStats', stats);
+    },
+    newReview(review) {
+      this.reviews.recentReviews.unshift(review);
+      this.showReviewForm = false;
+      this.reviewSubmited = true;
+    }
   },
   mounted() {
   }

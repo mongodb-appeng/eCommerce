@@ -26,7 +26,7 @@
         </tbody>
       </table>
       <!-- TODO: make these links -->
-      <nav class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
+      <nav v-if="categoryHierarchy.length > 2" class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
         <ul id="category-breadcrumbs">
           <li
             v-for="category in categoryHierarchy.slice(1, categoryHierarchy.length)"

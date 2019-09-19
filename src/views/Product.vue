@@ -35,8 +35,9 @@
       </div>
       <div v-if="stitchReady && product">
         <ProductReviews
-            v-if="product.reviews && product.reviews.recentReviews && product.reviews.recentReviews.length > 0"
-            v-bind:reviews="product.reviews.recentReviews"
+            v-bind:reviews="product.reviews"
+            v-bind:productID="product.productID"
+            v-on:reviewStats="newReviewStats"
         ></ProductReviews>
       </div>
 
@@ -120,6 +121,11 @@ export default {
       } else {
         this.error = 'Error, no productID included in URL query parameters';
       }
+    },
+    newReviewStats(reviewStats) {
+      // TODO
+      this.product.reviews.averageReviewScore = reviewStats.averageReviewScore;
+      this.product.reviews.numberOfReviews = reviewStats.numberOfReviews;
     },
     waitUntilStitchReady() {
       if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
