@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <MyHeader></MyHeader>
+    <MyHeader
+      v-bind:needLogin="needLogin"
+    ></MyHeader>
     <div>
       <AnonymousAuth></AnonymousAuth>
     </div>
@@ -38,6 +40,7 @@
             v-bind:reviews="product.reviews"
             v-bind:productID="product.productID"
             v-on:reviewStats="newReviewStats"
+            v-on:login="login"
         ></ProductReviews>
       </div>
 
@@ -87,7 +90,8 @@ export default {
       success: '',
       stitchReady: false,
       productID: null,
-      product: null 
+      product: null,
+      needLogin: false
     }
   },
   computed: {
@@ -137,6 +141,9 @@ export default {
         let _this = this;
         setTimeout(_this.waitUntilStitchReady, 100);
       }
+    },
+    login() {
+      this.needLogin = true
     }
   },
   mounted() {

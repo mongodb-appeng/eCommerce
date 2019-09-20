@@ -63,7 +63,7 @@
 </header>
 <body>
     <div class="container">
-        <div v-if="loginModalVisible" class="modal is-active">
+        <div v-if="loginModalVisible || (needLogin && !userLoggedIn)" class="modal is-active">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <UserLogin v-on:close-modal="hideLoginModal"></UserLogin>
@@ -85,6 +85,7 @@ import {
 export default {
     name: "Header",
     props: [
+        'needLogin'
     ], 
     components: {
         UserLogin
@@ -111,6 +112,7 @@ export default {
         },
         hideLoginModal () {
             this.loginModalVisible = false;
+            this.needLogin = false;
         },
         gotoProfile () {
             if (this.userLoggedIn) {

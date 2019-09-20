@@ -1,6 +1,6 @@
 <template>
     <div class="container" id="add-review">
-        <div class="notification">
+        <div v-if="userLoggedIn" class="notification">
             <h1 class="title is-2">Review this product</h1>
             <textarea
                 v-model="comment"
@@ -116,7 +116,8 @@ export default {
     },
     computed: {
         ...mapState([
-            'stitchClient'
+            'stitchClient',
+            'userLoggedIn'
         ]),
     },
     methods: {
@@ -154,6 +155,9 @@ export default {
         }
     },
     mounted() {
+        if (!this.userLoggedIn) {
+            this.$emit('login');
+        }
     }
 }
 </script>

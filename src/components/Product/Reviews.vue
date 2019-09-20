@@ -21,6 +21,7 @@
         v-bind:productID="productID"
         v-on:reviewStats="newReviewStats"
         v-on:review="newReview"
+        v-on:login="login"
       ></AddReview>
       <br/><br/>
       <ul id="review-list">
@@ -87,6 +88,9 @@ export default {
       this.reviews.recentReviews.unshift(review);
       this.showReviewForm = false;
       this.reviewSubmited = true;
+    },
+    login() {
+      this.$emit('login');
     }
   },
   mounted() {
