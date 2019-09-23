@@ -372,7 +372,6 @@ export default {
                         let now = Date.now();
                     const s3Args = { 
                         ACL: "public-read",
-                        // TODO: Make configurable
                         Bucket: config.aws.bucket,
                         // Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,

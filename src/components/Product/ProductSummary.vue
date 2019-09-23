@@ -21,7 +21,7 @@
           </tr>
           <tr v-if="saving > 0">
             <td class="right">You save:</td>
-            <td>${{ saving }} (%{{ savingPercent }})</td>
+            <td>${{ saving }} ({{ savingPercent }}%)</td>
           </tr>
         </tbody>
       </table>

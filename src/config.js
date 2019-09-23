@@ -7,8 +7,9 @@ const config = {
     aws: {
         serviceName: 'AWS2',
         bucket: 'ecommerce-mongodb-mugshots',
-
-
+        productBucket: 'ecommerce-mongodb-products',
+        accessKeyId: 'AKIA2QKJSCXB4LWQ7SH5',
+        secretAccessKey: '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'
     }
 }
 
