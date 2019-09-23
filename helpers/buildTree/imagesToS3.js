@@ -41,9 +41,10 @@ function uploadProductImages(doc) {
         // console.log(`Wrote to S3; URL = ${newURL}`);
         imageArray.push(newURL);
       })
-    }, (error) => {
+    }, () => {
       // console.log(`Requested URL: ${imageURL}`);
       // console.log(`Error: ${error.message}`);
+      // Just discard the broken link silently
       imagesRemoved++;
     })
   });
