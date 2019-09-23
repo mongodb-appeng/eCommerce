@@ -2,7 +2,8 @@
 node_modules
 data
 helpers/buildTree/node_modules
-src/config.js
+# src/config.js
+build
 
 
 # local env files
