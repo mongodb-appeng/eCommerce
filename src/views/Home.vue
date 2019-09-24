@@ -63,8 +63,6 @@ export default {
        if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
        } else {
-         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-         console.log('Waiting');
          let _this = this;
          setTimeout(_this.waitUntilStitchReady, 100);
        }
@@ -72,7 +70,6 @@ export default {
   },
   mounted() {
     this.waitUntilStitchReady();
-    console.log('Hi');
   }
 }
 </script>

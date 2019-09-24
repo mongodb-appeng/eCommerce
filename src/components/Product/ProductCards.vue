@@ -84,8 +84,6 @@ export default {
         this.success = '';
         this.progress = "Fetching product list";
         this.bouncable = false;
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-        console.log('Fetching more products');
         let query = {
           productID: {$lt: this.lastProductID}
         };
@@ -101,8 +99,6 @@ export default {
             {$and: matchCategories}
           ];
         }
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-        console.log(`Query: ${String(query)}`);
         this.database.collection("products")
         .find(
           query,
@@ -125,8 +121,6 @@ export default {
           }
         ).toArray()
         .then ((docArray) => {
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-          console.log(`${docArray.length} new products`);
           if (docArray.length > 0) {
             this.lastProductID = docArray[docArray.length - 1].productID;
             docArray.forEach((item) => {

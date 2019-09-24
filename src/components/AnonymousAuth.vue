@@ -51,8 +51,6 @@ export default {
                 this.progress = 'Authing app...'
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.log('Authed');
                     this.progress = '';
                     this.connectDatabase();
                     this.setStitchClient(this.localStitchClient);
@@ -82,15 +80,9 @@ export default {
     },
     mounted() {
         try {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.log(`Trying to get app client`);
             this.localStitchClient = Stitch.getAppClient(config.appId);
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.log('Got the client');
         }
         catch {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.log(`Caught no default client`);
             // The default client hasn't been set yet
             this.localStitchClient = Stitch.initializeDefaultAppClient(config.appId);
         }

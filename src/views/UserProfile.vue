@@ -387,11 +387,7 @@ export default {
                         // TODO include timestamp in the URL
                         // this.customer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
                         // this.customer.mugshotURL = `https://ecommerce-mongodb-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
-                        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                        console.log('storing new url');
                         this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
-                        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                        console.log(`newURL = ${this.localCustomer.mugshotURL}`);
                     },
                     (error) => {
                         this.error = `Failed to upload image file: ${error.message}`;

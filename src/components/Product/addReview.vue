@@ -136,10 +136,7 @@ export default {
             ])
             .then ((results) => {
                 this.test = results;
-                console.log(`Call passed`);
                 if (results && results.averageReviewScore && results.numberOfReviews) {
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.log('Results look good');
                     let stats = {
                         averageReviewScore: results.averageReviewScore,
                         numberOfReviews: results.numberOfReviews

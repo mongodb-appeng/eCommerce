@@ -109,8 +109,6 @@ export default {
                 .then (() => {
                     this.progress = 'This window will close in 2 seconds';
                     this.success = `Successfully logged in with id: ${authedUser.id}`;
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.log(this.success);
                     const _this = this;
                     setTimeout(function(){
                         _this.$emit("close-modal");

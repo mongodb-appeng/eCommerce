@@ -112,10 +112,6 @@ const store = new Vuex.Store({
                   if (customerDoc) {
                   commit('setCustomer', customerDoc);
                   commit('setUserFirstName', customerDoc.name.first);
-              } else {
-                  // No record found for this customer – doesn't mean that it's a problem
-                  /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                  console.log('No matching customer document found in the database.');
               }
               resolve();
           }, (err) => {

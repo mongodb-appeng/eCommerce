@@ -99,8 +99,6 @@ export default {
             'incrTest'
         ]),
         register() {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.log('Registering user');
             this.error = '';
             this.progress = '';
             if (this.password != this.password2)

@@ -31,6 +31,7 @@
         <div class="column is-3">
           <div class="container">
             <PurchaseBox
+              v-bind:stockLevel="product.stockLevel"
             ></PurchaseBox>
           </div>
         </div>
@@ -136,8 +137,6 @@ export default {
         this.stitchReady = true;
         this.fetchProduct();
       } else {
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-        console.log('Waiting');
         let _this = this;
         setTimeout(_this.waitUntilStitchReady, 100);
       }

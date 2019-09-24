@@ -66,8 +66,6 @@ export default {
     fetchTree() {
       if (!this.categoryTree) {
         this.progress = 'Fetching product categories';
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        console.log('Fetching category tree');
         this.database.collection('meta').findOne(
           {name: 'categoryTree'}
         )
@@ -92,8 +90,6 @@ export default {
     fetchSaleTree() {
       if (!this.saleCategoryTree) {
         this.progress = 'Fetching sales product categories';
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-        console.log('Fetching sales category tree');
         this.database.collection('meta').findOne(
           {name: 'saleCategoryTree'}
         )
