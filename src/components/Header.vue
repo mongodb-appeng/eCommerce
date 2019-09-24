@@ -63,7 +63,7 @@
 </header>
 <body>
     <div class="container">
-        <div v-if="loginModalVisible || (needLogin && !userLoggedIn)" class="modal is-active">
+        <div v-if="loginModalVisible || (loginRequested && !userLoggedIn)" class="modal is-active">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <UserLogin v-on:close-modal="hideLoginModal"></UserLogin>
@@ -92,7 +92,8 @@ export default {
     },
     data() {
         return {
-            loginModalVisible: false
+            loginModalVisible: false,
+            loginRequested: false
         }
     },
     computed: {
@@ -134,6 +135,7 @@ export default {
         }
     },
     created() {
+        this.loginRequested = this.loginRequested;
   }
 }
 </script>

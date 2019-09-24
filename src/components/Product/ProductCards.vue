@@ -49,8 +49,7 @@ export default {
           success: '',
           products: [],
           bouncable: false,
-          lastProductID: '',
-          lastInterest: 99999999999
+          lastProductID: 'fffffffffffffffffffffffffffffff'
         }
     },
     computed: {
@@ -63,8 +62,7 @@ export default {
       categoryFilter: function () {
         console.log(`categoryFilter: ${this.categoryFilter}`);
    
-        this.lastProductID = '';
-        this.lastInterest = 99999999999;
+        this.lastProductID = 'fffffffffffffffffffffffffffffff';
         this.products = [];
         this.fetchProductList();
       }
@@ -89,8 +87,7 @@ export default {
         /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
         console.log('Fetching more products');
         let query = {
-          // interest: {$lte: this.lastInterest},
-          productID: {$gt: this.lastProductID}
+          productID: {$lt: this.lastProductID}
         };
         if (this.categoryFilter.length > 0) {
           let matchCategories = [];
@@ -119,12 +116,10 @@ export default {
               productImages: 1,
               price: 1,
               "reviews.averageReviewScore": 1,
-              "reviews.numberOfReviews": 1,
-              interest: 1
+              "reviews.numberOfReviews": 1
             },
             // TODO should probably find something better to sort on (like) review scores
             // but need to figure out how to not break the efficient pagination
-            // sort: {interest: -1, productID: 1},
             sort: {productID: -1},
             limit: 20
           }
@@ -134,7 +129,6 @@ export default {
           console.log(`${docArray.length} new products`);
           if (docArray.length > 0) {
             this.lastProductID = docArray[docArray.length - 1].productID;
-            this.lastInterest = docArray[docArray.length - 1].interest;
             docArray.forEach((item) => {
               this.products.push(item);
             })
