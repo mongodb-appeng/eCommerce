@@ -38,6 +38,7 @@ import {
 export default {
     name: "ProductCards",
     props: [
+      'searchTerm'
     ], 
     components: {
         ProductCard,
@@ -49,7 +50,8 @@ export default {
           success: '',
           products: [],
           bouncable: false,
-          lastProductID: 'fffffffffffffffffffffffffffffff'
+          lastProductID: 'fffffffffffffffffffffffffffffff',
+          lastScore: 10000
         }
     },
     computed: {
@@ -59,12 +61,17 @@ export default {
       ]),
     },
     watch: {
-      categoryFilter: function () {
-        console.log(`categoryFilter: ${this.categoryFilter}`);
-   
+      categoryFilter: function () {  
         this.lastProductID = 'fffffffffffffffffffffffffffffff';
         this.products = [];
         this.fetchProductList();
+        this.searchTerm = '';
+      },
+      searchTerm: function () {
+        this.lastProductID = 'fffffffffffffffffffffffffffffff';
+        this.lastScore = 10000;
+        this.products = [];
+        this.searchProducts();
       }
     },
     methods: {
@@ -144,13 +151,125 @@ export default {
             console.error(this.error);
         })
       },
+
+      searchProducts () {
+        this.error = '';
+        this.success = '';
+        this.progress = "Searching for matching products";
+        this.bouncable = false;
+        this.database.collection('products').aggregate(
+          [
+            {
+              $searchBeta: {
+                index: 'Titles and descriptions', 
+                compound: {
+                  must: {
+                    search: {
+                      query: this.searchTerm, 
+                      path: 'description'
+                    }
+                  }, 
+                  should: {
+                    search: {
+                      query: 'shirt', 
+                      path: 'productName'
+                    },
+                    // eslint-disable-next-line
+                    search: {
+                      query: 'shirt', 
+                      path: 'category'
+                    }
+                  }
+                }, 
+                highlight: {
+                  path: 'description'
+                }
+              }
+            }, {
+              $project: {
+                _id: 0,
+                productName: 1, 
+                description: 1, 
+                productID: 1, 
+                category: 1, 
+                productImages: 1, 
+                price: 1,
+                "reviews.averageReviewScore": 1,
+                "reviews.numberOfReviews": 1,
+                score: {
+                  $meta: 'searchScore'
+                }, 
+                highlights: {
+                  $meta: 'searchHighlights'
+                }
+              }
+            },
+            {
+              $match: {
+                $or: [
+                  {
+                    score: {$lt: this.lastScore}
+                  },
+                  {
+                    $and: [
+                      {
+                        score: {$eq: this.lastScore},
+                      },
+                      {
+                        productID: {$lt: this.lastProductID}
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              '$sort': {
+                'score': -1, 
+                'productID': -1
+              }
+            }, 
+            {
+              '$limit': 20
+            }
+          ]
+        ).toArray()
+        .then ((docArray) => {
+          if (docArray.length > 0) {
+            this.lastProductID = docArray[docArray.length - 1].productID;
+            this.lastScore = docArray[docArray.length - 1].score;
+            docArray.forEach((item) => {
+              this.products.push(item);
+            })
+            this.progress = '';
+            const _this = this;
+            // Wait 2 seconds before allowing a request to fetch more products
+            setTimeout(function(){        
+                _this.bouncable = true;
+              }, 500);
+            } else {
+              this.progress = '';
+              this.success = 'No more matching products.';
+            }
+        },
+        (error) => {
+          this.progress = '';
+          this.error = `Error: Failed to read the list of products – ${error.message}`;
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+            console.error(this.error);
+        })
+      },
       scroll () {
         window.onscroll = () => {
           const position = 750 + Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight;
           const height = document.documentElement.offsetHeight;
           if (position >= height) {
             if (this.bouncable) {
-              this.fetchProductList();
+              if (this.searchTerm === '') {
+                this.fetchProductList();
+              } else {
+                this.searchProducts();
+              }
             }
           }
         }
@@ -171,4 +290,5 @@ export default {
     overflow-y: auto;
     flex-direction: column;
   }
+
 </style>

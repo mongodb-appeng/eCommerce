@@ -4,7 +4,7 @@
       <h3 class="title is-3">Placeholder for for purchase panel</h3>
     </section>
     <span v-if="stockLevel > 0" class="has-text-primary">{{ stockLevel }} units in stock</span>
-    <span v-else class="has-text-warning">Product is out of stock</span>
+    <span v-else class="has-text-danger">Product is out of stock</span>
   </div>
 </template>
 

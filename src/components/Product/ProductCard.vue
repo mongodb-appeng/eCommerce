@@ -8,16 +8,17 @@
                     </figure>
                 </div>
                 <div class="media-content">
-                    <div class="content">
+                    <div>
                         <h6 class="title is-6">{{ product.productName }}</h6>
                         <span class="tag" v-if="product.category">{{ product.category }}</span>
                         <p><strong>${{ product.price.sale }}</strong>
                         <span v-if="product.price.list > product.price.sale">
                             <small> Reduced from ${{ product.price.list }}</small>
                         </span>
-                        <br>
-                        {{ productSummary }}</p>
-
+                        </p>
+                        <div >
+                            <p v-html="productSummary"></p>
+                        </div>
                         <Rank
                             v-bind:score="product.reviews.averageReviewScore"
                             v-bind:numberReviews="product.reviews.numberOfReviews"
@@ -90,8 +91,27 @@ export default {
         ]),
     },
     methods: {
+        highlightText (highlights) {
+            let result = '';
+            highlights.forEach ((para) => {
+            para.texts.forEach ((snippet) => {
+                if (snippet.type == 'hit') {
+                result += `<span class="has-text-primary has-text-weight-bold">${snippet.value}</span>`;
+                } else {
+                result += snippet.value;
+                }
+            })
+            result += ' ';
+            })
+            return result;
+        },
+        
         prepareProductData () {
-            this.productSummary = this.product.description.substring(0 ,252) + '...';
+            if (this.product.highlights) {
+                this.productSummary = this.highlightText(this.product.highlights).substring(0, 450) + '...';
+            } else {
+                this.productSummary = this.product.description.substring(0, 300) + '...';
+            }
         },
     },
     created() {

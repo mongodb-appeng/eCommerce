@@ -21,6 +21,22 @@
                 <a class="navbar-item" v-on:click="gotoHome">
                     Home
                 </a>
+
+                <div class="field" id=search-box v-if="homePage">
+                    <div class="control has-icons-right">
+                        <input class="input is-small" 
+                            type="text" 
+                            v-model="searchTerm"
+                            placeholder="Search for products" 
+                            v-on:keyup.enter="search"
+                        >
+                        <span class="icon is-small is-right" v-on:click="search">
+                        <i class="fas fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+
+
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">
                         <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
@@ -85,7 +101,8 @@ import {
 export default {
     name: "Header",
     props: [
-        'needLogin'
+        'needLogin',
+        'homePage'
     ], 
     components: {
         UserLogin
@@ -93,7 +110,8 @@ export default {
     data() {
         return {
             loginModalVisible: false,
-            loginRequested: false
+            loginRequested: false,
+            searchTerm: ''
         }
     },
     computed: {
@@ -132,6 +150,9 @@ export default {
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
                 console.error(`Error: Failed to sign out ${error.message}`);
             })
+        },
+        search () {
+            this.$emit('search-term', this.searchTerm);
         }
     },
     created() {
@@ -141,4 +162,7 @@ export default {
 </script>
 
 <style scoped>
+div#search-box {
+    padding-top: 12px;
+}
 </style>

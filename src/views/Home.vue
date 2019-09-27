@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <MyHeader></MyHeader>
+    <MyHeader
+      v-bind:homePage="home"
+      v-on:search-term="search"
+    ></MyHeader>
     <div v-if="!userLoggedIn">
       <AnonymousAuth></AnonymousAuth>
     </div>
@@ -15,6 +18,7 @@
           <div class="container">
             <ProductCards
               v-bind:path="path"
+              v-bind:searchTerm="searchTerm"
             >
             </ProductCards>           
           </div>
@@ -49,7 +53,9 @@ export default {
   data() {
     return {
       path: [],
-      stitchReady: false
+      stitchReady: false,
+      home: true,
+      searchTerm: ''
     }
   },
   computed: {
@@ -66,6 +72,9 @@ export default {
          let _this = this;
          setTimeout(_this.waitUntilStitchReady, 100);
        }
+    },
+    search (searchTerm) {
+      this.searchTerm = searchTerm;
     }
   },
   mounted() {
