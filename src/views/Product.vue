@@ -1,8 +1,9 @@
 <template>
   <div class="home">
-    <MyHeader
+    <MyHeader></MyHeader>
+    <!-- <MyHeader
       v-bind:needLogin="needLogin"
-    ></MyHeader>
+    ></MyHeader> -->
     <div>
       <AnonymousAuth></AnonymousAuth>
     </div>
@@ -41,8 +42,13 @@
             v-bind:reviews="product.reviews"
             v-bind:productID="product.productID"
             v-on:reviewStats="newReviewStats"
-            v-on:login="login"
         ></ProductReviews>
+        <!-- <ProductReviews
+            v-bind:reviews="product.reviews"
+            v-bind:productID="product.productID"
+            v-on:reviewStats="newReviewStats"
+            v-on:login="login"
+        ></ProductReviews> -->
       </div>
 
     </section>
@@ -92,7 +98,7 @@ export default {
       stitchReady: false,
       productID: null,
       product: null,
-      needLogin: false
+      // needLogin: false
     }
   },
   computed: {
@@ -128,7 +134,6 @@ export default {
       }
     },
     newReviewStats(reviewStats) {
-      // TODO
       this.product.reviews.averageReviewScore = reviewStats.averageReviewScore;
       this.product.reviews.numberOfReviews = reviewStats.numberOfReviews;
     },
@@ -141,9 +146,9 @@ export default {
         setTimeout(_this.waitUntilStitchReady, 100);
       }
     },
-    login() {
-      this.needLogin = true
-    }
+    // login() {
+    //   this.needLogin = true
+    // }
   },
   mounted() {
     this.productID = this.$route.query.productID;

@@ -21,8 +21,14 @@
         v-bind:productID="productID"
         v-on:reviewStats="newReviewStats"
         v-on:review="newReview"
-        v-on:login="login"
       ></AddReview>
+      <!-- <AddReview
+        v-if="showReviewForm"
+        v-bind:productID="productID"
+        v-on:reviewStats="newReviewStats"
+        v-on:review="newReview"
+        v-on:login="login"
+      ></AddReview> -->
       <br/><br/>
       <ul id="review-list">
         <li
@@ -43,12 +49,17 @@
             </div>
         </li>
       </ul>
+      <ArchivedReviews
+        v-bind:productID="productID"
+      >
+      </ArchivedReviews>
     </section>
   </div>
 </template>
 
 <script>
 import AddReview from './addReview';
+import ArchivedReviews from './archivedReviews';
 import {
     mapState,
     // mapMutations
@@ -61,7 +72,8 @@ export default {
     'productID'
 ],
   components: {
-    AddReview
+    AddReview,
+    ArchivedReviews
   },
   data() {
     return {
@@ -89,9 +101,9 @@ export default {
       this.showReviewForm = false;
       this.reviewSubmited = true;
     },
-    login() {
-      this.$emit('login');
-    }
+    // login() {
+    //   this.$emit('login');
+    // }
   },
   mounted() {
   }

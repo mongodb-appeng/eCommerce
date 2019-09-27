@@ -68,8 +68,8 @@ export default {
 div.box {
   padding: 0.25rem
 }
-.restrict-height {
+/* .restrict-height {
   height: 300px;
   overflow: scroll;
-}
+} */
 </style>

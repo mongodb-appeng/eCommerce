@@ -50,7 +50,8 @@ export default {
           success: '',
           products: [],
           bouncable: false,
-          lastProductID: 'fffffffffffffffffffffffffffffff',
+          lastProductID: '',
+          lastInterest: 10000,
           lastScore: 10000
         }
     },
@@ -62,13 +63,15 @@ export default {
     },
     watch: {
       categoryFilter: function () {  
-        this.lastProductID = 'fffffffffffffffffffffffffffffff';
+        this.lastProductID = '';
+        this.lastInterest = 10000;
         this.products = [];
         this.fetchProductList();
         this.searchTerm = '';
       },
       searchTerm: function () {
-        this.lastProductID = 'fffffffffffffffffffffffffffffff';
+        this.lastProductID = '';
+        this.lastInterest = 10000;
         this.lastScore = 10000;
         this.products = [];
         this.searchProducts();
@@ -92,7 +95,21 @@ export default {
         this.progress = "Fetching product list";
         this.bouncable = false;
         let query = {
-          productID: {$lt: this.lastProductID}
+          $or: [
+            {
+              interest: {$lt: this.lastInterest}
+            },
+            {
+              $and: [
+                {
+                  interest: {$eq: this.lastInterest}
+                },
+                {
+                  productID: {$gt: this.lastProductID}
+                }
+              ]
+            }
+          ]
         };
         if (this.categoryFilter.length > 0) {
           let matchCategories = [];
@@ -118,18 +135,21 @@ export default {
               category: 1,
               productImages: 1,
               price: 1,
+              interest: 1,
               "reviews.averageReviewScore": 1,
               "reviews.numberOfReviews": 1
             },
             // TODO should probably find something better to sort on (like) review scores
             // but need to figure out how to not break the efficient pagination
-            sort: {productID: -1},
+            sort: {interest: -1, productID: 1},
             limit: 20
           }
         ).toArray()
         .then ((docArray) => {
           if (docArray.length > 0) {
             this.lastProductID = docArray[docArray.length - 1].productID;
+            this.lastInterest = docArray[docArray.length - 1].interest;
+            
             docArray.forEach((item) => {
               this.products.push(item);
             })

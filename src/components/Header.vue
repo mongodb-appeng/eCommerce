@@ -101,7 +101,7 @@ import {
 export default {
     name: "Header",
     props: [
-        'needLogin',
+        // 'needLogin',
         'homePage'
     ], 
     components: {
@@ -131,7 +131,7 @@ export default {
         },
         hideLoginModal () {
             this.loginModalVisible = false;
-            this.needLogin = false;
+            // this.needLogin = false;
         },
         gotoProfile () {
             if (this.userLoggedIn) {

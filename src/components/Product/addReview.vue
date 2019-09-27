@@ -76,7 +76,10 @@
                     </button>
                 </p>
             </div>
-        </div>      
+        </div>
+        <div v-else class="notification is-warning">
+            <strong>You must be logged in to submit a review</strong>
+        </div>
         <div v-if="error" class="notification is-danger">
             <strong>{{ error }}</strong>
         </div>
@@ -100,7 +103,7 @@ export default {
     name: "addReview",
     props: [
         'productID',
-        'reviews' // TODO: This is an array and so will be passed by reference?
+        'reviews'
     ], 
     data() {
         return {
@@ -111,7 +114,6 @@ export default {
             password: '',
             comment: '',
             stars: 0,
-            test: 'fish'
         }
     },
     computed: {
@@ -135,7 +137,6 @@ export default {
                 this.stars
             ])
             .then ((results) => {
-                this.test = results;
                 if (results && results.averageReviewScore && results.numberOfReviews) {
                     let stats = {
                         averageReviewScore: results.averageReviewScore,
@@ -147,14 +148,14 @@ export default {
             },
             (err) => {
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(`Error: failed to fetch country list: ${err.message}`);
+                console.error(`Error: failed to post review: ${err.message}`);
             })
         }
     },
     mounted() {
-        if (!this.userLoggedIn) {
-            this.$emit('login');
-        }
+        // if (!this.userLoggedIn) {
+        //     this.$emit('login');
+        // }
     }
 }
 </script>
