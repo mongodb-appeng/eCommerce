@@ -88,14 +88,9 @@ export default {
                 });
                 this.progress = '';
                 let _this = this;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.log('Starting to wait');
                 // Wait 2 seconds before allowing a request to fetch more products
                 setTimeout(function(){
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.log('finished waiting');
                     _this.bouncable = true;
-                    console.log(_this.bouncable);
                 }, 500);
             } else {
                 this.progress = '';
