@@ -8,7 +8,7 @@
     </div>
     <section class="section">
       <div v-if="stitchReady && product" class="columns">
-        <div class="column is-5 restrict-height">
+        <div class="column is-5 ">
           <div class="container">
             <ImageBox
               v-bind:productImages="product.productImages"

@@ -3,7 +3,7 @@
     <section class="section">
       <div class="columns">
         <div class="column is-2 restrict-height">
-          <div class="container">
+          <!-- <div class="container"> -->
             <ul id="product-images">
               <li
                 v-for="productImage in productImages"
@@ -17,9 +17,8 @@
                   </div>
                 </a>
               </li>
-
             </ul>
-          </div>
+          <!-- </div> -->
         </div>
         <div class="column is-10">
           <figure class="image is-square" v-if="currentImage">
@@ -70,7 +69,7 @@ div.box {
   padding: 0.25rem
 }
 .restrict-height {
-  height: 600px;
+  height: 300px;
   overflow: scroll;
 }
 </style>
