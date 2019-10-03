@@ -30,7 +30,8 @@ const nullCustomer =  {
       state: '',
       postalCode: '',
       country: ''
-    }
+    },
+    waitingOnProducts: []
   }
 };
 
@@ -63,7 +64,8 @@ const store = new Vuex.Store({
           state: '',
           postalCode: '',
           country: ''
-        }
+        },
+        waitingOnProducts: []
       },
       marketingPreferences: {
         email: false,
@@ -85,6 +87,7 @@ const store = new Vuex.Store({
     setUser (state, payload) {state.user = payload},
     setCustomer (state, payload) {state.customer = payload},
     setCategoryFilter (state, payload) {state.categoryFilter = payload},
+    setWaitingOnProducts (state, payload) {state.waitingOnProducts = payload},
     signout (state) {
       state.customer = nullCustomer;
       state.user = null;

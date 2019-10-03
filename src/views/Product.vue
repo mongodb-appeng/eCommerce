@@ -33,6 +33,7 @@
           <div class="container">
             <PurchaseBox
               v-bind:stockLevel="product.stockLevel"
+              v-bind:productID="product.productID"
             ></PurchaseBox>
           </div>
         </div>

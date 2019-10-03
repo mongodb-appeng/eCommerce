@@ -69,7 +69,7 @@ import MyHeader from '../components/Header.vue'
 import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk"
 import { 
     mapState, 
-    mapMutations 
+    // mapMutations
     } from 'vuex';
 
 export default {
@@ -95,9 +95,8 @@ export default {
     ]),
     },
     methods: {
-        ...mapMutations([
-            'incrTest'
-        ]),
+        // ...mapMutations([
+        // ]),
         register() {
             this.error = '';
             this.progress = '';
