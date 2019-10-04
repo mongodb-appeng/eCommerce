@@ -98,6 +98,7 @@ export default {
             'setUserLoggedIn'
         ]),
         Login() {
+            // TODO should download the order history and merge shoppping carts
             this.error = '';
             this.success = '';
             this.progress = 'Attempting to log you in...'
@@ -112,7 +113,7 @@ export default {
                     const _this = this;
                     setTimeout(function(){
                         _this.$emit("close-modal");
-                    }, 2000);
+                    }, 100);
                 },
                 (error => {
                     this.progress = '';

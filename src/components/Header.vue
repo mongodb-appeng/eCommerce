@@ -21,7 +21,6 @@
                 <a class="navbar-item" v-on:click="gotoHome">
                     Home
                 </a>
-
                 <div class="field" id=search-box v-if="homePage">
                     <div class="control has-icons-right">
                         <input class="input is-small" 
@@ -35,21 +34,25 @@
                         </span>
                     </div>
                 </div>
-
-
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">
                         <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
                     </figure>
                 </a>
-                <a class="navbar-item" v-on:click="gotoProfile">
-                    <span >Hi {{userFirstName}}</span>
+                <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoProfile">
+                    <span >{{userFirstName}}'s account</span>
                 </a>
-                <a class="navbar-item" v-if="!userLoggedIn">
+                <a v-else class="navbar-item">
                     <span v-on:click="showLoginModal">Login/Register</span>
                 </a>
                 <a class="navbar-item" v-if="userLoggedIn">
                     <span v-on:click="logout">Sign out</span>
+                </a>
+                <a v-if="customer.shoppingBasketSize > 0" class="navbar-item">
+                    <span class="icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </span>
+                    <span><small>{{ customer.shoppingBasketSize }}</small> Chekout</span>
                 </a>
                 <span class="navbar-item">
                     <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">

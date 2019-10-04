@@ -1,7 +1,51 @@
 <template>
   <div>
     <section class="section">
-      <span v-if="stockLevel > 0" class="has-text-primary">{{ stockLevel }} units in stock</span>
+      <div v-if="stockLevel > 0">
+        <p><span class="has-text-primary">{{ stockLevel }} units in stock</span></p>
+          <div class="field">
+              <div class="field-body">
+                  <div class="field">
+                      <label >
+                          Quantity: 
+                          <div class="select is-small">
+                            <select v-model="quantity">
+                              <option 
+                                v-for="num in Math.min(20, stockLevel)"
+                                v-bind:key="num"
+                                >
+                                  {{ num }}
+                              </option>
+                            </select>
+                          </div>
+                      </label>
+                  </div>
+              </div>
+          </div>
+          <div>
+            <p>
+              ${{ (quantity *  price).toFixed(2) }}
+              <br/>
+            </p>
+          </div>
+          <div class="buttons are-small">
+            <p>
+              <a v-if="quantity > 0" v-on:click="newBaskItem" class="button is-primary is-small is-focused">
+                  <span class="icon is-small">
+                      <i class="fas fa-cart-plus"></i>
+                  </span>
+                  <span>Add to basket</span>
+              </a>
+              <a v-else class="button is-grey is-small" disabled>
+                  <span class="icon is-small">
+                      <i class="fas fa-cart-plus"></i>
+                  </span>
+                  <span>Add to basket</span>
+              </a>
+            </p>
+          </div>
+
+      </div>
       <div v-else class="field">
         <p>
           <span class="has-text-danger">
@@ -40,7 +84,10 @@ export default {
   name: 'purchase-box',
   props: [
     'stockLevel',
-    'productID'
+    'productID',
+    'productName',
+    'price',
+    'productImage'
   ],
   components: {
   },
@@ -49,7 +96,8 @@ export default {
       progress: '',
       error: '',
       success: '',
-      notifyMe: false
+      notifyMe: false,
+      quantity: 0
     }
   },
   computed: {
@@ -61,7 +109,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setWaitingOnProducts'
+      'setWaitingOnProducts',
+      'addToBasket'
     ]),
     notificationChange () {
       if (this.userLoggedIn) {
@@ -93,7 +142,6 @@ export default {
           this.notifyMe = !this.notifyMe;
         })
         )
-
       } else {
         this.error = "You must log in first";
         this.notifyMe = false;
@@ -102,6 +150,17 @@ export default {
           _this.error = '';
         }, 2000);
       } 
+    },
+    newBaskItem () {
+      const quantityToAdd = parseInt(this.quantity);
+      this.quantity = 0;
+      this.addToBasket([{
+        productID: this.productID,
+        productName: this.productName,
+        price: this.price,
+        productImage: this.productImage,
+        quantity: quantityToAdd
+      }])
     }
   },
   mounted() {
@@ -115,5 +174,7 @@ export default {
 </script>
 
 <style scoped>
-
+.button {
+  margin-top: 15px;
+}
 </style>

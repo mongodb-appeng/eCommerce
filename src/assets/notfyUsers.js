@@ -40,3 +40,13 @@ exports = function(event) {
 
 {"updateDescription.updatedFields":{"stockLevel":{"$gt":{"$numberInt":"0"}}}}
 {"updateDescription.updatedFields.":{"$gt":{"$numberInt":"0"}}}
+
+{
+    "fullDocument.internal.outOfStock": true,
+    "fullDocument.stockLevel": {"$gt":{"$numberInt":"0"}}
+}
+
+{
+    "fullDocument.internal.outOfStock": false,
+    "fullDocument.stockLevel": {"$eq":{"$numberInt":"0"}}
+}

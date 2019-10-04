@@ -34,6 +34,9 @@
             <PurchaseBox
               v-bind:stockLevel="product.stockLevel"
               v-bind:productID="product.productID"
+              v-bind:productName="product.productName"
+              v-bind:price="product.price.sale"
+              v-bind:productImage="product.productImages[0]"
             ></PurchaseBox>
           </div>
         </div>
