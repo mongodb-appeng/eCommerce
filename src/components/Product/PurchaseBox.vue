@@ -30,7 +30,7 @@
           </div>
           <div class="buttons are-small">
             <p>
-              <a v-if="quantity > 0" v-on:click="newBaskItem" class="button is-primary is-small is-focused">
+              <a v-if="quantity > 0" v-on:click="newBasketItem" class="button is-primary is-small is-focused">
                   <span class="icon is-small">
                       <i class="fas fa-cart-plus"></i>
                   </span>
@@ -77,7 +77,8 @@
 <script>
 import {
     mapState,
-    mapMutations
+    mapMutations,
+    mapActions
     } from 'vuex';
 
 export default {
@@ -109,8 +110,11 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setWaitingOnProducts',
-      'addToBasket'
+      'setWaitingOnProducts'
+      // 'addToBasket'
+    ]),
+    ...mapActions([
+        'addToBasket'
     ]),
     notificationChange () {
       if (this.userLoggedIn) {
@@ -151,7 +155,7 @@ export default {
         }, 2000);
       } 
     },
-    newBaskItem () {
+    newBasketItem () {
       const quantityToAdd = parseInt(this.quantity);
       this.quantity = 0;
       this.addToBasket([{

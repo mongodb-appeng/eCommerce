@@ -5,6 +5,7 @@ import ConfirmEmail from './views/Confirm.vue'
 import Register from './views/Register.vue'
 import UserProfile from './views/UserProfile.vue'
 import Product from './views/Product.vue'
+import Basket from './views/Basket.vue'
 import Test from './views/Test.vue'
 
 
@@ -40,6 +41,12 @@ export default new Router({
       path: '/product',
       name: 'product',
       component: Product, 
+      props: true
+    },
+    {
+      path: '/basket',
+      name: 'basket',
+      component: Basket, 
       props: true
     },
     {

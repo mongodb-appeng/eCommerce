@@ -177,6 +177,8 @@ export default {
         this.success = '';
         this.progress = "Searching for matching products";
         this.bouncable = false;
+        // TODO move this to a system-user Stitch function so that the `product.internal`
+        // attribute can be hidden by a rule
         this.database.collection('products').aggregate(
           [
             {
@@ -191,12 +193,12 @@ export default {
                   }, 
                   should: {
                     search: {
-                      query: 'shirt', 
+                      query: this.searchTerm, 
                       path: 'productName'
                     },
                     // eslint-disable-next-line
                     search: {
-                      query: 'shirt', 
+                      query: this.searchTerm, 
                       path: 'category'
                     }
                   }

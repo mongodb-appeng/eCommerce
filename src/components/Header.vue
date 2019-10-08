@@ -48,7 +48,7 @@
                 <a class="navbar-item" v-if="userLoggedIn">
                     <span v-on:click="logout">Sign out</span>
                 </a>
-                <a v-if="customer.shoppingBasketSize > 0" class="navbar-item">
+                <a v-if="customer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
                     <span class="icon">
                         <i class="fas fa-shopping-cart"></i>
                     </span>
@@ -143,6 +143,13 @@ export default {
         },
         gotoHome () {
             this.$router.push({name: 'home'})
+        },
+        openBasket () {
+            if (this.userLoggedIn) {
+                this.$router.push({name: 'basket'})
+            } else {
+                this.showLoginModal()
+            }
         },
         logout () {
             this.stitchClient.auth.logout()

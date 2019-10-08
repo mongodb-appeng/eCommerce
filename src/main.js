@@ -34,7 +34,8 @@ const nullCustomer =  {
   },
   waitingOnProducts: [],
   shoppingBasket: [],
-  shoppingBasketSize: 0
+  shoppingBasketSize: 0,
+  shoppingBasketValue:0
 };
 
 const store = new Vuex.Store({
@@ -74,7 +75,8 @@ const store = new Vuex.Store({
       },
       waitingOnProducts: [],
       shoppingBasket: [],
-      shoppingBasketSize: 0
+      shoppingBasketSize: 0,
+      shoppingBasketValue: 0
     },
     categoryFilter: []
   },
@@ -89,14 +91,42 @@ const store = new Vuex.Store({
     setLoggedIn (state, payload) {state.userLoggedIn = payload},
     setUserFirstName (state, payload) {state.userFirstName = payload},
     setUser (state, payload) {state.user = payload},
-    setCustomer (state, payload) {state.customer = payload},
     setCategoryFilter (state, payload) {state.categoryFilter = payload},
+
+    // `customer` mutations
+    setCustomer (state, payload) {state.customer = payload},
     setWaitingOnProducts (state, payload) {state.customer.waitingOnProducts.push(payload)},
-    addToBasket (state, payload) {
+    setShoppingBasket (state, payload) {Vue.set(state.customer, 'shoppingBasket', payload)},
+    setShoppingBasketSize (state, payload) {Vue.set(state.customer, 'shoppingBasketSize', payload);},
+    setShoppingBasketValue (state, payload) {Vue.set(state.customer, 'shoppingBasketValue', payload)},
+    pushBasketItem (state, payload) {state.customer.shoppingBasket.push(payload)},
+    increaseBasketItemQuantity (state, payload) {
+      Vue.set(
+        state.customer.shoppingBasket[payload.index], 
+        'quantity',
+        state.customer.shoppingBasket[payload.index].quantity + payload.quantity)
+    },
+    setBasketItemQuantity (state, payload) {
+      state.customer.shoppingBasket[payload.index].quantity =  payload.quantity;
+      // Vue.set(state.customer.shoppingBasket[payload.index], 'quantity',  payload.quantity)
+    },
+    signout (state) {
+      state.customer = nullCustomer;
+      state.user = null;
+      state.userLoggedIn = false;
+      state.userFirstName = 'Guest';
+      // state.stitchClient = null;
+      // state.database = null;
+      state.categoryFilter = [];
+    }
+  },
+  actions: {
+
+    addToBasket ({commit, state, dispatch}, payload) {
       // `payload` must be an array of basket entries
-      if (!state.customer.shoppingBasket) {
-        state.customer.shoppingBasket = [];
-      }
+      // if (!state.customer.shoppingBasket) {
+      //   state.customer.shoppingBasket = [];
+      // }
       if (payload) {
         payload.forEach((item, incomingIndex) => {
           const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
@@ -104,16 +134,18 @@ const store = new Vuex.Store({
           });
           if (existingIndex < 0) {
             // No matching productID in existing basket
-            state.customer.shoppingBasket.push(payload[incomingIndex]);
+            commit('pushBasketItem', payload[incomingIndex]);
+            // state.customer.shoppingBasket.push(payload[incomingIndex]);
           } else {
-            state.customer.shoppingBasket[existingIndex].quantity += payload[incomingIndex].quantity;
+            commit('increaseBasketItemQuantity', {index: incomingIndex, quantity: payload[incomingIndex].quantity});
+            // state.customer.shoppingBasket[existingIndex].quantity += payload[incomingIndex].quantity;
           }
         });
         if (state.userLoggedIn) {
           // If not already logged in then the basket will be written to the database
           // when the customer logs in
-          if (this.state.database) {
-            const customers = this.state.database.collection('customers');
+          if (state.database) {
+            const customers = state.database.collection('customers');
             customers.updateOne(
               {"contact.email": state.customer.contact.email},
               {$set: {shoppingBasket: state.customer.shoppingBasket}}
@@ -125,24 +157,83 @@ const store = new Vuex.Store({
           }
         }        
       }
+      dispatch('calcBasketStats');
+    },
+
+    deleteFromBasket ({commit, state, dispatch}, payload) {
+      // `payload` is the productID to remove from the basket
+      if (payload) {
+        const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
+          return entry.productID === payload;
+        });
+        if (existingIndex >= 0) {
+          let newBasket = state.customer.shoppingBasket.slice();
+          newBasket.splice(existingIndex, 1);
+          commit('setShoppingBasket', newBasket);
+          dispatch('calcBasketStats');
+          if (state.userLoggedIn) {
+            // If not already logged in then the basket will be written to the database
+            // when the customer logs in
+            if (state.database) {
+              const customers = state.database.collection('customers');
+              customers.updateOne(
+                {"contact.email": state.customer.contact.email},
+                {$set: {shoppingBasket: newBasket}}
+              )
+              .catch ((error) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+              });
+            }
+          }
+        }
+      }
+    },
+
+    updateBasketItemQuantity ({commit, state, dispatch}, payload) {
+      // `payload` {productID, quantity}
+      if (payload) {
+        const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
+          return entry.productID === payload.productID;
+        });
+        if (existingIndex >= 0) {
+          commit('setBasketItemQuantity', {index: existingIndex, quantity: payload.quantity});
+          dispatch('calcBasketStats');
+          if (state.userLoggedIn) {
+            // If not already logged in then the basket will be written to the database
+            // when the customer logs in
+            if (state.database) {
+              const customers = state.database.collection('customers');
+              customers.updateOne(
+                {"contact.email": state.customer.contact.email},
+                {$set: {shoppingBasket: state.customer.shoppingBasket}}
+              )
+              .catch ((error) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+              });
+            }
+          }
+        }
+      }
+    },
+
+    calcBasketStats({commit, state}) {
       const shoppingBasketSize = state.customer.shoppingBasket.reduce((total, item) =>
         {
           return total + item.quantity;
         }, 0);
-      Vue.set(state.customer, 'shoppingBasketSize', shoppingBasketSize);
+        commit('setShoppingBasketSize', shoppingBasketSize);
+        // Vue.set(state.customer, 'shoppingBasketSize', shoppingBasketSize);
+      const shoppingBasketValue = state.customer.shoppingBasket.reduce((total, item) =>
+        {
+          return total + (item.quantity * item.price);
+        }, 0);
+      commit('setShoppingBasketValue', shoppingBasketValue);
+      // Vue.set(state.customer, 'shoppingBasketValue', shoppingBasketValue);
     },
-    signout (state) {
-      state.customer = nullCustomer;
-      state.user = null;
-      state.userLoggedIn = false;
-      state.userFirstName = 'Guest';
-      state.stitchClient = null;
-      state.database = null;
-      state.categoryFilter = [];
-    }
-  },
-  actions: {
-    setUserLoggedIn ({commit, state}, user) {
+
+    setUserLoggedIn ({commit, state, dispatch}, user) {
       commit('setLoggedIn', true);
       commit('setUser', user);
       if (user.profile.firstName) {
@@ -159,7 +250,7 @@ const store = new Vuex.Store({
               const localBasket = state.customer.shoppingBasket;
               commit('setCustomer', customerDoc);
               // Avoid losing contents of local basket (created before customer logged in)
-              commit('addToBasket', localBasket);
+              dispatch('addToBasket', localBasket);
 
               // if (localBasket && localBasket.length > 0) {
               //   commit('addToBasket', localBasket);
