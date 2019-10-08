@@ -140,7 +140,7 @@
                         </p>
                     </div>
 
-                    <div class="dropdown is-active">
+                    <!-- <div class="dropdown is-active">
                         <div class="dropdown-trigger">
                             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                                 <span>Country</span>
@@ -149,7 +149,7 @@
                                 </span>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="field">
                         <div class="control is-expanded has-icons-left">
                             <div class="select">
@@ -367,6 +367,7 @@ export default {
                 this.mugshotFile = files[0];
                 // TODO switch to MongoDB marketing account AWS2 / ecommerce-mongodb-mugshots
                 const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, config.aws.serviceName);
+                const cleanEmail = this.customer.contact.email.replace("+", "_");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
                         let now = Date.now();
@@ -375,7 +376,7 @@ export default {
                         Bucket: config.aws.bucket,
                         // Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,
-                        Key: `mug_${this.customer.contact.email}_${now}`,
+                        Key: `mug_${cleanEmail}_${now}`,
                         Body: bsonFile
                     };
                     const request = new AwsRequest.Builder()
@@ -385,9 +386,9 @@ export default {
                     s3.execute(request.build())
                     .then (() => {
                         // TODO include timestamp in the URL
-                        // this.customer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
-                        // this.customer.mugshotURL = `https://ecommerce-mongodb-mugshots.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
-                        this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${this.customer.contact.email}_${now}`
+                        // this.customer.mugshotURL = `https://clusterdb-ecommerce-mugshots.s3.amazonaws.com/mug_${cleanEmail}_${now}`
+                        // this.customer.mugshotURL = `https://ecommerce-mongodb-mugshots.s3.amazonaws.com/mug_${cleanEmail}_${now}`
+                        this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${cleanEmail}_${now}`
                     },
                     (error) => {
                         this.error = `Failed to upload image file: ${error.message}`;
