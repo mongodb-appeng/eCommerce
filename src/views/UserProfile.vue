@@ -334,11 +334,12 @@ export default {
                     this.setUserFirstName(this.localCustomer.name.first)
                 }
                 this.success = "User profile updated.";
-                this.progress = 'Returning to main page in 2 seconds';
+                this.progress = 'Taking you back';
                 const _this = this;
                 setTimeout(function(){
-                    _this.$router.push({name: 'home'});
-                }, 2000);
+                    // _this.$router.push({name: 'home'});
+                    _this.$router.go(-1);
+                }, 1000);
             }, (err) => {
                 this.progress = '';
                 this.error = `Error: Writing profile to the database - ${err.message}`;

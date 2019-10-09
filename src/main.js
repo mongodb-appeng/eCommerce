@@ -32,11 +32,20 @@ const nullCustomer =  {
       country: ''
     }
   },
+  marketingPreferences: {
+    email: false,
+    sms: false
+  },
   waitingOnProducts: [],
   shoppingBasket: [],
+  orders: [],
+  orderOverflow: false
+};
+
+const nullMetaCustomer = {
   shoppingBasketSize: 0,
   shoppingBasketValue:0
-};
+}
 
 const store = new Vuex.Store({
   // TODO: turn this back on
@@ -47,37 +56,8 @@ const store = new Vuex.Store({
     userLoggedIn: false,
     userFirstName: "Guest",
     user: null,
-    customer: {
-      name: {
-        title: '',
-        first: '',
-        last: '',
-      },
-      contact: {
-        email: '',
-        phone: {
-          home: '',
-          work: '',
-          mobile: ''
-        },
-        deliveryAddress: {
-          number: '',
-          street: '',
-          city: '',
-          state: '',
-          postalCode: '',
-          country: ''
-        }
-      },
-      marketingPreferences: {
-        email: false,
-        sms: false
-      },
-      waitingOnProducts: [],
-      shoppingBasket: [],
-      shoppingBasketSize: 0,
-      shoppingBasketValue: 0
-    },
+    customer: nullCustomer,
+    metaCustomer: nullMetaCustomer,
     categoryFilter: []
   },
   getters: {
@@ -97,8 +77,8 @@ const store = new Vuex.Store({
     setCustomer (state, payload) {state.customer = payload},
     setWaitingOnProducts (state, payload) {state.customer.waitingOnProducts.push(payload)},
     setShoppingBasket (state, payload) {Vue.set(state.customer, 'shoppingBasket', payload)},
-    setShoppingBasketSize (state, payload) {Vue.set(state.customer, 'shoppingBasketSize', payload);},
-    setShoppingBasketValue (state, payload) {Vue.set(state.customer, 'shoppingBasketValue', payload)},
+    setShoppingBasketSize (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketSize', payload);},
+    setShoppingBasketValue (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketValue', payload)},
     pushBasketItem (state, payload) {state.customer.shoppingBasket.push(payload)},
     increaseBasketItemQuantity (state, payload) {
       Vue.set(
@@ -110,6 +90,11 @@ const store = new Vuex.Store({
       state.customer.shoppingBasket[payload.index].quantity =  payload.quantity;
       // Vue.set(state.customer.shoppingBasket[payload.index], 'quantity',  payload.quantity)
     },
+    clearBasket (state) {
+      Vue.set(state.customer, 'shoppingBasket', []);
+      Vue.set(state.metaCustomer, 'shoppingBasketSize', 0);
+      Vue.set(state.metaCustomer, 'shoppingBasketValue', 0);
+    },
     signout (state) {
       state.customer = nullCustomer;
       state.user = null;
@@ -118,6 +103,10 @@ const store = new Vuex.Store({
       // state.stitchClient = null;
       // state.database = null;
       state.categoryFilter = [];
+    },
+    setOrders (state, payload) {
+      Vue.set(state.customer, 'orders', payload.orders);
+      Vue.set(state.customer, 'orderOverflow', payload.orderOverflow);
     }
   },
   actions: {
@@ -218,19 +207,36 @@ const store = new Vuex.Store({
       }
     },
 
-    calcBasketStats({commit, state}) {
+    emptyBasket ({state, commit}) {
+      commit('clearBasket');
+      if (state.userLoggedIn) {
+        // If not already logged in then the basket will be written to the database
+        // when the customer logs in
+        if (state.database) {
+          const customers = state.database.collection('customers');
+          customers.updateOne(
+            {"contact.email": state.customer.contact.email},
+            {$set: {shoppingBasket: state.customer.shoppingBasket}}
+          )
+          .catch ((error) => {
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+            console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+          });
+        }
+      }
+    },
+
+    calcBasketStats ({commit, state}) {
       const shoppingBasketSize = state.customer.shoppingBasket.reduce((total, item) =>
         {
           return total + item.quantity;
         }, 0);
         commit('setShoppingBasketSize', shoppingBasketSize);
-        // Vue.set(state.customer, 'shoppingBasketSize', shoppingBasketSize);
       const shoppingBasketValue = state.customer.shoppingBasket.reduce((total, item) =>
         {
           return total + (item.quantity * item.price);
         }, 0);
       commit('setShoppingBasketValue', shoppingBasketValue);
-      // Vue.set(state.customer, 'shoppingBasketValue', shoppingBasketValue);
     },
 
     setUserLoggedIn ({commit, state, dispatch}, user) {
@@ -270,6 +276,20 @@ const store = new Vuex.Store({
           reject({message: `Error: Call to fetch customer document failed: ${err.message}`});
         }
       })
+    },
+
+    fetchOrders ({commit, state}) {
+      const customers = state.database.collection('customers');
+      return customers.findOne(
+        {"contact.email": state.customer.contact.email},
+        {$projection: {
+          orders: 1,
+          orderOverflow: 1
+        }}
+      )
+      .then ((doc) => {
+        commit('setOrders', doc);
+      });
     }
   }
 });

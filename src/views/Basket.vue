@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="basket">
     <MyHeader></MyHeader>
     <div v-if="!userLoggedIn">
       <AnonymousAuth></AnonymousAuth>
@@ -14,12 +14,12 @@
         </div>
         <div class="column is-3 restrict-height">
           <div class="container">
-              <strong>Basket Total: ${{ customer.shoppingBasketValue.toFixed(2) }}</strong>
+              <strong>Basket Total: ${{ metaCustomer.shoppingBasketValue.toFixed(2) }}</strong>
           </div>
             <div class="buttons">
             <p>
               <a 
-                v-if="customer.shoppingBasketSize > 0" 
+                v-if="metaCustomer.shoppingBasketSize > 0" 
                 v-on:click="checkout" 
                 class="button is-primary  is-focused">
                   <span class="icon">
@@ -63,16 +63,15 @@ export default {
   data() {
     return {
       path: [],
-      stitchReady: false,
-      home: true,
-      searchTerm: ''
+      stitchReady: false
     }
   },
   computed: {
       ...mapState([
           'userLoggedIn',
           'stitchClient',
-          'customer'
+          'customer',
+          'metaCustomer'
       ])
   },
   methods: {
@@ -85,7 +84,7 @@ export default {
        }
     },
     checkout () {
-        // TODO go to checkout page
+      this.$router.push({name: 'checkout'})
     }
   },
   mounted() {

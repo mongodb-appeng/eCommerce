@@ -48,11 +48,11 @@
                 <a class="navbar-item" v-if="userLoggedIn">
                     <span v-on:click="logout">Sign out</span>
                 </a>
-                <a v-if="customer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
+                <a v-if="metaCustomer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
                     <span class="icon">
                         <i class="fas fa-shopping-cart"></i>
                     </span>
-                    <span><small>{{ customer.shoppingBasketSize }}</small> Chekout</span>
+                    <span><small>{{ metaCustomer.shoppingBasketSize }}</small> Chekout</span>
                 </a>
                 <span class="navbar-item">
                     <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">
@@ -121,6 +121,7 @@ export default {
         ...mapState([
             'stitchClient',
             'customer',
+            'metaCustomer',
             'userFirstName',
             'userLoggedIn'
         ]),

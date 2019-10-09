@@ -10,7 +10,6 @@
           </li>
         </ul>
       </section>
-
       <br>
       <!-- TODO: Move these to a status component -->
       <div v-if="error" class="notification is-danger">

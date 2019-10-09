@@ -108,12 +108,8 @@ export default {
                 // TODO: should change the action to return a promise.
                 this.$store.dispatch('setUserLoggedIn', authedUser)
                 .then (() => {
-                    this.progress = 'This window will close in 2 seconds';
-                    this.success = `Successfully logged in with id: ${authedUser.id}`;
-                    const _this = this;
-                    setTimeout(function(){
-                        _this.$emit("close-modal");
-                    }, 100);
+                    this.progress = '';
+                    this.$emit("close-modal");
                 },
                 (error => {
                     this.progress = '';

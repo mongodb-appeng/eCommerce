@@ -22,13 +22,6 @@
         v-on:reviewStats="newReviewStats"
         v-on:review="newReview"
       ></AddReview>
-      <!-- <AddReview
-        v-if="showReviewForm"
-        v-bind:productID="productID"
-        v-on:reviewStats="newReviewStats"
-        v-on:review="newReview"
-        v-on:login="login"
-      ></AddReview> -->
       <br/><br/>
       <ul id="review-list">
         <li

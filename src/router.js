@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import UserProfile from './views/UserProfile.vue'
 import Product from './views/Product.vue'
 import Basket from './views/Basket.vue'
+import Checkout from './views/Checkout.vue'
 import Test from './views/Test.vue'
 
 
@@ -47,6 +48,12 @@ export default new Router({
       path: '/basket',
       name: 'basket',
       component: Basket, 
+      props: true
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout, 
       props: true
     },
     {
