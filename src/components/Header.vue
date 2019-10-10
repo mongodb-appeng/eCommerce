@@ -36,10 +36,10 @@
                 </div>
                 <a class="navbar-item" v-if="customer.mugshotURL">
                     <figure class="image is-24x24">
-                        <img v-on:click="gotoProfile" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
+                        <img v-on:click="gotoUserAccount" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
                     </figure>
                 </a>
-                <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoProfile">
+                <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoUserAccount">
                     <span >{{userFirstName}}'s account</span>
                 </a>
                 <a v-else class="navbar-item">
@@ -137,9 +137,9 @@ export default {
             this.loginModalVisible = false;
             // this.needLogin = false;
         },
-        gotoProfile () {
+        gotoUserAccount () {
             if (this.userLoggedIn) {
-                this.$router.push({name: 'profile'})
+                this.$router.push({name: 'account'})
             }
         },
         gotoHome () {

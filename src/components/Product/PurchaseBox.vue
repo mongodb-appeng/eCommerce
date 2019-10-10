@@ -116,16 +116,35 @@ export default {
     ...mapActions([
         'addToBasket'
     ]),
+
     notificationChange () {
+      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+      console.log('Notification change');
+
+      // TODO check
+      console.log(`notify coming in: ${this.notifyMe}`);
+
       if (this.userLoggedIn) {
         if (!this.customer.waitingOnProducts) {
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.log('init waiting array');
           this.customer.waitingOnProducts = [];
         }
+        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+        console.log(`notify: ${this.notifyMe}. Included: ${this.customer.waitingOnProducts.includes(this.productID)}, length: ${this.customer.waitingOnProducts.length}`);
         if (this.notifyMe && !this.customer.waitingOnProducts.includes(this.productID)) {
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.log(`this.notifyMe && !waiting -> ${this.productID}`);
           this.customer.waitingOnProducts.push(this.productID);
         } else if (!this.notifyMe && this.customer.waitingOnProducts.includes(this.productID)) {
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.log(`!this.notifyMe && waiting -> ${this.productID}`);
           let index = this.customer.waitingOnProducts.indexOf(this.productID);
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.log(`index: ${index}`);
+          console.log(`length before: ${this.customer.waitingOnProducts.length}`);
           this.customer.waitingOnProducts.splice(index, 1);
+          console.log(`length after: ${this.customer.waitingOnProducts.length}`);
         }
         this.progress = "Updating customer"
         this.database.collection("customers").updateOne(
@@ -133,6 +152,7 @@ export default {
           {$set: {waitingOnProducts: this.customer.waitingOnProducts}}
         )
         .then (() => {
+          console.log('Once');
           this.setWaitingOnProducts(this.customer.waitingOnProducts);
           this.progress = '';
           this.success = 'Customer document updated';
@@ -155,6 +175,7 @@ export default {
         }, 2000);
       } 
     },
+
     newBasketItem () {
       const quantityToAdd = parseInt(this.quantity);
       this.quantity = 0;
@@ -173,6 +194,8 @@ export default {
     } else {
       this.notifyMe = false;
     }
+    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+    console.log(`initted notifyMe to ${this.notifyMe}`)
   }
 }
 </script>

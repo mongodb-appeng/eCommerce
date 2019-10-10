@@ -75,7 +75,11 @@ const store = new Vuex.Store({
 
     // `customer` mutations
     setCustomer (state, payload) {state.customer = payload},
-    setWaitingOnProducts (state, payload) {state.customer.waitingOnProducts.push(payload)},
+    setWaitingOnProducts (state, payload) {
+      const newList = payload.slice();
+      Vue.set(state.customer, 'waitingOnProducts', newList);
+      // state.customer.waitingOnProducts.push(newList);
+    },
     setShoppingBasket (state, payload) {Vue.set(state.customer, 'shoppingBasket', payload)},
     setShoppingBasketSize (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketSize', payload);},
     setShoppingBasketValue (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketValue', payload)},

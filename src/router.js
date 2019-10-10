@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import ConfirmEmail from './views/Confirm.vue'
 import Register from './views/Register.vue'
-import UserProfile from './views/UserProfile.vue'
+import UserProfile from './views/UserProfile.vue' // TODO remove
+import UserAccount from './views/UserAccount.vue'
 import Product from './views/Product.vue'
 import Basket from './views/Basket.vue'
 import Checkout from './views/Checkout.vue'
@@ -33,9 +34,14 @@ export default new Router({
       props: true
     },
     {
-      path: '/profile',
+      path: '/profile', // TODO Remove
       name: 'profile',
       component: UserProfile, 
+      props: true
+    },    {
+      path: '/account',
+      name: 'account',
+      component: UserAccount, 
       props: true
     },
     {
