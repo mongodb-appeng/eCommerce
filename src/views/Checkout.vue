@@ -124,7 +124,7 @@ export default {
             {name: 'Scooby snacks'},
             {name: 'Leafies'}
         ],
-        paymentMethod: null
+        paymentMethod: 'Scooby snacks'
         }
   },
   computed: {
@@ -154,7 +154,7 @@ export default {
 
     checkout () {
       this.progress = 'Submitting order';
-      this.stitchClient.callFunction("postReview", this.paymentMethod)
+      this.stitchClient.callFunction("placeOrder", [this.paymentMethod])
         .then ((results) => {
             if (results && results.result) {
                 this.emptyBasket();
@@ -182,10 +182,7 @@ export default {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.error(this.error);
         })
-        // TODO clear the basket (action)
-        // TODO fetch orders
-        // TODO **OR** let an action handle this
-        }
+    }
   },
   mounted() {
     this.waitUntilStitchReady();
