@@ -1,18 +1,18 @@
 <template>
     <div>
-      <section class="section" id="order-cards">
-        <div v-if="customer.orders.length > 0">
-            <ul id="order-list">
-            <li
-                v-for="order in customer.orders"
-                v-bind:key="order.orderId">
-                    <OrderCard v-bind:order="order">
-                    </OrderCard>
-            </li>
+      <section class="section" id="watching-cards">
+        <div v-if="customer.waitingOnProducts.length > 0">
+            <ul id="watch-list">
+                <li
+                    v-for="productID in customer.waitingOnProducts"
+                    v-bind:key="productID">
+                        <WatchingCard v-bind:productID="productID">
+                        </WatchingCard>
+                </li>
             </ul>
         </div>
         <div v-else>
-            <h3 class="title is-4">No orders submitted yet</h3>
+            <h3 class="title is-4">Not currently watching any products</h3>
         </div>
       </section>
       <br>
@@ -30,18 +30,18 @@
 </template>
 
 <script>
-import OrderCard from "./OrderCard.vue"
+import WatchingCard from "./WatchingCard.vue"
 import { 
     mapState
     // mapMutations 
     } from 'vuex';
 
 export default {
-    name: "OrderCards",
+    name: "WatchingCards",
     props: [
     ], 
     components: {
-        OrderCard,
+        WatchingCard,
     },
     data() {
         return {

@@ -78,7 +78,6 @@ const store = new Vuex.Store({
     setWaitingOnProducts (state, payload) {
       const newList = payload.slice();
       Vue.set(state.customer, 'waitingOnProducts', newList);
-      // state.customer.waitingOnProducts.push(newList);
     },
     setShoppingBasket (state, payload) {Vue.set(state.customer, 'shoppingBasket', payload)},
     setShoppingBasketSize (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketSize', payload);},
@@ -297,7 +296,6 @@ const store = new Vuex.Store({
     },
 
     deleteOrder ({commit, state}, payload) {
-      // TODO
       // `payload` is the orderID to remove from the order list
       if (payload) {
         const existingIndex = state.customer.orders.findIndex((entry) => {
@@ -315,6 +313,36 @@ const store = new Vuex.Store({
               customers.updateOne(
                 {"contact.email": state.customer.contact.email},
                 {$set: {orders: newOrders}}
+              )
+              .catch ((error) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(`Failed to update the order list in the database: ${error.message}`);
+              });
+            }
+          }
+        }
+      }
+    },
+
+    unWatch ({commit, state}, payload) {
+      // TODO
+      // `payload` is the productID to remove from the waitingOnProducts list
+      if (payload) {
+        const existingIndex = state.customer.waitingOnProducts.findIndex((entry) => {
+          return entry === payload;
+        });
+        if (existingIndex >= 0) {
+          let newList = state.customer.waitingOnProducts.slice();
+          newList.splice(existingIndex, 1);
+          commit('setWaitingOnProducts', newList);
+          if (state.userLoggedIn) {
+            // If not already logged in then the list will be written to the database
+            // when the customer logs in
+            if (state.database) {
+              const customers = state.database.collection('customers');
+              customers.updateOne(
+                {"contact.email": state.customer.contact.email},
+                {$set: {waitingOnProducts: newList}}
               )
               .catch ((error) => {
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
