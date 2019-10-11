@@ -17,7 +17,7 @@ The application frontend uses these technologies:
 - Buefy
 - SaaS
 
-The frontend code can be hosted on Stich/Real static hosting.
+The frontend code can be hosted on Stich/Realm static hosting.
 
 ## Project setup
 ```
