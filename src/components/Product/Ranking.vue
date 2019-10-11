@@ -38,9 +38,9 @@ export default {
     methods: {
     },
     created() {
-        if (this.productRating === Math.round(this.productRating)) {
-            this.productRating = this.score
-        } else {
+        if (this.score === Math.round(this.score)) {
+            this.productRating = this.score;
+        } else {ß
             this.productRating = this.score.toFixed(1);
         }
   }
