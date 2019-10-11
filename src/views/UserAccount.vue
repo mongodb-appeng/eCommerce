@@ -2,7 +2,7 @@
   <div class="profile">
     <MyHeader></MyHeader>
     <div class="section">
-        <h1 class="title is-3">{{ userFirstName }}'s Account</h1>
+        <h1 class="title is-3">{{ userFirstName }}'s Recent Orders</h1>
         <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
         <ul>
             <li 
@@ -34,7 +34,9 @@
         <div v-if="profileTab">
             <UserProfile></UserProfile>
         </div>
-        <!-- TODO Add other tabs -->
+        <div v-if="ordersTab">
+            <OrderCards></OrderCards>
+        </div>
     </div>
 </div>
 </template>
@@ -43,6 +45,7 @@
 
 import MyHeader from '../components/Header.vue'
 import UserProfile from '../components/UserProfile.vue'
+import OrderCards from '../components/Orders/OrderCards.vue'
 
 import { 
     mapState, 
@@ -55,7 +58,8 @@ export default {
     ],
     components: {
         MyHeader,
-        UserProfile
+        UserProfile,
+        OrderCards
     },
     data() {
         return {

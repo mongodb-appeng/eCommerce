@@ -1,12 +1,12 @@
 <template>
     <div>
-      <section class="section" id="basket-cards">
-        <ul id="basket-list">
+      <section class="section" id="order-cards">
+        <ul id="order-list">
           <li
-            v-for="product in customer.shoppingBasket"
-            v-bind:key="product.productId">
-                <BasketCard v-bind:product="product">
-                </BasketCard>
+            v-for="order in customer.orders"
+            v-bind:key="order.orderId">
+                <OrderCard v-bind:order="order">
+                </OrderCard>
           </li>
         </ul>
       </section>
@@ -25,25 +25,24 @@
 </template>
 
 <script>
-import BasketCard from "./BasketCard.vue"
+import OrderCard from "./OrderCard.vue"
 import { 
     mapState
     // mapMutations 
     } from 'vuex';
 
 export default {
-    name: "BasketCards",
+    name: "OrderCards",
     props: [
     ], 
     components: {
-        BasketCard,
+        OrderCard,
     },
     data() {
         return {
           error: '',
           progress: '',
           success: ''
-        //   basket: []
         }
     },
     computed: {
@@ -52,20 +51,12 @@ export default {
       ])
     },
     watch: {
-    //   searchTerm: function () {
-    //     this.lastProductID = '';
-    //     this.lastInterest = 10000;
-    //     this.lastScore = 10000;
-    //     this.products = [];
-    //     this.searchProducts();
-    //   }
     },
     methods: {
       // ...mapMutations([
       //   ]),
     },
     mounted() {
-        // this.basket = this.customer.shoppingBasket.slice();
   }
 }
 </script>

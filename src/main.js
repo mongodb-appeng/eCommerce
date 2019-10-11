@@ -294,6 +294,36 @@ const store = new Vuex.Store({
       .then ((doc) => {
         commit('setOrders', doc);
       });
+    },
+
+    deleteOrder ({commit, state}, payload) {
+      // TODO
+      // `payload` is the orderID to remove from the order list
+      if (payload) {
+        const existingIndex = state.customer.orders.findIndex((entry) => {
+          return entry.orderID === payload;
+        });
+        if (existingIndex >= 0) {
+          let newOrders = state.customer.orders.slice();
+          newOrders.splice(existingIndex, 1);
+          commit('setOrders', {orders: newOrders, orderOverflow: state.customer.orderOverflow});
+          if (state.userLoggedIn) {
+            // If not already logged in then the basket will be written to the database
+            // when the customer logs in
+            if (state.database) {
+              const customers = state.database.collection('customers');
+              customers.updateOne(
+                {"contact.email": state.customer.contact.email},
+                {$set: {orders: newOrders}}
+              )
+              .catch ((error) => {
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(`Failed to update the order list in the database: ${error.message}`);
+              });
+            }
+          }
+        }
+      }
     }
   }
 });
