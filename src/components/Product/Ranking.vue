@@ -40,7 +40,7 @@ export default {
     created() {
         if (this.score === Math.round(this.score)) {
             this.productRating = this.score;
-        } else {ß
+        } else {
             this.productRating = this.score.toFixed(1);
         }
   }
