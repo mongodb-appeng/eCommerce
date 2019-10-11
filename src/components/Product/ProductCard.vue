@@ -13,7 +13,7 @@
                         <span class="tag" v-if="product.category">{{ product.category }}</span>
                         <p><strong>${{ product.price.sale }}</strong>
                         <span v-if="product.price.list > product.price.sale">
-                            <small> Reduced from ${{ product.price.list }}</small>
+                            <small> Reduced from ${{ product.price.list.toFixed(2) }}</small>
                         </span>
                         </p>
                         <div >
@@ -24,25 +24,6 @@
                             v-bind:numberReviews="product.reviews.numberOfReviews"
                         ></Rank>
                     </div>
-                    <nav class="level is-mobile">
-                        <div class="level-left">
-                            <a class="level-item" aria-label="reply">
-                                <span class="icon is-small">
-                                <i class="fas fa-reply" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                            <a class="level-item" aria-label="retweet">
-                                <span class="icon is-small">
-                                <i class="fas fa-retweet" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                            <a class="level-item" aria-label="like">
-                                <span class="icon is-small">
-                                <i class="fas fa-heart" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </div>
-                    </nav>
                     <div v-if="progress" class="notification is-info">
                         {{ progress }}
                     </div>
