@@ -11,7 +11,7 @@
                     <div>
                         <h6 class="title is-6">{{ product.productName }}</h6>
                         <span class="tag" v-if="product.category">{{ product.category }}</span>
-                        <p><strong>${{ product.price.sale }}</strong>
+                        <p><strong>${{ product.price.sale.toFixed(2) }}</strong>
                         <span v-if="product.price.list > product.price.sale">
                             <small> Reduced from ${{ product.price.list.toFixed(2) }}</small>
                         </span>
