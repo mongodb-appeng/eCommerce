@@ -58,7 +58,8 @@ const store = new Vuex.Store({
     user: null,
     customer: nullCustomer,
     metaCustomer: nullMetaCustomer,
-    categoryFilter: []
+    categoryFilter: [],
+    checkoutID: ''
   },
   getters: {
     // stitchClient: state => {
@@ -66,13 +67,26 @@ const store = new Vuex.Store({
     // },
   },
   mutations: {
-    setStitchClient (state, payload) {state.stitchClient = payload},
-    setDatabase (state, payload) {state.database = payload},
+    setStitchClient (state, payload) {
+      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+      console.log('Setting Stitch client');
+      console.log(`app ID: ${payload.info.clientAppId}`);
+      Vue.set(state, 'stitchClient', payload);
+      // state.stitchClient = payload;
+      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+      console.log('set stitch client');
+      console.log(`state app ID: ${state.stitchClient.info.clientAppId}`);
+    },
+    setDatabase (state, payload) {
+      console.log('mutating database');
+      state.database = payload
+      console.log('mutated database');
+    },
     setLoggedIn (state, payload) {state.userLoggedIn = payload},
     setUserFirstName (state, payload) {state.userFirstName = payload},
     setUser (state, payload) {state.user = payload},
     setCategoryFilter (state, payload) {state.categoryFilter = payload},
-
+    // setCheckoutID (state, payload) {state.checkoutID = payload},
     // `customer` mutations
     setCustomer (state, payload) {state.customer = payload},
     setWaitingOnProducts (state, payload) {
@@ -100,6 +114,8 @@ const store = new Vuex.Store({
     },
     signout (state) {
       state.customer = nullCustomer;
+      state.metaCustomer.shoppingBasketSize = 0;
+      state.metaCustomer.shoppingBasketValue = 0;
       state.user = null;
       state.userLoggedIn = false;
       state.userFirstName = 'Guest';

@@ -8,6 +8,7 @@ import UserAccount from './views/UserAccount.vue'
 import Product from './views/Product.vue'
 import Basket from './views/Basket.vue'
 import Checkout from './views/Checkout.vue'
+import CheckedOut from './views/CheckedOut.vue'
 import Test from './views/Test.vue'
 
 
@@ -32,13 +33,7 @@ export default new Router({
       name: 'register',
       component: Register, 
       props: true
-    },
-    // {
-    //   path: '/profile',
-    //   name: 'profile',
-    //   component: UserProfile, 
-    //   props: true
-    // },    
+    }, 
     {
       path: '/account',
       name: 'account',
@@ -61,6 +56,12 @@ export default new Router({
       path: '/checkout',
       name: 'checkout',
       component: Checkout, 
+      props: true
+    },
+    {
+      path: '/checkedout',
+      name: 'checkedout',
+      component: CheckedOut, 
       props: true
     },
     {

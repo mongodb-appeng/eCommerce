@@ -51,7 +51,7 @@
             </div>
             <h3 class="title is-4">Order items</h3>
             <BasketCards>
-            </BasketCards>           
+            </BasketCards>
           </div>
         </div>
         <div class="column is-3 restrict-height">
@@ -95,13 +95,18 @@
 <script>
 import {
     mapState,
-    mapActions
-    // mapMutations
+    mapActions,
+    mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
 import AnonymousAuth from '../components/AnonymousAuth.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
+import config from '../config';
+import Stripe from 'stripe';
+// import { Card, createToken } from 'vue-stripe-elements-plus'
+// import Stripe from 'https://js.stripe.com/v3/';
+
 
 export default {
   name: 'checkout',
@@ -122,10 +127,11 @@ export default {
         // TODO payment methods should be attributes of the customer
         paymentMethods: [
             {name: 'Scooby snacks'},
-            {name: 'Leafies'}
+            {name: 'Leafies'},
+            {name: 'Credit or debit card'}
         ],
         paymentMethod: 'Scooby snacks'
-        }
+    }
   },
   computed: {
       ...mapState([
@@ -133,12 +139,17 @@ export default {
           'stitchClient',
           'customer',
           'metaCustomer'
-      ])
+      ]),
+      // stripeKey() {return config.stripeKey},
+      // stripeOptions() {return config.stripeOptions}      
   },
   methods: {
     ...mapActions([
         'emptyBasket',
         'fetchOrders'
+    ]),
+    ...mapMutations([
+        'setCheckoutID'
     ]),
     waitUntilStitchReady() {
        if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
@@ -148,40 +159,76 @@ export default {
          setTimeout(_this.waitUntilStitchReady, 100);
        }
     },
+
     editAddress () {
         this.$router.push({name: 'account'})
     },
 
+    // pay () {
+    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+    //   createToken().then(data => console.log(data.token))
+    // }
+
+    submitOrder () {
+      this.stitchClient.callFunction("placeOrder", [this.paymentMethod])
+      .then ((results) => {
+        if (results && results.result) {
+            this.emptyBasket();
+            this.fetchOrders()
+            .then (() => {
+                this.progress = '';
+                this.$router.push({name: 'home'});
+            },
+            (err) => {
+                this.progress = '';
+                this.error = `Failed to fetch list of orders: ${err}`;
+            })
+        } else {
+            this.progress = '';
+            if (results) {
+                this.error = results.error;
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.error(this.error);
+            }
+        }
+      },
+        (err) => {
+          this.progress = '';
+          this.error = `Error: failed to submit order: ${err.message}`
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+          console.error(this.error);
+        }
+      )
+    },
+
     checkout () {
       this.progress = 'Submitting order';
-      this.stitchClient.callFunction("placeOrder", [this.paymentMethod])
-        .then ((results) => {
-            if (results && results.result) {
-                this.emptyBasket();
-                this.fetchOrders()
-                .then (() => {
-                    this.progress = '';
-                    this.$router.push({name: 'home'});
-                },
-                (err) => {
-                    this.progress = '';
-                    this.error = `Failed to fetch list of orders: ${err}`;
-                })
-            } else {
-                this.progress = '';
-                if (results) {
-                    this.error = results.error;
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.error(this.error);
-                }
-            }
-        },
-        (err) => {
+      if (this.paymentMethod === 'Credit or debit card') {
+        this.stitchClient.callFunction(
+          "stripeCreateCheckoutSession",
+          [(Math.round(this.metaCustomer.shoppingBasketValue * 100))/100]
+          )
+        .then ((checkoutID) => {
+          if (checkoutID) {
+            const stripe = Stripe(config.stripePublicKey);
+            stripe.redirectToCheckout({sessionId: checkoutID});
+          } else {
             this.progress = '';
-            this.error = `Error: failed to submit order: ${err.message}`
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+            this.error = 'Failed to process payment';
+            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.error(this.error);
+          }
+
+        },
+        (error) => {
+          this.error = `Error, failed to create Stripe checkout session: ${error}`;
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.error(this.error);
         })
+        // TODO the order is only created once the payment has been processed
+      } else {
+        this.submitOrder();        
+      }
     }
   },
   mounted() {

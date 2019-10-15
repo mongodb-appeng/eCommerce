@@ -1,7 +1,9 @@
 module.exports = {
   configureWebpack: {
-    devtool: 'source-map'
+    devtool: 'source-map',
+    externals: {
+      stripe: 'Stripe'
+    }
   },
-
   runtimeCompiler: true
 }
