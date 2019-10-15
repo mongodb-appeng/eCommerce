@@ -5,7 +5,7 @@ import router from './router'
 import 'bulma/css/bulma.css'
 import './main.scss'
 
-// TODO turn this back on
+// TODO turn this back on 
 // import createPersistedState from 'vuex-persistedstate'
 
 Vue.config.productionTip = false
