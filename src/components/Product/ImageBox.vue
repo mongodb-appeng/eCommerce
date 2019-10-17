@@ -3,22 +3,20 @@
     <section class="section">
       <div class="columns">
         <div class="column is-2 restrict-height">
-          <!-- <div class="container"> -->
-            <ul id="product-images">
-              <li
-                v-for="productImage in productImages"
-                v-bind:key="productImage"
-                v-on:mouseover="currentImage = productImage">
-                <a>
-                  <div class="box">
-                    <figure class="image is-square">
-                      <img :src="productImage" >
-                    </figure>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          <!-- </div> -->
+          <ul id="product-images">
+            <li
+              v-for="productImage in productImages"
+              v-bind:key="productImage"
+              v-on:mouseover="currentImage = productImage">
+              <a>
+                <div class="box">
+                  <figure class="image is-square">
+                    <img :src="productImage" >
+                  </figure>
+                </div>
+              </a>
+            </li>
+          </ul>
         </div>
         <div class="column is-10">
           <figure class="image is-square" v-if="currentImage">

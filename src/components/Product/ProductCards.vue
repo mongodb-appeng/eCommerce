@@ -57,7 +57,7 @@ export default {
     },
     computed: {
       ...mapState([
-          'database',
+          // 'database',
           'categoryFilter'
       ]),
     },
@@ -123,7 +123,7 @@ export default {
             {$and: matchCategories}
           ];
         }
-        this.database.collection("products")
+        this.$root.$data.database.collection("products")
         .find(
           query,
           {
@@ -179,7 +179,7 @@ export default {
         this.bouncable = false;
         // TODO move this to a system-user Stitch function so that the `product.internal`
         // attribute can be hidden by a rule
-        this.database.collection('products').aggregate(
+        this.$root.$data.database.collection('products').aggregate(
           [
             {
               $searchBeta: {

@@ -57,7 +57,7 @@ export default {
   },
   computed: {
       ...mapState([
-          'database'
+        //   'database'
       ]),
   },
   methods: {
@@ -77,7 +77,7 @@ export default {
                 productID: this.productID
             }
         }
-        this.database.collection("reviewOverflow")
+        this.$root.$data.database.collection("reviewOverflow")
         .find(query, {sort: {_id: -1}, limit: 20})
         .toArray()
         .then ((docArray) => {
@@ -88,7 +88,7 @@ export default {
                 });
                 this.progress = '';
                 let _this = this;
-                // Wait 2 seconds before allowing a request to fetch more products
+                // Wait half a second before allowing a request to fetch more products
                 setTimeout(function(){
                     _this.bouncable = true;
                 }, 500);

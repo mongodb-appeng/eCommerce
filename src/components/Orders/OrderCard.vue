@@ -82,7 +82,10 @@ export default {
         ]),
         removeOrder () {
             this.progress = 'Deleting order';
-            this.deleteOrder (this.order.orderID);
+            this.deleteOrder ({
+                database: this.$root.$data.database,
+                orderID: this.order
+            });
             this.progress = '';
         }
     },

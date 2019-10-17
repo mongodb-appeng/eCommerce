@@ -258,12 +258,12 @@ export default {
     },
     computed: {
         ...mapState([
-            'stitchClient',
-            'database',
+            // 'stitchClient',
+            // 'database',
             'userLoggedIn',
             'userFirstName',
-            'customer',
-            'user'
+            'customer'
+            // 'user'
         ])
     },
     methods: {
@@ -273,7 +273,7 @@ export default {
         ]),
 
         getCountriesList () {
-            this.stitchClient.callFunction("getCountriesList")
+            this.$root.$data.stitchClient.callFunction("getCountriesList")
             .then ((results) => {
                 this.countries = results;
             },
@@ -285,8 +285,8 @@ export default {
 
         fetchCustomer () {
             this.progress = 'Looking for existing user profile.';
-            this.database.collection("customers")
-            .findOne({"contact.email": this.user.profile.data.email}) 
+            this.$root.$data.database.collection("customers")
+            .findOne({"contact.email": this.customer.contact.email}) 
             .then (customerDoc => {
                     if (customerDoc) {
                     this.localCustomer = customerDoc;
@@ -307,7 +307,7 @@ export default {
             this.progress = 'Writing profile to database.';
             this.error = '';
             this.success = '';
-            this.database.collection("customers").updateOne(
+            this.$root.$data.database.collection("customers").updateOne(
                 {"contact.email": this.localCustomer.contact.email},
                 this.localCustomer,
                 {upsert: true}
@@ -318,12 +318,17 @@ export default {
                     this.setUserFirstName(this.localCustomer.name.first)
                 }
                 this.success = "User profile updated.";
-                this.progress = 'Taking you back';
+                // this.progress = 'Taking you back';
                 const _this = this;
                 setTimeout(function(){
-                    // _this.$router.push({name: 'home'});
-                    _this.$router.go(-1);
-                }, 1000);
+                    _this.success = '';
+                }, 1000);                this.success = "User profile updated.";
+                // this.progress = 'Taking you back';
+                // const _this = this;
+                // setTimeout(function(){
+                //     // _this.$router.push({name: 'home'});
+                //     _this.$router.go(-1);
+                // }, 1000);
             }, (err) => {
                 this.progress = '';
                 this.error = `Error: Writing profile to the database - ${err.message}`;
@@ -353,7 +358,7 @@ export default {
             if (files.length) {
                 this.mugshotFile = files[0];
                 // TODO switch to MongoDB marketing account AWS2 / ecommerce-mongodb-mugshots
-                const s3 = this.stitchClient.getServiceClient(AwsServiceClient.factory, config.aws.serviceName);
+                const s3 = this.$root.$data.stitchClient.getServiceClient(AwsServiceClient.factory, config.aws.serviceName);
                 const cleanEmail = this.customer.contact.email.replace("+", "_");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
@@ -390,8 +395,8 @@ export default {
         this.getCountriesList();
         if (this.userLoggedIn) {
             this.localCustomer = this.customer;
-            this.localCustomer.owner_id = this.stitchClient.auth.user.id;
-            this.localCustomer.contact.email = this.user.profile.data.email;
+            this.localCustomer.owner_id = this.$root.$data.stitchClient.auth.user.id;
+            this.localCustomer.contact.email = this.customer.contact.email;
             this.fetchCustomer();
             this.originalEmail = this.localCustomer.contact.email;
         } else {

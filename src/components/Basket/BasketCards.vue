@@ -43,7 +43,6 @@ export default {
           error: '',
           progress: '',
           success: ''
-        //   basket: []
         }
     },
     computed: {
@@ -52,20 +51,12 @@ export default {
       ])
     },
     watch: {
-    //   searchTerm: function () {
-    //     this.lastProductID = '';
-    //     this.lastInterest = 10000;
-    //     this.lastScore = 10000;
-    //     this.products = [];
-    //     this.searchProducts();
-    //   }
     },
     methods: {
       // ...mapMutations([
       //   ]),
     },
     mounted() {
-        // this.basket = this.customer.shoppingBasket.slice();
   }
 }
 </script>

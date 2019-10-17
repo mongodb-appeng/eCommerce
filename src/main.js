@@ -5,8 +5,7 @@ import router from './router'
 import 'bulma/css/bulma.css'
 import './main.scss'
 
-// TODO turn this back on 
-// import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.config.productionTip = false
 
@@ -48,47 +47,44 @@ const nullMetaCustomer = {
 }
 
 const store = new Vuex.Store({
-  // TODO: turn this back on
-  // plugins: [createPersistedState()],
+  plugins: [createPersistedState()],
   state: {
-    stitchClient: null,
-    database: null,
+    // stitchClient: null,
+    // database: null,
     userLoggedIn: false,
     userFirstName: "Guest",
-    user: null,
+    // user: null,
     customer: nullCustomer,
     metaCustomer: nullMetaCustomer,
     categoryFilter: [],
     checkoutID: ''
   },
   getters: {
-    // stitchClient: state => {
-    //   return state.stitchClient;
-    // },
   },
   mutations: {
-    setStitchClient (state, payload) {
-      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-      console.log('Setting Stitch client');
-      console.log(`app ID: ${payload.info.clientAppId}`);
-      Vue.set(state, 'stitchClient', payload);
-      // state.stitchClient = payload;
-      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-      console.log('set stitch client');
-      console.log(`state app ID: ${state.stitchClient.info.clientAppId}`);
-    },
-    setDatabase (state, payload) {
-      console.log('mutating database');
-      state.database = payload
-      console.log('mutated database');
-    },
+    // setStitchClient (state, payload) {
+    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+    //   console.log('Setting Stitch client');
+    //   console.log(`app ID: ${payload.info.clientAppId}`);
+    //   Vue.set(state, 'stitchClient', payload);
+    //   // state.stitchClient = payload;
+    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+    //   console.log('set stitch client');
+    //   console.log(`state app ID: ${state.stitchClient.info.clientAppId}`);
+    // },
+    // setDatabase (state, payload) {
+    //   console.log('mutating database');
+    //   state.database = payload
+    //   console.log('mutated database');
+    // },
     setLoggedIn (state, payload) {state.userLoggedIn = payload},
     setUserFirstName (state, payload) {state.userFirstName = payload},
-    setUser (state, payload) {state.user = payload},
+    // setUser (state, payload) {state.user = payload},
     setCategoryFilter (state, payload) {state.categoryFilter = payload},
     // setCheckoutID (state, payload) {state.checkoutID = payload},
     // `customer` mutations
     setCustomer (state, payload) {state.customer = payload},
+    setEmail (state, payload) {Vue.set(state.customer.contact, 'email', payload)},
     setWaitingOnProducts (state, payload) {
       const newList = payload.slice();
       Vue.set(state.customer, 'waitingOnProducts', newList);
@@ -116,7 +112,7 @@ const store = new Vuex.Store({
       state.customer = nullCustomer;
       state.metaCustomer.shoppingBasketSize = 0;
       state.metaCustomer.shoppingBasketValue = 0;
-      state.user = null;
+      // state.user = null;
       state.userLoggedIn = false;
       state.userFirstName = 'Guest';
       // state.stitchClient = null;
@@ -131,29 +127,24 @@ const store = new Vuex.Store({
   actions: {
 
     addToBasket ({commit, state, dispatch}, payload) {
-      // `payload` must be an array of basket entries
-      // if (!state.customer.shoppingBasket) {
-      //   state.customer.shoppingBasket = [];
-      // }
-      if (payload) {
-        payload.forEach((item, incomingIndex) => {
+      // payload = {database, itemArray}  
+      if (payload.itemArray) {
+        payload.itemArray.forEach((item, incomingIndex) => {
           const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
             return entry.productID === item.productID;
           });
           if (existingIndex < 0) {
             // No matching productID in existing basket
-            commit('pushBasketItem', payload[incomingIndex]);
-            // state.customer.shoppingBasket.push(payload[incomingIndex]);
+            commit('pushBasketItem', payload.itemArray[incomingIndex]);
           } else {
-            commit('increaseBasketItemQuantity', {index: incomingIndex, quantity: payload[incomingIndex].quantity});
-            // state.customer.shoppingBasket[existingIndex].quantity += payload[incomingIndex].quantity;
+            commit('increaseBasketItemQuantity', {index: incomingIndex, quantity: payload.itemArray[incomingIndex].quantity});
           }
         });
         if (state.userLoggedIn) {
           // If not already logged in then the basket will be written to the database
           // when the customer logs in
-          if (state.database) {
-            const customers = state.database.collection('customers');
+          if (payload.database) {
+            const customers = payload.database.collection('customers');
             customers.updateOne(
               {"contact.email": state.customer.contact.email},
               {$set: {shoppingBasket: state.customer.shoppingBasket}}
@@ -169,10 +160,10 @@ const store = new Vuex.Store({
     },
 
     deleteFromBasket ({commit, state, dispatch}, payload) {
-      // `payload` is the productID to remove from the basket
-      if (payload) {
+      // `payload` = {database, productID}
+      if (payload.productID) {
         const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
-          return entry.productID === payload;
+          return entry.productID === payload.productID;
         });
         if (existingIndex >= 0) {
           let newBasket = state.customer.shoppingBasket.slice();
@@ -182,8 +173,8 @@ const store = new Vuex.Store({
           if (state.userLoggedIn) {
             // If not already logged in then the basket will be written to the database
             // when the customer logs in
-            if (state.database) {
-              const customers = state.database.collection('customers');
+            if (payload.database) {
+              const customers = payload.database.collection('customers');
               customers.updateOne(
                 {"contact.email": state.customer.contact.email},
                 {$set: {shoppingBasket: newBasket}}
@@ -199,7 +190,7 @@ const store = new Vuex.Store({
     },
 
     updateBasketItemQuantity ({commit, state, dispatch}, payload) {
-      // `payload` {productID, quantity}
+      // `payload` = {database, productID, quantity} 
       if (payload) {
         const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
           return entry.productID === payload.productID;
@@ -210,8 +201,8 @@ const store = new Vuex.Store({
           if (state.userLoggedIn) {
             // If not already logged in then the basket will be written to the database
             // when the customer logs in
-            if (state.database) {
-              const customers = state.database.collection('customers');
+            if (payload.database) {
+              const customers = payload.database.collection('customers');
               customers.updateOne(
                 {"contact.email": state.customer.contact.email},
                 {$set: {shoppingBasket: state.customer.shoppingBasket}}
@@ -226,13 +217,13 @@ const store = new Vuex.Store({
       }
     },
 
-    emptyBasket ({state, commit}) {
+    emptyBasket ({state, commit}, database) {
       commit('clearBasket');
       if (state.userLoggedIn) {
         // If not already logged in then the basket will be written to the database
         // when the customer logs in
-        if (state.database) {
-          const customers = state.database.collection('customers');
+        if (database) {
+          const customers = database.collection('customers');
           customers.updateOne(
             {"contact.email": state.customer.contact.email},
             {$set: {shoppingBasket: state.customer.shoppingBasket}}
@@ -258,28 +249,26 @@ const store = new Vuex.Store({
       commit('setShoppingBasketValue', shoppingBasketValue);
     },
 
-    setUserLoggedIn ({commit, state, dispatch}, user) {
+    setUserLoggedIn ({commit, state, dispatch}, payload) {
+      // payload = {database, user} 
       commit('setLoggedIn', true);
-      commit('setUser', user);
-      if (user.profile.firstName) {
-        commit('setUserFirstName', user.profile.firstName);
-      } else if (user.profile.email) {
-        commit('setUserFirstName', user.profile.email);  
+      commit('setEmail', payload.user.profile.email);
+      // commit('setUser', user);
+      if (payload.user.profile.firstName) {
+        commit('setUserFirstName', payload.user.profile.firstName);
+      } else if (payload.user.profile.email) {
+        commit('setUserFirstName', payload.user.profile.email);  
       }
       return new Promise ((resolve, reject) => {
         try {
-          state.database.collection("customers")
-          .findOne({"contact.email": state.user.profile.data.email}) 
+          payload.database.collection("customers")
+          .findOne({"contact.email": payload.user.profile.data.email}) 
           .then (customerDoc => {
             if (customerDoc) {
               const localBasket = state.customer.shoppingBasket;
               commit('setCustomer', customerDoc);
               // Avoid losing contents of local basket (created before customer logged in)
               dispatch('addToBasket', localBasket);
-
-              // if (localBasket && localBasket.length > 0) {
-              //   commit('addToBasket', localBasket);
-              // }
               commit('setUserFirstName', customerDoc.name.first);
             }
               resolve();
@@ -297,8 +286,8 @@ const store = new Vuex.Store({
       })
     },
 
-    fetchOrders ({commit, state}) {
-      const customers = state.database.collection('customers');
+    fetchOrders ({commit, state}, database) {
+      const customers = database.collection('customers');
       return customers.findOne(
         {"contact.email": state.customer.contact.email},
         {$projection: {
@@ -312,10 +301,10 @@ const store = new Vuex.Store({
     },
 
     deleteOrder ({commit, state}, payload) {
-      // `payload` is the orderID to remove from the order list
-      if (payload) {
+      // `payload` = {database, orderID} 
+      if (payload.orderID) {
         const existingIndex = state.customer.orders.findIndex((entry) => {
-          return entry.orderID === payload;
+          return entry.orderID === payload.orderID;
         });
         if (existingIndex >= 0) {
           let newOrders = state.customer.orders.slice();
@@ -324,8 +313,8 @@ const store = new Vuex.Store({
           if (state.userLoggedIn) {
             // If not already logged in then the basket will be written to the database
             // when the customer logs in
-            if (state.database) {
-              const customers = state.database.collection('customers');
+            if (payload.database) {
+              const customers = payload.database.collection('customers');
               customers.updateOne(
                 {"contact.email": state.customer.contact.email},
                 {$set: {orders: newOrders}}
@@ -341,11 +330,11 @@ const store = new Vuex.Store({
     },
 
     unWatch ({commit, state}, payload) {
-      // TODO
-      // `payload` is the productID to remove from the waitingOnProducts list
-      if (payload) {
+      // 
+      // `payload` = {database, waitingList}
+      if (payload.waitingList) {
         const existingIndex = state.customer.waitingOnProducts.findIndex((entry) => {
-          return entry === payload;
+          return entry === payload.waitingList;
         });
         if (existingIndex >= 0) {
           let newList = state.customer.waitingOnProducts.slice();
@@ -354,8 +343,8 @@ const store = new Vuex.Store({
           if (state.userLoggedIn) {
             // If not already logged in then the list will be written to the database
             // when the customer logs in
-            if (state.database) {
-              const customers = state.database.collection('customers');
+            if (payload.database) {
+              const customers = payload.database.collection('customers');
               customers.updateOne(
                 {"contact.email": state.customer.contact.email},
                 {$set: {waitingOnProducts: newList}}
@@ -376,6 +365,8 @@ new Vue({
   router,
   store,
   data: {
+    stitchClient: null, // Structure is too complex to store in `state`
+    database: null // Structure is too complex to store in `state`
   },
   computed: {
   },

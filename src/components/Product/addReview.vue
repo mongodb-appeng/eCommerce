@@ -54,18 +54,6 @@
                     </span>
                 </div>
             </div>
-            <!-- <div class="box">
-                <div class="level-left">
-                    <a v-for="rank in [1, 2, 3, 4, 5]" v-bind:key="rank" class="level-item">
-                        <span v-if="stars >= rank" class="icon is-small has-text-warning">
-                            <i class="fas fa-star"></i>
-                        </span>
-                        <span v-else class="icon is-small has-text-warning">
-                            <i class="far fa-star"></i>
-                        </span>
-                    </a>
-                </div>
-            </div> -->
             <div class="field is-grouped is-grouped-centered">
                 <p class="control">
                     <button v-on:click="postReview" class="button is-success is-medium is-focused">
@@ -131,7 +119,7 @@ export default {
             this.stars = stars;
         },
         postReview () {
-            this.stitchClient.callFunction("addReview", [
+            this.$root.$data.stitchClient.callFunction("addReview", [
                 this.productID,
                 this.comment,
                 this.stars

@@ -87,7 +87,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'stitchClient'
+            // 'stitchClient'
         ]),
     },
     methods: {
@@ -103,10 +103,13 @@ export default {
             this.success = '';
             this.progress = 'Attempting to log you in...'
             const credential = new UserPasswordCredential(this.email, this.password);
-            this.stitchClient.auth.loginWithCredential(credential)
+            this.$root.$data.stitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
                 // TODO: should change the action to return a promise.
-                this.$store.dispatch('setUserLoggedIn', authedUser)
+                this.$store.dispatch('setUserLoggedIn', {
+                    database: this.$root.$data.database,
+                    user: authedUser
+                })
                 .then (() => {
                     this.progress = '';
                     this.$emit("close-modal");

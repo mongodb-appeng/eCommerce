@@ -103,10 +103,7 @@ import AnonymousAuth from '../components/AnonymousAuth.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
 import config from '../config';
-import Stripe from 'stripe';
-// import { Card, createToken } from 'vue-stripe-elements-plus'
-// import Stripe from 'https://js.stripe.com/v3/';
-
+import Stripe from 'stripe'; // see vue.config.js for `externals`
 
 export default {
   name: 'checkout',
@@ -136,7 +133,7 @@ export default {
   computed: {
       ...mapState([
           'userLoggedIn',
-          'stitchClient',
+          // 'stitchClient',
           'customer',
           'metaCustomer'
       ]),
@@ -152,7 +149,7 @@ export default {
         'setCheckoutID'
     ]),
     waitUntilStitchReady() {
-       if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
        } else {
          let _this = this;
@@ -164,17 +161,12 @@ export default {
         this.$router.push({name: 'account'})
     },
 
-    // pay () {
-    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-    //   createToken().then(data => console.log(data.token))
-    // }
-
     submitOrder () {
-      this.stitchClient.callFunction("placeOrder", [this.paymentMethod])
+      this.$root.$data.stitchClient.callFunction("placeOrder", [this.paymentMethod])
       .then ((results) => {
         if (results && results.result) {
-            this.emptyBasket();
-            this.fetchOrders()
+            this.emptyBasket(this.$root.$data.database);
+            this.fetchOrders(this.$root.$data.database)
             .then (() => {
                 this.progress = '';
                 this.$router.push({name: 'home'});
@@ -204,7 +196,7 @@ export default {
     checkout () {
       this.progress = 'Submitting order';
       if (this.paymentMethod === 'Credit or debit card') {
-        this.stitchClient.callFunction(
+        this.$root.$data.stitchClient.callFunction(
           "stripeCreateCheckoutSession",
           [(Math.round(this.metaCustomer.shoppingBasketValue * 100))/100]
           )

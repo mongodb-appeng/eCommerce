@@ -54,8 +54,7 @@ export default {
   },
   computed: {
     ...mapState([
-      "userLoggedIn", 
-      "database"
+      "userLoggedIn"
     ]),
     indent() {
         return {

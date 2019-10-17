@@ -4,7 +4,8 @@
       v-bind:homePage="home"
       v-on:search-term="search"
     ></MyHeader>
-    <div v-if="!userLoggedIn">
+    <!-- <div v-if="!userLoggedIn"> -->
+    <div>
       <AnonymousAuth></AnonymousAuth>
     </div>
     <section class="section">
@@ -60,13 +61,13 @@ export default {
   },
   computed: {
       ...mapState([
-          'userLoggedIn',
-          'stitchClient'
+          // 'userLoggedIn'
+          // 'stitchClient'
       ]),
   },
   methods: {
     waitUntilStitchReady() {
-       if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
        } else {
          let _this = this;

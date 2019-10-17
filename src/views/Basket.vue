@@ -69,14 +69,14 @@ export default {
   computed: {
       ...mapState([
           'userLoggedIn',
-          'stitchClient',
+          // 'stitchClient',
           'customer',
           'metaCustomer'
       ])
   },
   methods: {
     waitUntilStitchReady() {
-       if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
        } else {
          let _this = this;

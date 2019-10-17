@@ -58,15 +58,15 @@ export default {
   },
   computed: {
       ...mapState([
-        'userLoggedIn',
-        'database'
+        'userLoggedIn'
+        // 'database'
       ]),
   },
   methods: {
     fetchTree() {
       if (!this.categoryTree) {
         this.progress = 'Fetching product categories';
-        this.database.collection('meta').findOne(
+        this.$root.$data.database.collection('meta').findOne(
           {name: 'categoryTree'}
         )
         .then ((tree) => {
@@ -90,7 +90,7 @@ export default {
     fetchSaleTree() {
       if (!this.saleCategoryTree) {
         this.progress = 'Fetching sales product categories';
-        this.database.collection('meta').findOne(
+        this.$root.$data.database.collection('meta').findOne(
           {name: 'saleCategoryTree'}
         )
         .then ((tree) => {

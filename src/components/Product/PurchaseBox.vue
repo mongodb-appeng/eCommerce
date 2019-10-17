@@ -104,14 +104,13 @@ export default {
   computed: {
     ...mapState([
       'customer',
-      'userLoggedIn',
-      'database'
+      'userLoggedIn'
+      // 'database'
     ]),
   },
   methods: {
     ...mapMutations([
       'setWaitingOnProducts'
-      // 'addToBasket'
     ]),
     ...mapActions([
         'addToBasket'
@@ -129,7 +128,7 @@ export default {
           this.customer.waitingOnProducts.splice(index, 1);
         }
         this.progress = "Updating customer"
-        this.database.collection("customers").updateOne(
+        this.$root.$data.database.collection("customers").updateOne(
           {"contact.email": this.customer.contact.email},
           {$set: {waitingOnProducts: this.customer.waitingOnProducts}}
         )
@@ -160,13 +159,16 @@ export default {
     newBasketItem () {
       const quantityToAdd = parseInt(this.quantity);
       this.quantity = 0;
-      this.addToBasket([{
-        productID: this.productID,
-        productName: this.productName,
-        price: this.price,
-        productImage: this.productImage,
-        quantity: quantityToAdd
-      }])
+      this.addToBasket({
+        database: this.$root.$data.database,
+        itemArray: [{
+          productID: this.productID,
+          productName: this.productName,
+          price: this.price,
+          productImage: this.productImage,
+          quantity: quantityToAdd
+        }]
+      })
     }
   },
   mounted() {

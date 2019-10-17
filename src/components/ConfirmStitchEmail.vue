@@ -24,7 +24,6 @@ import { mapState } from 'vuex';
 export default {
     name: "ConfirmStitchEmail",
     props: [
-        // "stitchClient"
     ], 
     data() {
         return {
@@ -35,7 +34,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'stitchClient'
+            // 'stitchClient'
         ]),
     },
   created() {
@@ -56,7 +55,7 @@ export default {
     try {
         // Confirm the user's email/password account (at this point, the user hasn't logged 
         // in and doesn't appear in the Stitch UI)
-        const emailPassClient = this.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+        const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
         emailPassClient.confirmUser(token, tokenId)
         .then ( () => {
             this.success = "Password confirmed.";

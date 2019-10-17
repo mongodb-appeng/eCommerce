@@ -9,8 +9,6 @@ import Product from './views/Product.vue'
 import Basket from './views/Basket.vue'
 import Checkout from './views/Checkout.vue'
 import CheckedOut from './views/CheckedOut.vue'
-import Test from './views/Test.vue'
-
 
 Vue.use(Router)
 
@@ -63,13 +61,7 @@ export default new Router({
       name: 'checkedout',
       component: CheckedOut, 
       props: true
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: Test, 
-      props: true
-    },
+    }
     // {
     //   path: '/about',
     //   name: 'about',

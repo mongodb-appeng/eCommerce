@@ -3,22 +3,27 @@
     <MyHeader></MyHeader>
     <div>
       <AnonymousAuth></AnonymousAuth>
-      <h3 class="title is-4">Thanks for your payment</h3>
+
     </div>
     <section class="section">
-      <div v-if="stitchReady && product">
+      <div class="container">
+        <h3 class="title is-3">Payment complete</h3>
+      </div>
+      <div v-if="stitchReady">
           
       </div>
     </section>
-    <!-- TODO: Move these to a status component -->
-    <div v-if="error" class="notification is-danger">
-        <strong>{{ error }}</strong>
-    </div>
-    <div v-if="success" class="notification is-success">
-        {{ success }}
-    </div>
-    <div v-if="progress" class="notification is-primary">
-        {{ progress }}
+    <div class="container">
+      <!-- TODO: Move these to a status component -->
+      <div v-if="error" class="notification is-danger">
+          <strong>{{ error }}</strong>
+      </div>
+      <div v-if="success" class="notification is-success">
+          {{ success }}
+      </div>
+      <div v-if="progress" class="notification is-primary">
+          {{ progress }}
+      </div>
     </div>
   </div>
 </template>
@@ -26,7 +31,8 @@
 <script>
 import {
     mapState,
-    // mapMutations
+    mapMutations,
+    mapActions
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
 import AnonymousAuth from '../components/AnonymousAuth.vue'
@@ -52,15 +58,34 @@ export default {
   computed: {
       ...mapState([
           'userLoggedIn',
-          'stitchClient',
-          'database'
+          // 'stitchClient',
+          // 'database'
       ]),
   },
   methods: {
+    ...mapMutations([
+      'clearBasket'
+    ]),
+    ...mapActions([
+        'fetchOrders',
+        'calcBasketStats'
+    ]),
+    
+    updateBasketAndOrders () {
+      this.clearBasket();
+      this.calcBasketStats();
+      this.fetchOrders(this.$root.$data.database)
+      .then(() => {
+        this.progress = 'Taking you back to the store...';
+        let _this = this;
+        setTimeout(function () {_this.$router.push({name: 'home'})}, 3000);
+      });
+    },
+
     waitUntilStitchReady() {
-      if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+      if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
+        this.updateBasketAndOrders();
         this.stitchReady = true;
-        this.fetchProduct();
       } else {
         let _this = this;
         setTimeout(_this.waitUntilStitchReady, 100);

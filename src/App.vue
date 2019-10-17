@@ -25,16 +25,16 @@ export default {
   },
   computed: {
     ...mapState([
-        'database',
-        'user',
-        'userFirstName'
+        // 'database',
+        // 'user',
+        // 'userFirstName'
     ]),
   },
   methods: {
     ...mapMutations([
-      'setLoggedIn',
-      'setUser',
-      'setUserFirstName'
+      // 'setLoggedIn',
+      // 'setUser',
+      // 'setUserFirstName'
     ]),
   },
   created() {

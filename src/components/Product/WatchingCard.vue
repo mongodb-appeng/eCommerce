@@ -64,7 +64,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'database'
+            // 'database'
         ]),
     },
     methods: {
@@ -73,14 +73,17 @@ export default {
         ]),
 
         fetchProduct () {
-            return this.database.collection('products').findOne(
+            return this.$root.$data.database.collection('products').findOne(
                 {productID: this.productID}
             );
         },
 
         stopWatching () {
             this.progress = 'Unwatching product';
-            this.unWatch (this.productID)
+            this.unWatch ({
+                database: this.$root.data.database,
+                productID: this.productID
+            })
             .then (() => {
                 this.progress = '';
                 this.product = null;

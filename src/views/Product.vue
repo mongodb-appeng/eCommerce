@@ -47,14 +47,7 @@
             v-bind:productID="product.productID"
             v-on:reviewStats="newReviewStats"
         ></ProductReviews>
-        <!-- <ProductReviews
-            v-bind:reviews="product.reviews"
-            v-bind:productID="product.productID"
-            v-on:reviewStats="newReviewStats"
-            v-on:login="login"
-        ></ProductReviews> -->
       </div>
-
     </section>
     <!-- TODO: Move these to a status component -->
     <div v-if="error" class="notification is-danger">
@@ -107,16 +100,16 @@ export default {
   },
   computed: {
       ...mapState([
-          'userLoggedIn',
-          'stitchClient',
-          'database'
+          'userLoggedIn'
+          // 'stitchClient',
+          // 'database'
       ]),
   },
   methods: {
     fetchProduct() {
       if (this.productID) {
         this.progress = 'Fetching product details';
-        this.database.collection('products').findOne({productID: this.productID})
+        this.$root.$data.database.collection('products').findOne({productID: this.productID})
         .then ((doc) => {
           if (doc) {
             this.progress = '';
@@ -142,17 +135,14 @@ export default {
       this.product.reviews.numberOfReviews = reviewStats.numberOfReviews;
     },
     waitUntilStitchReady() {
-      if (this.stitchClient && this.stitchClient.auth.isLoggedIn) {
+      if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
         this.stitchReady = true;
         this.fetchProduct();
       } else {
         let _this = this;
         setTimeout(_this.waitUntilStitchReady, 100);
       }
-    },
-    // login() {
-    //   this.needLogin = true
-    // }
+    }
   },
   mounted() {
     this.productID = this.$route.query.productID;

@@ -100,7 +100,6 @@ export default {
             this.ordersTab = false;
             this.watchingTab = true;
         },
-        
     },
     mounted() {
     }

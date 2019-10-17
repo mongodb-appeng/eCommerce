@@ -91,7 +91,7 @@ export default {
     },
     computed: {
         ...mapState([
-        'stitchClient'
+        // 'stitchClient'
     ]),
     },
     methods: {
@@ -105,15 +105,14 @@ export default {
                 this.error = 'Error, passwords must match.';
             } else {
                 this.progress = `Registering ${this.email}`;
-                const emailPassClient = this.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+                const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
                 emailPassClient.registerWithEmail(this.email, this.password)
                 .then(() => {
-                    this.success = "Registration request being processed – check your inbox";
-                    this.progress = 'Returning to main page in 2 seconds';
+                    this.success = "Registration complete";
                     let _this = this;
                     setTimeout(function(){
                         _this.$router.push({name: 'home'});
-                    }, 2000);
+                    }, 1000);
                 },
                 (err) => {
                     this.progress = '';
@@ -122,10 +121,10 @@ export default {
                     console.error(this.error);
                 });
             }
-        },
-        setUserLoggedIn(user) {
-            this.setUser(user);
         }
+        // setUserLoggedIn(user) {
+        //     this.setUser(user);
+        // }
     },
     mounted() {
     }

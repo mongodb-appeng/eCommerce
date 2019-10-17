@@ -90,23 +90,27 @@ export default {
         'updateBasketItemQuantity'
     ]),
         deleteItem () {
-            this.deleteFromBasket(this.product.productID);
+            this.deleteFromBasket({
+                database: this.$root.$data.database,
+                productID: this.product.productID
+            });
         },
 
         incrementItem () {
             this.updateBasketItemQuantity(
                 {
+                    database: this.$root.$data.database,
                     productID: this.product.productID,
                     quantity: this.product.quantity + 1
                 }
             )
-            // this.$emit('updateQuantity', this.product.productID, this.product.quantity + 1);
         },
 
         decrementItem () {
             if (this.product.quantity > 0) {
                 this.updateBasketItemQuantity(
                     {
+                        database: this.$root.$data.database,
                         productID: this.product.productID,
                         quantity: this.product.quantity - 1
                     }

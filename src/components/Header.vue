@@ -104,7 +104,6 @@ import {
 export default {
     name: "Header",
     props: [
-        // 'needLogin',
         'homePage'
     ], 
     components: {
@@ -119,7 +118,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'stitchClient',
+            // 'stitchClient',
             'customer',
             'metaCustomer',
             'userFirstName',
@@ -153,14 +152,18 @@ export default {
             }
         },
         logout () {
-            this.stitchClient.auth.logout()
-            .then (() => {
-                this.signout();
-            },
-            (error) => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(`Error: Failed to sign out ${error.message}`);
-            })
+            this.signout();
+            this.$router.push({name: 'home'});
+            // TODO add this back?
+            // this.$root.$data.stitchClient.auth.logout()
+            // .then (() => {
+            //     this.signout();
+            //     this.$router.push({name: 'home'});
+            // },
+            // (error) => {
+            //     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
+            //     console.error(`Error: Failed to sign out ${error.message}`);
+            // })
         },
         search () {
             this.$emit('search-term', this.searchTerm);
