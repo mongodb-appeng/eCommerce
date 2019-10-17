@@ -211,7 +211,10 @@
         </div>
         <div class="field is-grouped is-grouped-centered">
             <p class="control">
-                <button v-on:click="saveProfile" class="button is-success">
+                <button v-if="allowSubmit" v-on:click="saveProfile" class="button is-success">
+                    Save Profile
+                </button>
+                <button v-else class="button is-grey" disbaled>
                     Save Profile
                 </button>
             </p>
@@ -253,7 +256,8 @@ export default {
             progress: '',
             localCustomer: {},
             countries: [],
-            mugshotFile: {}
+            mugshotFile: {},
+            allowSubmit: true
         }
     },
     computed: {
@@ -356,8 +360,8 @@ export default {
             this.success = '';
             const files = event.target.files || event.dataTransfer.files;
             if (files.length) {
+                this.allowSubmit = false;
                 this.mugshotFile = files[0];
-                // TODO switch to MongoDB marketing account AWS2 / ecommerce-mongodb-mugshots
                 const s3 = this.$root.$data.stitchClient.getServiceClient(AwsServiceClient.factory, config.aws.serviceName);
                 const cleanEmail = this.customer.contact.email.replace("+", "_");
                 this.convertImageToBSON (this.mugshotFile)
@@ -366,7 +370,6 @@ export default {
                     const s3Args = { 
                         ACL: "public-read",
                         Bucket: config.aws.bucket,
-                        // Bucket: "clusterdb-ecommerce-mugshots",
                         ContentType: this.mugshotFile.type,
                         Key: `mug_${cleanEmail}_${now}`,
                         Body: bsonFile
@@ -377,17 +380,21 @@ export default {
                         .withArgs(s3Args);
                     s3.execute(request.build())
                     .then (() => {
-                        this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${cleanEmail}_${now}`
+                        this.localCustomer.mugshotURL = `https://${config.aws.bucket}.s3.amazonaws.com/mug_${cleanEmail}_${now}`;
+                        this.allowSubmit = true;
                     },
                     (error) => {
                         this.error = `Failed to upload image file: ${error.message}`;
+                        this.allowSubmit = true;
                     })
                 },
                 (error) => {
                     this.error = `Error: Failed to convert image file: ${error.messahge}.`;
+                    this.allowSubmit = true;
                 })
             } else {
                 this.error = "Failed to select a file";
+                this.allowSubmit = true;
             }
         }
     },

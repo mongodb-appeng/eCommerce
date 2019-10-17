@@ -156,7 +156,7 @@ export default {
         },
         logout () {
             this.signout();
-            this.$router.push({name: 'home'});
+            // this.$router.push({name: 'home'}); // TODO
             // TODO add this back?
             // this.$root.$data.stitchClient.auth.logout()
             // .then (() => {
