@@ -1,10 +1,9 @@
 <template>
   <div class="checked-out">
     <MyHeader></MyHeader>
-    <div>
+    <!-- <div>
       <AnonymousAuth></AnonymousAuth>
-
-    </div>
+    </div> -->
     <section class="section">
       <div class="container">
         <h3 class="title is-3">Payment complete</h3>
@@ -35,7 +34,7 @@ import {
     mapActions
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-import AnonymousAuth from '../components/AnonymousAuth.vue'
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import { setTimeout } from 'timers';
 
 export default {
@@ -43,7 +42,7 @@ export default {
   props: [
   ],
   components: {
-    AnonymousAuth,
+    // AnonymousAuth,
     MyHeader
   },
   data() {
@@ -57,7 +56,7 @@ export default {
   },
   computed: {
       ...mapState([
-          'userLoggedIn',
+          // 'userLoggedIn',
           // 'stitchClient',
           // 'database'
       ]),

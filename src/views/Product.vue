@@ -4,9 +4,9 @@
     <!-- <MyHeader
       v-bind:needLogin="needLogin"
     ></MyHeader> -->
-    <div>
+    <!-- <div>
       <AnonymousAuth></AnonymousAuth>
-    </div>
+    </div> -->
     <section class="section">
       <div v-if="stitchReady && product" class="columns">
         <div class="column is-5 ">
@@ -68,7 +68,7 @@ import {
     // mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-import AnonymousAuth from '../components/AnonymousAuth.vue'
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import ImageBox from '../components/Product/ImageBox.vue'
 import ProductSummary from '../components/Product/ProductSummary.vue'
 import PurchaseBox from '../components/Product/PurchaseBox.vue'
@@ -80,7 +80,7 @@ export default {
   props: [
   ],
   components: {
-    AnonymousAuth,
+    // AnonymousAuth,
     MyHeader,
     ImageBox,
     ProductSummary,

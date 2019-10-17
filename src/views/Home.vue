@@ -5,9 +5,9 @@
       v-on:search-term="search"
     ></MyHeader>
     <!-- <div v-if="!userLoggedIn"> -->
-    <div>
+    <!-- <div>
       <AnonymousAuth></AnonymousAuth>
-    </div>
+    </div> -->
     <section class="section">
       <div v-if="stitchReady" class="columns">
         <div class="column is-3 restrict-height">
@@ -36,7 +36,7 @@ import {
     // mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-import AnonymousAuth from '../components/AnonymousAuth.vue'
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import ProductCards from '../components/Product/ProductCards.vue'
 import CategoryMenu from "../components/Product/CategoryMenu.vue"
 import { setTimeout } from 'timers';
@@ -46,7 +46,7 @@ export default {
   props: [
   ],
   components: {
-    AnonymousAuth,
+    // AnonymousAuth,
     MyHeader,
     ProductCards,
     CategoryMenu

@@ -1,7 +1,10 @@
 <template>
   <div class="profile">
     <MyHeader></MyHeader>
-    <div class="section">
+    <!-- <div>
+      <AnonymousAuth></AnonymousAuth>
+    </div> -->
+    <div v-if="stitchReady" class="section">
         <h1 class="title is-3">{{ userFirstName }}'s Account</h1>
         <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
         <ul>
@@ -47,10 +50,10 @@
 <script>
 
 import MyHeader from '../components/Header.vue'
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import UserProfile from '../components/UserProfile.vue'
 import OrderCards from '../components/Orders/OrderCards.vue'
 import WatchingCards from '../components/Product/watchingCards.vue'
-
 
 import { 
     mapState, 
@@ -63,6 +66,7 @@ export default {
     ],
     components: {
         MyHeader,
+        // AnonymousAuth,
         UserProfile,
         OrderCards,
         WatchingCards
@@ -71,7 +75,8 @@ export default {
         return {
             profileTab: true,
             ordersTab: false,
-            watchingTab: false
+            watchingTab: false.OrderCards,
+            stitchReady: false
         }
     },
     computed: {
@@ -100,8 +105,18 @@ export default {
             this.ordersTab = false;
             this.watchingTab = true;
         },
+
+        waitUntilStitchReady() {
+            if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
+                this.stitchReady = true;
+            } else {
+                let _this = this;
+                setTimeout(_this.waitUntilStitchReady, 100);
+            }
+        },
     },
     mounted() {
+        this.waitUntilStitchReady();
     }
 }
 </script>

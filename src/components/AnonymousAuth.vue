@@ -22,7 +22,8 @@ import {
 } from "mongodb-stitch-browser-sdk"
 import { 
     mapState, 
-    mapMutations 
+    mapMutations,
+    mapActions
     } from 'vuex';
 
 export default {
@@ -44,9 +45,12 @@ export default {
             // 'setDatabase',
             // 'setStitchClient'
         ]),
+        ...mapActions([
+            'refreshCustomer'
+        ]),
         anonymousLogin() {
             if (!this.localStitchClient.auth.isLoggedIn) {
-                this.progress = 'Authing app...'
+                this.progress = 'Authing app...';
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
                     this.progress = '';
@@ -66,6 +70,11 @@ export default {
             try {
                 const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db(config.database);
                 this.$root.$data.database = database;
+                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+                console.log('Connected to DB from AnonymousAuth');
+                this.refreshCustomer(this.$root.$data.database);
+                // TODO Fetch the customer document and write it to the
+                // store. If userLoggedIn then fetch and store customer.
             }
             catch (err) {
                 this.error = `Failed to connect to the database: ${err.message}`;

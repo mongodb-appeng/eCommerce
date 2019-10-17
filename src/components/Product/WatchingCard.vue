@@ -81,7 +81,7 @@ export default {
         stopWatching () {
             this.progress = 'Unwatching product';
             this.unWatch ({
-                database: this.$root.data.database,
+                database: this.$root.$data.database,
                 productID: this.productID
             })
             .then (() => {

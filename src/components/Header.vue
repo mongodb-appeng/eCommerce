@@ -52,7 +52,7 @@
                     <span class="icon">
                         <i class="fas fa-shopping-cart"></i>
                     </span>
-                    <span><small>{{ metaCustomer.shoppingBasketSize }}</small> Chekout</span>
+                    <span><small>{{ metaCustomer.shoppingBasketSize }}</small> Checkout</span>
                 </a>
                 <span class="navbar-item">
                     <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">
@@ -81,6 +81,7 @@
     </section>
 </header>
 <body>
+    <AnonymousAuth></AnonymousAuth>
     <div class="container">
         <div v-if="loginModalVisible || (loginRequested && !userLoggedIn)" class="modal is-active">
             <div class="modal-background"></div>
@@ -95,6 +96,7 @@
 </template>
 
 <script>
+import AnonymousAuth from '../components/AnonymousAuth.vue'
 import UserLogin from "../components/UserLogin.vue"
 import { 
     mapState, 
@@ -107,6 +109,7 @@ export default {
         'homePage'
     ], 
     components: {
+        AnonymousAuth,
         UserLogin
     },
     data() {

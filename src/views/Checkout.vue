@@ -1,9 +1,9 @@
 <template>
   <div class="checkout">
     <MyHeader></MyHeader>
-    <div v-if="!userLoggedIn">
+    <!-- <div v-if="!userLoggedIn">
       <AnonymousAuth></AnonymousAuth>
-    </div>
+    </div> -->
     <section class="section">
       <div v-if="stitchReady" class="columns">
         <div class="column is-9 scroll" id="products">
@@ -99,7 +99,7 @@ import {
     mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-import AnonymousAuth from '../components/AnonymousAuth.vue'
+// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
 import config from '../config';
@@ -110,7 +110,7 @@ export default {
   props: [
   ],
   components: {
-    AnonymousAuth,
+    // AnonymousAuth,
     MyHeader,
     BasketCards
   },
@@ -132,7 +132,7 @@ export default {
   },
   computed: {
       ...mapState([
-          'userLoggedIn',
+          // 'userLoggedIn',
           // 'stitchClient',
           'customer',
           'metaCustomer'

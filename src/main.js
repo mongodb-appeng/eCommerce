@@ -286,6 +286,21 @@ const store = new Vuex.Store({
       })
     },
 
+    refreshCustomer ({commit, state}, database) {
+      if (state.customer.contact.email) {
+        // TODO
+        return database.collection('customers').findOne(
+          {"contact.email": state.customer.contact.email})
+        .then ((customer) => {
+          commit('setCustomer', customer);
+        },
+        (error) => {
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.error(`Error, failed to fetch the customer document: ${error}`);
+        })
+      }
+    },
+
     fetchOrders ({commit, state}, database) {
       const customers = database.collection('customers');
       return customers.findOne(
@@ -331,10 +346,10 @@ const store = new Vuex.Store({
 
     unWatch ({commit, state}, payload) {
       // 
-      // `payload` = {database, waitingList}
-      if (payload.waitingList) {
+      // `payload` = {database, productID}
+      if (payload.productID) {
         const existingIndex = state.customer.waitingOnProducts.findIndex((entry) => {
-          return entry === payload.waitingList;
+          return entry === payload.productID;
         });
         if (existingIndex >= 0) {
           let newList = state.customer.waitingOnProducts.slice();
