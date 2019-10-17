@@ -1,5 +1,5 @@
 <template>
-    <div class="container" id="login">
+    <div class="container" id="login" tabindex="0" v-on:keydown.esc="quit">
         <div class="notification is-primary">
             <h1 class="title is-2">Log into your existing account</h1>
             <div class="field is-horizontal">
@@ -7,7 +7,7 @@
                     <div class="field is-expanded">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input v-model="email" class="input" type="email" placeholder="Email">
+                                <input v-model="email" class="input" type="email" placeholder="Email" ref="email">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
@@ -127,9 +127,13 @@ export default {
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                 console.error(this.error);
             })
+        },
+        quit () {
+            this.$emit('close-modal');
         }
     },
-    created() {
+    mounted() {
+        this.$refs.email.focus();
     }
 }
 </script>

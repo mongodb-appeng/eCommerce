@@ -83,7 +83,8 @@
 <body>
     <AnonymousAuth></AnonymousAuth>
     <div class="container">
-        <div v-if="loginModalVisible || (loginRequested && !userLoggedIn)" class="modal is-active">
+        <!-- <div v-if="loginModalVisible || (loginRequested && !userLoggedIn)" class="modal is-active"> -->
+        <div v-if="loginModalVisible" class="modal is-active" v-on:close-modal="hideLoginModal">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <UserLogin v-on:close-modal="hideLoginModal"></UserLogin>
@@ -115,7 +116,7 @@ export default {
     data() {
         return {
             loginModalVisible: false,
-            loginRequested: false,
+            // loginRequested: false,
             searchTerm: ''
         }
     },
@@ -173,7 +174,7 @@ export default {
         }
     },
     created() {
-        this.loginRequested = this.loginRequested;
+        // this.loginRequested = this.loginRequested;
   }
 }
 </script>
