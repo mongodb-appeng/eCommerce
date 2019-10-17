@@ -133,3 +133,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.notification a:not(.button):not(.dropdown-item) {
+    text-decoration: none;
+}
+</style>
