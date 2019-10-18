@@ -10,7 +10,7 @@
     </div> -->
     <section class="section">
       <div v-if="stitchReady" class="columns">
-        <div class="column is-3 restrict-height">
+        <div v-if="windowWidth >= 800" class="column is-3 restrict-height">
           <div class="container">
             <CategoryMenu></CategoryMenu>
           </div>
@@ -56,6 +56,7 @@ export default {
       path: [],
       stitchReady: false,
       home: true,
+      windowWidth: 100,
       searchTerm: ''
     }
   },
@@ -74,12 +75,24 @@ export default {
          setTimeout(_this.waitUntilStitchReady, 100);
        }
     },
+    
     search (searchTerm) {
       this.searchTerm = searchTerm;
+    },
+
+    handleResize() {
+      this.windowWidth = window.innerWidth;
     }
   },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
   mounted() {
-    this.waitUntilStitchReady();
+    this.waitUntilStitchReady('resize', this.handleResize);
+  },
+  destroyed() {
+    window.removeEventListener
   }
 }
 </script>

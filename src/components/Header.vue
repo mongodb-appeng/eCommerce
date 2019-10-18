@@ -9,65 +9,70 @@
                 <a class="navbar-item">
                     <img src="../assets/MongoDB_Logo_White_RGB.png" alt="Logo">
                 </a>
-                <span class="navbar-burger burger" data-target="navbarMenuHeroB">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </div>
-            <div id="navbarMenuHeroB" class="navbar-menu">
-            <div class="navbar-end">
-                <!-- <a class="navbar-item is-active"> -->
-                <a class="navbar-item" v-on:click="gotoHome">
-                    Home
-                </a>
-                <div class="field" id=search-box v-if="homePage">
-                    <div class="control has-icons-right">
-                        <input class="input is-small" 
-                            type="text" 
-                            v-model="searchTerm"
-                            placeholder="Search for products" 
-                            v-on:keyup.enter="search"
-                        >
-                        <span class="icon is-small is-right" v-on:click="search">
-                        <i class="fas fa-search"></i>
-                        </span>
-                    </div>
+                <div 
+                    class="navbar-burger burger"
+                    data-target=""
+                    v-on:click="showBurgerNav = !showBurgerNav"
+                    v-bind:class="{ 'is-active': showBurgerNav }"
+                    >
+                        <!-- These spans are only there for the 3 stripes of the burger icon -->
+                        <span></span>
+                        <span></span>
+                        <span></span>
                 </div>
-                <a class="navbar-item" v-if="customer.mugshotURL">
-                    <figure class="image is-24x24">
-                        <img v-on:click="gotoUserAccount" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
-                    </figure>
-                </a>
-                <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoUserAccount">
-                    <span >{{userFirstName}}'s account</span>
-                </a>
-                <a v-else class="navbar-item">
-                    <span v-on:click="showLoginModal">Login/Register</span>
-                </a>
-                <a class="navbar-item" v-if="userLoggedIn">
-                    <span v-on:click="logout">Sign out</span>
-                </a>
-                <a v-if="metaCustomer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
-                    <span class="icon">
-                        <i class="fas fa-shopping-cart"></i>
-                    </span>
-                    <span><small>{{ metaCustomer.shoppingBasketSize }}</small> Checkout</span>
-                </a>
-                <span class="navbar-item">
-                    <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">
-                        <span class="icon">
-                            <i class="fab fa-github"></i>
-                        </span>
-                        <span>Source</span>
-                    </a>
-                </span>
             </div>
+            <div id="" class="navbar-menu" v-bind:class="{ 'is-active': showBurgerNav }">
+                <div class="navbar-end">
+                    <!-- <a class="navbar-item is-active"> -->
+                    <a class="navbar-item" v-on:click="gotoHome">
+                        Home
+                    </a>
+                    <div class="field" id=search-box v-if="homePage">
+                        <div class="control has-icons-right">
+                            <input class="input is-small" 
+                                type="text" 
+                                v-model="searchTerm"
+                                placeholder="Search for products" 
+                                v-on:keyup.enter="search"
+                            >
+                            <span class="icon is-small is-right" v-on:click="search">
+                            <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <a class="navbar-item" v-if="customer.mugshotURL">
+                        <figure class="image is-24x24">
+                            <img v-on:click="gotoUserAccount" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
+                        </figure>
+                    </a>
+                    <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoUserAccount">
+                        <span >{{userFirstName}}'s account</span>
+                    </a>
+                    <a v-else class="navbar-item">
+                        <span v-on:click="showLoginModal">Login/Register</span>
+                    </a>
+                    <a class="navbar-item" v-if="userLoggedIn">
+                        <span v-on:click="logout">Sign out</span>
+                    </a>
+                    <a v-if="metaCustomer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
+                        <span class="icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </span>
+                        <span><small>{{ metaCustomer.shoppingBasketSize }}</small> Checkout</span>
+                    </a>
+                    <span class="navbar-item">
+                        <a href="https://github.com/am-MongoDB/eCommerce" target="_blank" class="button is-black">
+                            <span class="icon">
+                                <i class="fab fa-github"></i>
+                            </span>
+                            <span>Source</span>
+                        </a>
+                    </span>
+                </div>
             </div>
         </div>
         </nav>
     </div>
-
     <div class="hero-body">
         <div class="container has-text-centered">
             <p class="title">
@@ -116,6 +121,7 @@ export default {
     data() {
         return {
             loginModalVisible: false,
+            showBurgerNav: false,
             // loginRequested: false,
             searchTerm: ''
         }

@@ -1,6 +1,6 @@
 # MongoDB eCommerce reference web app
 
-This is an example of how to build an eCommerce app using MongoDB Atlas and MongoDBn Stitch/Realm.
+This is an example of how to build an eCommerce app using MongoDB Atlas and MongoDB Stitch/Realm.
 
 ## Stack
 
