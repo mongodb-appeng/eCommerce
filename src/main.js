@@ -131,7 +131,7 @@ const store = new Vuex.Store({
     addToBasket ({commit, state, dispatch}, payload) {
       // payload = {database, itemArray}
       /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-      if (payload.itemArray) {
+      if (payload.itemArray && payload.itemArray.length > 0) {
         console.log(`addToBasket: ${payload.itemArray.length} items`);
         if (payload.itemArray.length > 0) {
           console.log(`first item to add: ${payload.itemArray[0].productName}`);
@@ -273,15 +273,15 @@ const store = new Vuex.Store({
           .then (customerDoc => {
             if (customerDoc) {
               console.log(`logging in; ${state.customer.shoppingBasket.length} items in temp basket`);
-              // const localBasket = state.customer.shoppingBasket;
-              let localBasket = [];
-              state.customer.shoppingBasket.forEach((item) => {localBasket.push(item)});
-              console.log(`First item in temp basket: ${localBasket[0].productName}`);
-              commit('setCustomer', customerDoc);
-              // Avoid losing contents of local basket (created before customer logged in)
-              dispatch('addToBasket', {
-                database: payload.database,
-                itemArray: localBasket});
+                // const localBasket = state.customer.shoppingBasket;
+                let localBasket = [];
+                state.customer.shoppingBasket.forEach((item) => {localBasket.push(item)});
+                // console.log(`First item in temp basket: ${localBasket[0].productName}`);
+                commit('setCustomer', customerDoc);
+                // Avoid losing contents of local basket (created before customer logged in)
+                dispatch('addToBasket', {
+                  database: payload.database,
+                  itemArray: localBasket});
               commit('setUserFirstName', customerDoc.name.first);
             }
               resolve();
