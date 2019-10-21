@@ -64,18 +64,11 @@
 </template>
 
 <script>
-
 import MyHeader from '../components/Header.vue'
 import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk"
-import { 
-    mapState, 
-    // mapMutations
-    } from 'vuex';
 
 export default {
     name: 'register',
-    props: [
-    ],
     components: {
         MyHeader
     },
@@ -89,14 +82,8 @@ export default {
             password2: ''
         }
     },
-    computed: {
-        ...mapState([
-        // 'stitchClient'
-    ]),
-    },
     methods: {
-        // ...mapMutations([
-        // ]),
+
         register() {
             this.error = '';
             this.progress = '';
@@ -105,7 +92,8 @@ export default {
                 this.error = 'Error, passwords must match.';
             } else {
                 this.progress = `Registering ${this.email}`;
-                const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+                const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(
+                    UserPasswordAuthProviderClient.factory);
                 emailPassClient.registerWithEmail(this.email, this.password)
                 .then(() => {
                     this.success = "Registration complete";
@@ -122,11 +110,6 @@ export default {
                 });
             }
         }
-        // setUserLoggedIn(user) {
-        //     this.setUser(user);
-        // }
-    },
-    mounted() {
     }
 }
 </script>

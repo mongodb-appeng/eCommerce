@@ -1,9 +1,6 @@
 <template>
   <div class="basket">
     <MyHeader></MyHeader>
-    <!-- <div v-if="!userLoggedIn">
-      <AnonymousAuth></AnonymousAuth>
-    </div> -->
     <section class="section">
       <div v-if="stitchReady" class="columns">
         <div class="column is-9 scroll" id="products">
@@ -21,7 +18,7 @@
               <a 
                 v-if="metaCustomer.shoppingBasketSize > 0" 
                 v-on:click="checkout" 
-                class="button is-primary  is-focused">
+                class="button is-primary is-focused">
                   <span class="icon">
                       <i class="fas fa-wallet"></i>
                   </span>
@@ -44,10 +41,8 @@
 <script>
 import {
     mapState,
-    // mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
 
@@ -56,7 +51,6 @@ export default {
   props: [
   ],
   components: {
-    // AnonymousAuth,
     MyHeader,
     BasketCards
   },
@@ -68,8 +62,6 @@ export default {
   },
   computed: {
       ...mapState([
-          // 'userLoggedIn',
-          // 'stitchClient',
           'customer',
           'metaCustomer'
       ])

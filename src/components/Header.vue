@@ -23,7 +23,6 @@
             </div>
             <div id="" class="navbar-menu" v-bind:class="{ 'is-active': showBurgerNav }">
                 <div class="navbar-end">
-                    <!-- <a class="navbar-item is-active"> -->
                     <a class="navbar-item" v-on:click="gotoHome">
                         Home
                     </a>
@@ -42,7 +41,10 @@
                     </div>
                     <a class="navbar-item" v-if="customer.mugshotURL">
                         <figure class="image is-24x24">
-                            <img v-on:click="gotoUserAccount" class="is-rounded" :src="customer.mugshotURL" alt="mugshot">
+                            <img 
+                                v-on:click="gotoUserAccount" 
+                                class="is-rounded" 
+                                :src="customer.mugshotURL">
                         </figure>
                     </a>
                     <a v-if="userLoggedIn" class="navbar-item" v-on:click="gotoUserAccount">
@@ -52,7 +54,7 @@
                         <span v-on:click="showLoginModal">Login/Register</span>
                     </a>
                     <a class="navbar-item" v-if="userLoggedIn">
-                        <span v-on:click="logout">Sign out</span>
+                        <span v-on:click="signout">Sign out</span>
                     </a>
                     <a v-if="metaCustomer.shoppingBasketSize > 0" v-on:click="openBasket" class="navbar-item">
                         <span class="icon">
@@ -79,7 +81,7 @@
                 MongoDB Store
             </p>
             <p class="subtitle">
-                Get it while it's hot!
+                An eCommerce store built on MongoDB Atlas and Stitch
             </p>
         </div>
     </div>
@@ -88,7 +90,6 @@
 <body>
     <AnonymousAuth></AnonymousAuth>
     <div class="container">
-        <!-- <div v-if="loginModalVisible || (loginRequested && !userLoggedIn)" class="modal is-active"> -->
         <div v-if="loginModalVisible" class="modal is-active" v-on:close-modal="hideLoginModal">
             <div class="modal-background"></div>
             <div class="modal-content">
@@ -122,7 +123,6 @@ export default {
         return {
             loginModalVisible: false,
             showBurgerNav: false,
-            // loginRequested: false,
             searchTerm: ''
         }
     },
@@ -139,21 +139,25 @@ export default {
         ...mapMutations([
             'signout'
         ]),
+
         showLoginModal () {
             this.loginModalVisible = true;
         },
+
         hideLoginModal () {
             this.loginModalVisible = false;
-            // this.needLogin = false;
         },
+
         gotoUserAccount () {
             if (this.userLoggedIn) {
                 this.$router.push({name: 'account'})
             }
         },
+
         gotoHome () {
             this.$router.push({name: 'home'})
         },
+
         openBasket () {
             if (this.userLoggedIn) {
                 this.$router.push({name: 'basket'})
@@ -161,27 +165,11 @@ export default {
                 this.showLoginModal()
             }
         },
-        logout () {
-            this.signout();
-            // this.$router.push({name: 'home'}); // TODO
-            // TODO add this back?
-            // this.$root.$data.stitchClient.auth.logout()
-            // .then (() => {
-            //     this.signout();
-            //     this.$router.push({name: 'home'});
-            // },
-            // (error) => {
-            //     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            //     console.error(`Error: Failed to sign out ${error.message}`);
-            // })
-        },
+
         search () {
             this.$emit('search-term', this.searchTerm);
         }
-    },
-    created() {
-        // this.loginRequested = this.loginRequested;
-  }
+    }
 }
 </script>
 

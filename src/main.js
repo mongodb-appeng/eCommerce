@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 import router from './router'
 import 'bulma/css/bulma.css'
 import './main.scss'
-
 import createPersistedState from 'vuex-persistedstate'
 
 Vue.config.productionTip = false
@@ -43,99 +42,89 @@ const nullCustomer =  {
 
 const nullMetaCustomer = {
   shoppingBasketSize: 0,
-  shoppingBasketValue:0
+  shoppingBasketValue: 0
 }
 
 const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
-    // stitchClient: null,
-    // database: null,
     userLoggedIn: false,
     userFirstName: "Guest",
-    // user: null,
     customer: nullCustomer,
     metaCustomer: nullMetaCustomer,
     categoryFilter: [],
     checkoutID: ''
   },
-  getters: {
-  },
+
   mutations: {
-    // setStitchClient (state, payload) {
-    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-    //   console.log('Setting Stitch client');
-    //   console.log(`app ID: ${payload.info.clientAppId}`);
-    //   Vue.set(state, 'stitchClient', payload);
-    //   // state.stitchClient = payload;
-    //   /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-    //   console.log('set stitch client');
-    //   console.log(`state app ID: ${state.stitchClient.info.clientAppId}`);
-    // },
-    // setDatabase (state, payload) {
-    //   console.log('mutating database');
-    //   state.database = payload
-    //   console.log('mutated database');
-    // },
+    // Any changes to state held in `store` should be done through these
+    // mutations. No asynchronous calls should be made from a mutation
+    // (that should be performed within an action which in turn
+    // invokes the relevant mutation(s))
+    
     setLoggedIn (state, payload) {state.userLoggedIn = payload},
+
     setUserFirstName (state, payload) {state.userFirstName = payload},
-    // setUser (state, payload) {state.user = payload},
+    
     setCategoryFilter (state, payload) {state.categoryFilter = payload},
-    // setCheckoutID (state, payload) {state.checkoutID = payload},
-    // `customer` mutations
+    
     setCustomer (state, payload) {state.customer = payload},
+    
     setEmail (state, payload) {Vue.set(state.customer.contact, 'email', payload)},
+    
     setWaitingOnProducts (state, payload) {
       const newList = payload.slice();
       Vue.set(state.customer, 'waitingOnProducts', newList);
     },
+    
     setShoppingBasket (state, payload) {Vue.set(state.customer, 'shoppingBasket', payload)},
+    
     setShoppingBasketSize (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketSize', payload);},
+    
     setShoppingBasketValue (state, payload) {Vue.set(state.metaCustomer, 'shoppingBasketValue', payload)},
+    
     pushBasketItem (state, payload) {state.customer.shoppingBasket.push(payload)},
+    
     increaseBasketItemQuantity (state, payload) {
       Vue.set(
         state.customer.shoppingBasket[payload.index], 
         'quantity',
         state.customer.shoppingBasket[payload.index].quantity + payload.quantity)
     },
+    
     setBasketItemQuantity (state, payload) {
       state.customer.shoppingBasket[payload.index].quantity =  payload.quantity;
-      // Vue.set(state.customer.shoppingBasket[payload.index], 'quantity',  payload.quantity)
     },
+    
     clearBasket (state) {
       Vue.set(state.customer, 'shoppingBasket', []);
       Vue.set(state.metaCustomer, 'shoppingBasketSize', 0);
       Vue.set(state.metaCustomer, 'shoppingBasketValue', 0);
     },
+    
     signout (state) {
       Vue.set(state, 'customer', nullCustomer);
       Vue.set(state.customer, 'contact', {});
-      console.log(`email after signing out: ${state.customer.contact.email}`);
       state.metaCustomer.shoppingBasketSize = 0;
       state.metaCustomer.shoppingBasketValue = 0;
-      // state.user = null;
       state.userLoggedIn = false;
       state.userFirstName = 'Guest';
-      // state.stitchClient = null;
-      // state.database = null;
       state.categoryFilter = [];
     },
+    
     setOrders (state, payload) {
       Vue.set(state.customer, 'orders', payload.orders);
       Vue.set(state.customer, 'orderOverflow', payload.orderOverflow);
     }
   },
+
   actions: {
+    // Actions should be used when the store state needs to be updated together
+    // with other (asynchronous) tasks.
 
     addToBasket ({commit, state, dispatch}, payload) {
       // payload = {database, itemArray}
-      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
       if (payload.itemArray && payload.itemArray.length > 0) {
-        console.log(`addToBasket: ${payload.itemArray.length} items`);
-        if (payload.itemArray.length > 0) {
-          console.log(`first item to add: ${payload.itemArray[0].productName}`);
-        }
         payload.itemArray.forEach((item, incomingIndex) => {
           const existingIndex = state.customer.shoppingBasket.findIndex((entry) => {
             return entry.productID === item.productID;
@@ -144,7 +133,9 @@ const store = new Vuex.Store({
             // No matching productID in existing basket
             commit('pushBasketItem', payload.itemArray[incomingIndex]);
           } else {
-            commit('increaseBasketItemQuantity', {index: incomingIndex, quantity: payload.itemArray[incomingIndex].quantity});
+            commit('increaseBasketItemQuantity', {
+              index: incomingIndex,
+              quantity: payload.itemArray[incomingIndex].quantity});
           }
         });
         if (state.userLoggedIn) {
@@ -260,7 +251,6 @@ const store = new Vuex.Store({
       // payload = {database, user} 
       commit('setLoggedIn', true);
       commit('setEmail', payload.user.profile.email);
-      // commit('setUser', user);
       if (payload.user.profile.firstName) {
         commit('setUserFirstName', payload.user.profile.firstName);
       } else if (payload.user.profile.email) {
@@ -273,10 +263,8 @@ const store = new Vuex.Store({
           .then (customerDoc => {
             if (customerDoc) {
               console.log(`logging in; ${state.customer.shoppingBasket.length} items in temp basket`);
-                // const localBasket = state.customer.shoppingBasket;
                 let localBasket = [];
                 state.customer.shoppingBasket.forEach((item) => {localBasket.push(item)});
-                // console.log(`First item in temp basket: ${localBasket[0].productName}`);
                 commit('setCustomer', customerDoc);
                 // Avoid losing contents of local basket (created before customer logged in)
                 dispatch('addToBasket', {
@@ -285,23 +273,24 @@ const store = new Vuex.Store({
               commit('setUserFirstName', customerDoc.name.first);
             }
               resolve();
-          }, (err) => {
+          }, (error) => {
+            let errorMessage = `Error: attempt to read customer document failed: ${error}`;
               /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-              console.error(`Error: attempt to read customer document failed: ${err.message}`);
-              reject ({message: `Error: attempt to read customer document failed: ${err.message}`});
+              console.error(errorMessage);
+              reject (errorMessage);
           }) 
         }
-        catch (err) {
+        catch (error) {
+          let errorMessage = `Error: Call to fetch customer document failed: ${error.message}`;
           /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.error(`Error: Call to fetch customer document failed: ${err.message}`);
-          reject({message: `Error: Call to fetch customer document failed: ${err.message}`});
+          console.error(errorMessage);
+          reject(errorMessage);
         }
       })
     },
 
     refreshCustomer ({commit, state}, database) {
       if (state.customer.contact.email) {
-        // TODO
         return database.collection('customers').findOne(
           {"contact.email": state.customer.contact.email})
         .then ((customer) => {

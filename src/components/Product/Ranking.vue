@@ -13,11 +13,6 @@
 </template>
 
 <script>
-import { 
-    mapState, 
-    // mapMutations 
-    } from 'vuex';
-
 export default {
     name: "Rank",
     props: [
@@ -30,12 +25,6 @@ export default {
         return {
             productRating: 0
         }
-    },
-    computed: {
-        ...mapState([
-        ]),
-    },
-    methods: {
     },
     created() {
         if (this.score === Math.round(this.score)) {

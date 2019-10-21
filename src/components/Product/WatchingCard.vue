@@ -42,9 +42,7 @@
 
 <script>
 import { 
-    mapState,
-    mapActions,
-    // mapMutations 
+    mapActions
     } from 'vuex';
 
 export default {
@@ -52,9 +50,7 @@ export default {
     props: [
         'productID',
     ], 
-    components: {
-    },
-    data() {
+     data() {
         return {
             success: '',
             progress: '',
@@ -62,21 +58,10 @@ export default {
             product: null
         }
     },
-    computed: {
-        ...mapState([
-            // 'database'
-        ]),
-    },
     methods: {
         ...mapActions([
             'unWatch'
         ]),
-
-        fetchProduct () {
-            return this.$root.$data.database.collection('products').findOne(
-                {productID: this.productID}
-            );
-        },
 
         stopWatching () {
             this.progress = 'Unwatching product';
@@ -92,7 +77,9 @@ export default {
     },
     mounted() {
         this.progress = 'Fetching product';
-        this.fetchProduct()
+        this.$root.$data.database.collection('products').findOne(
+                {productID: this.productID}
+            )
         .then ((product) => {
             this.product = product;
             this.progress = '';

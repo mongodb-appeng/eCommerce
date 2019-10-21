@@ -33,13 +33,10 @@
 import WatchingCard from "./WatchingCard.vue"
 import { 
     mapState
-    // mapMutations 
     } from 'vuex';
 
 export default {
     name: "WatchingCards",
-    props: [
-    ], 
     components: {
         WatchingCard,
     },
@@ -54,15 +51,7 @@ export default {
       ...mapState([
         'customer'
       ])
-    },
-    watch: {
-    },
-    methods: {
-      // ...mapMutations([
-      //   ]),
-    },
-    mounted() {
-  }
+    }
 }
 </script>
 

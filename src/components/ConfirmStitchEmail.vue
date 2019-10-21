@@ -16,26 +16,16 @@
 </template>
 
 <script>
-import {
-    UserPasswordAuthProviderClient
-} from "mongodb-stitch-browser-sdk"
-import { mapState } from 'vuex';
+import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk";
 
 export default {
     name: "ConfirmStitchEmail",
-    props: [
-    ], 
     data() {
         return {
             error:'',
             success:'',
             cta: ''
         }
-    },
-    computed: {
-        ...mapState([
-            // 'stitchClient'
-        ]),
     },
   created() {
     let token, tokenId = '';
@@ -55,17 +45,18 @@ export default {
     try {
         // Confirm the user's email/password account (at this point, the user hasn't logged 
         // in and doesn't appear in the Stitch UI)
-        const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(UserPasswordAuthProviderClient.factory);
+        const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(
+            UserPasswordAuthProviderClient.factory);
         emailPassClient.confirmUser(token, tokenId)
         .then ( () => {
             this.success = "Password confirmed.";
             this.cta = 'Return to <router-link to="/">Home page</router-link> and login to continue.';
-        }, err => {
-            this.error = `Failed to confirm email address: ${err.message}`;
+        }, error => {
+            this.error = `Failed to confirm email address: ${error}`;
             /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
             console.error(this.error);
         })
-        }
+    }
     catch (err) {
         this.error = `Failed to confirm email address: ${err.message}`;
         /*eslint no-console: ["error", { allow: ["warn", "error"] }] */

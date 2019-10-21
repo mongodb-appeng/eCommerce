@@ -41,10 +41,6 @@
 
 <script>
 import Rank from './Ranking.vue';
-import { 
-    mapState, 
-    // mapMutations 
-    } from 'vuex';
 
 export default {
     name: "ProductCard",
@@ -59,17 +55,8 @@ export default {
             success: '',
             progress: '',
             error: '',
-            productDetails: {
-                productName: "Loading...",
-                productImages: [],
-                price: '--'
-            },
             productSummary: ""
         }
-    },
-    computed: {
-        ...mapState([
-        ]),
     },
     methods: {
         highlightText (highlights) {

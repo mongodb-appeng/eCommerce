@@ -25,7 +25,6 @@
           </tr>
         </tbody>
       </table>
-      <!-- TODO: make these links -->
       <nav v-if="categoryHierarchy.length > 2" class="breadcrumb has-arrow-separator" aria-label="breadcrumbs">
         <ul id="category-breadcrumbs">
           <li
@@ -45,10 +44,6 @@
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 import Rank from './Ranking.vue'
 
 export default {
@@ -71,10 +66,6 @@ export default {
       savingPercent: 0,
       saleTag: null
     }
-  },
-  computed: {
-      ...mapState([
-      ]),
   },
   methods: {
     calculateSaving() {

@@ -1,9 +1,7 @@
 <template>
   <div class="profile">
     <MyHeader></MyHeader>
-    <!-- <div>
-      <AnonymousAuth></AnonymousAuth>
-    </div> -->
+
     <div v-if="stitchReady" class="section">
         <h1 class="title is-3">{{ userFirstName }}'s Account</h1>
         <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
@@ -50,14 +48,12 @@
 <script>
 
 import MyHeader from '../components/Header.vue'
-// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import UserProfile from '../components/UserProfile.vue'
 import OrderCards from '../components/Orders/OrderCards.vue'
-import WatchingCards from '../components/Product/watchingCards.vue'
+import WatchingCards from '../components/Product/WatchingCards.vue'
 
 import { 
-    mapState, 
-    mapMutations 
+    mapState
     } from 'vuex';
 
 export default {
@@ -66,7 +62,6 @@ export default {
     ],
     components: {
         MyHeader,
-        // AnonymousAuth,
         UserProfile,
         OrderCards,
         WatchingCards
@@ -75,7 +70,7 @@ export default {
         return {
             profileTab: true,
             ordersTab: false,
-            watchingTab: false.OrderCards,
+            watchingTab: false,
             stitchReady: false
         }
     },
@@ -85,8 +80,6 @@ export default {
         ])
     },
     methods: {
-        ...mapMutations([
-        ]),
 
         pickProfile () {
             this.profileTab = true;

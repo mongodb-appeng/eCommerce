@@ -33,10 +33,6 @@
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 
 export default {
   name: 'archived-reviews',
@@ -54,11 +50,6 @@ export default {
         lastId: null,
         bouncable: true
     }
-  },
-  computed: {
-      ...mapState([
-        //   'database'
-      ]),
   },
   methods: {
     fetchReviews () {
@@ -98,7 +89,7 @@ export default {
         },
         (error => {
             this.progress = '';
-            this.error = `Error: Failed to read archived reviews – ${error.message}`;
+            this.error = `Error: Failed to read archived reviews – ${error}`;
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.error(this.error);
         }))

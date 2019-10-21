@@ -67,8 +67,6 @@
 <script>
 import { UserPasswordCredential } from "mongodb-stitch-browser-sdk"
 import {
-    mapState,
-    mapMutations,
     mapActions
     } from 'vuex'
 
@@ -85,27 +83,17 @@ export default {
             password: ''
         }
     },
-    computed: {
-        ...mapState([
-            // 'stitchClient'
-        ]),
-    },
     methods: {
-        ...mapMutations([
-            // 'setUser'
-        ]),
         ...mapActions([
             'setUserLoggedIn'
         ]),
         Login() {
-            // TODO should download the order history and merge shoppping carts
             this.error = '';
             this.success = '';
             this.progress = 'Attempting to log you in...'
             const credential = new UserPasswordCredential(this.email, this.password);
             this.$root.$data.stitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
-                // TODO: should change the action to return a promise.
                 this.$store.dispatch('setUserLoggedIn', {
                     database: this.$root.$data.database,
                     user: authedUser
@@ -116,13 +104,13 @@ export default {
                 },
                 (error => {
                     this.progress = '';
-                    this.error = `Failed to log in user: ${error.message}`;
+                    this.error = `Failed to log in user: ${error}`;
                     /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                     console.error(this.error);
                 }))
             },
             (error) => {
-                this.error = `Failed to log in user: ${error.message}`;
+                this.error = `Failed to log in user: ${error}`;
                 this.progress = '';
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                 console.error(this.error);

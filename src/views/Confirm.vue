@@ -11,17 +11,9 @@ import MyHeader from '../components/Header.vue'
 
 export default {
   name: 'confirm',
-  props: [
-  ],
   components: {
     ConfirmStitchEmail,
     MyHeader
-  },
-  data() {
-  },
-  methods: {
-  },
-  mounted() {
   }
 }
 </script>

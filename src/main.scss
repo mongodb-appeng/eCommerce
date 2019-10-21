@@ -1,8 +1,6 @@
 @charset "utf-8";
 @import "../node_modules/bulma/sass/utilities/initial-variables";
 
-// @import "../node_modules/bulma/bulma.sass";
-
 $mongo-leaf: #13AA52;
 $mongo-fern: #12924F;
 $mongo-forest: #116149;
@@ -20,10 +18,7 @@ $success: $mongo-leaf;
 $title-color: $mongo-lead;
 $table-cell-border: none;
 $table-cell-padding: .2em;
-
 $navbar-burger-color: $mongo-smoke;
-
-// $family-primary: "courier";
 
 @import "../node_modules/bulma/sass/utilities/_all";
 @import "../node_modules/bulma/sass/base/_all";

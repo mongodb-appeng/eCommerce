@@ -30,10 +30,7 @@
 
 <script>
 import ProductCard from "./ProductCard.vue"
-import { 
-    mapState
-    // mapMutations 
-    } from 'vuex';
+import {mapState} from 'vuex';
 
 export default {
     name: "ProductCards",
@@ -57,7 +54,6 @@ export default {
     },
     computed: {
       ...mapState([
-          // 'database',
           'categoryFilter'
       ]),
     },
@@ -78,8 +74,6 @@ export default {
       }
     },
     methods: {
-      // ...mapMutations([
-      //   ]),
       jumpToProduct(productID) {
         window.onscroll = () => {};
         this.$router.push(
@@ -139,8 +133,6 @@ export default {
               "reviews.averageReviewScore": 1,
               "reviews.numberOfReviews": 1
             },
-            // TODO should probably find something better to sort on (like) review scores
-            // but need to figure out how to not break the efficient pagination
             sort: {interest: -1, productID: 1},
             limit: 20
           }
@@ -155,7 +147,7 @@ export default {
             })
             this.progress = '';
             const _this = this;
-            // Wait 2 seconds before allowing a request to fetch more products
+            // Wait half a second before allowing a request to fetch more products
             setTimeout(function(){        
                 _this.bouncable = true;
               }, 500);
@@ -166,7 +158,7 @@ export default {
         },
         (error) => {
           this.progress = '';
-          this.error = `Error: Failed to read the list of products – ${error.message}`;
+          this.error = `Error: Failed to read the list of products – ${error}`;
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.error(this.error);
         })
@@ -265,7 +257,7 @@ export default {
             })
             this.progress = '';
             const _this = this;
-            // Wait 2 seconds before allowing a request to fetch more products
+            // Wait half a second before allowing a request to fetch more products
             setTimeout(function(){        
                 _this.bouncable = true;
               }, 500);
@@ -276,14 +268,17 @@ export default {
         },
         (error) => {
           this.progress = '';
-          this.error = `Error: Failed to read the list of products – ${error.message}`;
+          this.error = `Error: Failed to read the list of products – ${error}`;
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
             console.error(this.error);
         })
       },
       scroll () {
         window.onscroll = () => {
-          const position = 750 + Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight;
+          const position = 750 + Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop) + window.innerHeight;
           const height = document.documentElement.offsetHeight;
           if (position >= height) {
             if (this.bouncable) {
@@ -306,7 +301,6 @@ export default {
 
 <style scoped>
   #product-cards {
-    /* background-color: blanchedalmond; */
     max-height: 10%;
     display: flex;
     overflow-y: auto;

@@ -1,9 +1,6 @@
 <template>
   <div class="checkout">
     <MyHeader></MyHeader>
-    <!-- <div v-if="!userLoggedIn">
-      <AnonymousAuth></AnonymousAuth>
-    </div> -->
     <section class="section">
       <div v-if="stitchReady" class="columns">
         <div class="column is-9 scroll" id="products">
@@ -99,7 +96,6 @@ import {
     mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
-// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
 import config from '../config';
@@ -107,10 +103,7 @@ import Stripe from 'stripe'; // see vue.config.js for `externals`
 
 export default {
   name: 'checkout',
-  props: [
-  ],
   components: {
-    // AnonymousAuth,
     MyHeader,
     BasketCards
   },
@@ -119,26 +112,21 @@ export default {
         error: '',
         progress: '',
         success: '',
-        path: [],
         stitchReady: false,
-        // TODO payment methods should be attributes of the customer
+        // TODO
         paymentMethods: [
             {name: 'Scooby snacks'},
             {name: 'Leafies'},
             {name: 'Credit or debit card'}
         ],
-        paymentMethod: 'Scooby snacks'
+        paymentMethod: 'Credit or debit card'
     }
   },
   computed: {
       ...mapState([
-          // 'userLoggedIn',
-          // 'stitchClient',
           'customer',
           'metaCustomer'
-      ]),
-      // stripeKey() {return config.stripeKey},
-      // stripeOptions() {return config.stripeOptions}      
+      ])   
   },
   methods: {
     ...mapActions([
@@ -178,7 +166,7 @@ export default {
         } else {
             this.progress = '';
             if (results) {
-                this.error = results.error;
+                this.error = `Error, failed to submit order: ${results.error}`;
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                 console.error(this.error);
             }
@@ -186,7 +174,7 @@ export default {
       },
         (err) => {
           this.progress = '';
-          this.error = `Error: failed to submit order: ${err.message}`
+          this.error = `Error: failed to submit order: ${err.message}`;
           /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
           console.error(this.error);
         }
@@ -199,7 +187,7 @@ export default {
         this.$root.$data.stitchClient.callFunction(
           "stripeCreateCheckoutSession",
           [(Math.round(this.metaCustomer.shoppingBasketValue * 100))/100]
-          )
+        )
         .then ((checkoutID) => {
           if (checkoutID) {
             const stripe = Stripe(config.stripePublicKey);
@@ -210,7 +198,6 @@ export default {
             /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
             console.error(this.error);
           }
-
         },
         (error) => {
           this.error = `Error, failed to create Stripe checkout session: ${error}`;

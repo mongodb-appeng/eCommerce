@@ -26,48 +26,24 @@
 
 <script>
 import BasketCard from "./BasketCard.vue"
-import { 
-    mapState
-    // mapMutations 
-    } from 'vuex';
+import {mapState} from 'vuex';
 
 export default {
-    name: "BasketCards",
-    props: [
-    ], 
-    components: {
-        BasketCard,
-    },
-    data() {
-        return {
-          error: '',
-          progress: '',
-          success: ''
-        }
-    },
-    computed: {
-      ...mapState([
-        'customer'
-      ])
-    },
-    watch: {
-    },
-    methods: {
-      // ...mapMutations([
-      //   ]),
-    },
-    mounted() {
+  name: "BasketCards",
+  components: {
+      BasketCard,
+  },
+  data() {
+      return {
+        error: '',
+        progress: '',
+        success: ''
+      }
+  },
+  computed: {
+    ...mapState([
+      'customer'
+    ])
   }
 }
 </script>
-
-<style scoped>
-  #product-cards {
-    /* background-color: blanchedalmond; */
-    max-height: 10%;
-    display: flex;
-    overflow-y: auto;
-    flex-direction: column;
-  }
-
-</style>

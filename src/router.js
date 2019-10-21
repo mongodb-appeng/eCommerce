@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import ConfirmEmail from './views/Confirm.vue'
 import Register from './views/Register.vue'
-// import UserProfile from './views/UserProfile.vue'
 import UserAccount from './views/UserAccount.vue'
 import Product from './views/Product.vue'
 import Basket from './views/Basket.vue'
@@ -62,13 +61,5 @@ export default new Router({
       component: CheckedOut, 
       props: true
     }
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    // }
   ]
 })

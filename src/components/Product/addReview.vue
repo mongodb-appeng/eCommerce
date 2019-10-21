@@ -9,7 +9,6 @@
                 placeholder="Tell us what you think about this product"
             ></textarea>
             <br/>
-            <!-- TODO Fix formating -->
             <div class="box">
                 <div class="level-left">
                     <span v-on:click="setStars(1)">
@@ -81,11 +80,6 @@
 </template>
 
 <script>
-import {
-    mapState,
-    mapMutations,
-    mapActions
-    } from 'vuex'
 
 export default {
     name: "addReview",
@@ -98,23 +92,11 @@ export default {
             error: '',
             success: '',
             progress: '',
-            email: '',
-            password: '',
             comment: '',
             stars: 0,
         }
     },
-    computed: {
-        ...mapState([
-            'stitchClient',
-            'userLoggedIn'
-        ]),
-    },
     methods: {
-        ...mapMutations([
-        ]),
-        ...mapActions([
-        ]),
         setStars(stars) {
             this.stars = stars;
         },
@@ -134,16 +116,12 @@ export default {
                     this.$emit('review', {review: this.comment, score: this.stars});
                 }
             },
-            (err) => {
+            (error) => {
+                this.error = `Error: failed to post review: ${error}`;
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(`Error: failed to post review: ${err.message}`);
+                console.error(this.error);
             })
         }
-    },
-    mounted() {
-        // if (!this.userLoggedIn) {
-        //     this.$emit('login');
-        // }
     }
 }
 </script>

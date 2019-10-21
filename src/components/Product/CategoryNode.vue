@@ -23,8 +23,7 @@
             v-bind:nodes="node.children"
             v-bind:depth="depth + 1"
             v-bind:path="newPath"
-            v-on:set-category-filter="setCategoryFilter"
-        >
+            v-on:set-category-filter="setCategoryFilter">
         </CategoryNode>
       </div>
     </div>
@@ -32,10 +31,7 @@
 </template>
 
 <script>
-import {
-  mapState,
-  mapMutations
-} from "vuex";
+import {mapMutations} from "vuex";
 
 export default {
   name: "CategoryNode",
@@ -53,9 +49,6 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      "userLoggedIn"
-    ]),
     indent() {
         return {
             transform: `translate(${this.depth * 10}px)`
@@ -86,9 +79,7 @@ export default {
         this.showChildren = !this.showChildren;
         this.$emit('set-category-filter', this.newPath);
       }
-  },
-
-  mounted() {}
+  }
 };
 </script>
 

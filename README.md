@@ -23,6 +23,8 @@ The frontend code can be hosted on Stich/Realm static hosting.
 ```
 npm install
 ```
+### Configure
+Update `_config.js` with your own values and move to `config.js`.
 
 ### Compiles and hot-reloads for development
 ```

@@ -21,8 +21,6 @@ import {
     RemoteMongoClient
 } from "mongodb-stitch-browser-sdk"
 import { 
-    mapState, 
-    mapMutations,
     mapActions
     } from 'vuex';
 
@@ -36,15 +34,7 @@ export default {
             localStitchClient: {}
         }
     },
-    computed: {
-        ...mapState([
-        ]),
-    },
     methods: {
-        ...mapMutations([
-            // 'setDatabase',
-            // 'setStitchClient'
-        ]),
         ...mapActions([
             'refreshCustomer'
         ]),
@@ -57,9 +47,9 @@ export default {
                     this.connectDatabase();
                     this.$root.$data.stitchClient = this.localStitchClient;
                 })
-                .catch(err => {
+                .catch(error => {
                     this.progress = '';
-                    this.error = `Anonymous Stitch authentication failed: ${err.message}`;
+                    this.error = `Anonymous Stitch authentication failed: ${error}`;
                 });
             } else {
                 this.$root.$data.stitchClient = this.localStitchClient;
@@ -68,12 +58,13 @@ export default {
         },
         connectDatabase() {
             try {
-                const database = this.localStitchClient.getServiceClient(RemoteMongoClient.factory, "mongodb-atlas").db(config.database);
+                const database = this.localStitchClient.getServiceClient(
+                    RemoteMongoClient.factory, "mongodb-atlas").db(config.database);
                 this.$root.$data.database = database;
                 this.refreshCustomer(this.$root.$data.database);
             }
-            catch (err) {
-                this.error = `Failed to connect to the database: ${err.message}`;
+            catch (error) {
+                this.error = `Failed to connect to the database: ${error}`;
                 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
                 console.error(this.error);
             }

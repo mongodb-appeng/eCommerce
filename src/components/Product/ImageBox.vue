@@ -22,8 +22,6 @@
           <figure class="image is-square" v-if="currentImage">
             <img :src="currentImage" alt="">
           </figure>
-          <div class="container">
-          </div>
         </div>
       </div>
     </section>
@@ -31,28 +29,16 @@
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 
 export default {
   name: 'image-box',
   props: [
     'productImages'
   ],
-  components: {
-  },
   data() {
     return {
       currentImage: null
     }
-  },
-  computed: {
-      ...mapState([
-      ]),
-  },
-  methods: {
   },
   created() {
     if (this.productImages && this.productImages.length > 0) {
@@ -66,8 +52,4 @@ export default {
 div.box {
   padding: 0.25rem
 }
-/* .restrict-height {
-  height: 300px;
-  overflow: scroll;
-} */
 </style>

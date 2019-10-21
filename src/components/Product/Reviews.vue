@@ -2,9 +2,6 @@
   <div class="container">
     <section class="section">
       <h3 class="title is-3">Reviews</h3>
-      <!-- Only show if logged in. Also add a list of products that a customer has reviewed
-      to their document so the button changes to "Update review" if they've already reviewed
-      the product -->
       <a 
         v-if="!showReviewForm && !reviewSubmited"
         v-on:click="exposeReviewForm"
@@ -42,10 +39,7 @@
             </div>
         </li>
       </ul>
-      <ArchivedReviews
-        v-bind:productID="productID"
-      >
-      </ArchivedReviews>
+      <ArchivedReviews v-bind:productID="productID"></ArchivedReviews>
     </section>
   </div>
 </template>
@@ -53,10 +47,6 @@
 <script>
 import AddReview from './addReview';
 import ArchivedReviews from './archivedReviews';
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 
 export default {
   name: 'product-reviews',
@@ -74,32 +64,26 @@ export default {
       reviewSubmited: false
     }
   },
-  computed: {
-      ...mapState([
-      ]),
-  },
   methods: {
     exposeReviewForm () {
       this.showReviewForm = true;
     },
+
     postedReview (review) {
       this.reviews.unshift(review);
       this.reviewSubmited = true;
     },
+
     newReviewStats(stats) {
       this.$emit('reviewStats', stats);
     },
+
     newReview(review) {
       this.reviews.recentReviews.unshift(review);
       this.showReviewForm = false;
       this.reviewSubmited = true;
-    },
-    // login() {
-    //   this.$emit('login');
-    // }
+    }
   },
-  mounted() {
-  }
 }
 </script>
 

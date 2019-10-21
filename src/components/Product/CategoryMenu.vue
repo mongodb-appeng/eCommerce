@@ -34,16 +34,10 @@
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 import CategoryNode from './CategoryNode.vue'
 
 export default {
   name: 'CategoryMenu',
-  props: [
-  ],
   components: {
     CategoryNode
   },
@@ -55,12 +49,6 @@ export default {
       categoryTree: null,
       saleCategoryTree: null
     }
-  },
-  computed: {
-      ...mapState([
-        'userLoggedIn'
-        // 'database'
-      ]),
   },
   methods: {
     fetchTree() {
@@ -75,18 +63,18 @@ export default {
           // categories
           if (tree && tree.children) {
             tree = tree.children[0];
-            // tree.children.sort((a,b) => b.count - a.count);
           }
           this.categoryTree = tree;
         },
         (error) => {
           this.progress = '';
-          this.error = `Failed to fetch the product categories: ${error.message}`;
+          this.error = `Failed to fetch the product categories: ${error}`;
           /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
           console.error(this.error);
         })
       }
     },
+
     fetchSaleTree() {
       if (!this.saleCategoryTree) {
         this.progress = 'Fetching sales product categories';
@@ -104,7 +92,7 @@ export default {
         },
         (error) => {
           this.progress = '';
-          this.error = `Failed to fetch the sales product categories: ${error.message}`;
+          this.error = `Failed to fetch the sales product categories: ${error}`;
           /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
           console.error(this.error);
         })
@@ -117,7 +105,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

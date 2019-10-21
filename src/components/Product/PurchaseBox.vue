@@ -44,7 +44,6 @@
               </a>
             </p>
           </div>
-
       </div>
       <div v-else class="field">
         <p>
@@ -90,8 +89,6 @@ export default {
     'price',
     'productImage'
   ],
-  components: {
-  },
   data() {
     return {
       progress: '',
@@ -105,7 +102,6 @@ export default {
     ...mapState([
       'customer',
       'userLoggedIn'
-      // 'database'
     ]),
   },
   methods: {
@@ -140,12 +136,14 @@ export default {
           setTimeout(function(){
             _this.success = '';
           }, 2000);
-        }, (err => {
+        }, (error => {
           this.progress = '';
-          this.error = `Failed to update the customer document: ${err.massage}`;
+          this.error = `Failed to update the customer document: ${error}`;
+          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+          console.error(this.error);
           this.notifyMe = !this.notifyMe;
         })
-        )
+      )
       } else {
         this.error = "You must log in first";
         this.notifyMe = false;
@@ -171,14 +169,9 @@ export default {
       })
     }
   },
-  mounted() {
-    if (this.customer.waitingOnProducts && this.customer.waitingOnProducts.includes(this.productID)) {
-      this.notifyMe = true;
-    } else {
-      this.notifyMe = false;
-    }
-  }
-}
+mounted() {
+  this.notifyMe = this.customer.waitingOnProducts && this.customer.waitingOnProducts.includes(this.productID);
+}}
 </script>
 
 <style scoped>

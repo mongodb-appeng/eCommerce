@@ -41,15 +41,6 @@
                             </a>
                         </div>
                     </nav>
-                    <div v-if="progress" class="notification is-info">
-                        {{ progress }}
-                    </div>
-                    <div v-if="error" class="notification is-danger">
-                        <strong>{{ error }}</strong>
-                    </div>
-                    <div v-if="success" class="notification is-success">
-                        {{ success }}
-                    </div>
                 </div>
             </article>
         </div>
@@ -57,34 +48,19 @@
 </template>
 
 <script>
-import { 
-    mapState, 
-    mapMutations,
-    mapActions
-    } from 'vuex';
+import {mapActions} from 'vuex';
 
 export default {
     name: "BasketCard",
     props: [
         'product'
-    ], 
-    components: {
-    },
+    ],
     data() {
         return {
-            success: '',
-            progress: '',
-            error: '',
             newQuantity: 0
         }
     },
-    computed: {
-        ...mapState([
-        ]),
-    },
     methods: {
-    ...mapMutations([
-    ]),
     ...mapActions([
         'deleteFromBasket',
         'updateBasketItemQuantity'

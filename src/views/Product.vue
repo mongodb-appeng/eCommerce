@@ -1,12 +1,6 @@
 <template>
   <div class="home">
     <MyHeader></MyHeader>
-    <!-- <MyHeader
-      v-bind:needLogin="needLogin"
-    ></MyHeader> -->
-    <!-- <div>
-      <AnonymousAuth></AnonymousAuth>
-    </div> -->
     <section class="section">
       <div v-if="stitchReady && product" class="columns">
         <div class="column is-5 ">
@@ -63,12 +57,7 @@
 </template>
 
 <script>
-import {
-    mapState,
-    // mapMutations
-    } from 'vuex';
 import MyHeader from '../components/Header.vue'
-// import AnonymousAuth from '../components/AnonymousAuth.vue'
 import ImageBox from '../components/Product/ImageBox.vue'
 import ProductSummary from '../components/Product/ProductSummary.vue'
 import PurchaseBox from '../components/Product/PurchaseBox.vue'
@@ -77,10 +66,7 @@ import { setTimeout } from 'timers';
 
 export default {
   name: 'product',
-  props: [
-  ],
   components: {
-    // AnonymousAuth,
     MyHeader,
     ImageBox,
     ProductSummary,
@@ -94,18 +80,11 @@ export default {
       success: '',
       stitchReady: false,
       productID: null,
-      product: null,
-      // needLogin: false
+      product: null
     }
   },
-  computed: {
-      ...mapState([
-          'userLoggedIn'
-          // 'stitchClient',
-          // 'database'
-      ]),
-  },
   methods: {
+
     fetchProduct() {
       if (this.productID) {
         this.progress = 'Fetching product details';
@@ -130,10 +109,12 @@ export default {
         this.error = 'Error, no productID included in URL query parameters';
       }
     },
+
     newReviewStats(reviewStats) {
       this.product.reviews.averageReviewScore = reviewStats.averageReviewScore;
       this.product.reviews.numberOfReviews = reviewStats.numberOfReviews;
     },
+
     waitUntilStitchReady() {
       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
         this.stitchReady = true;
@@ -150,10 +131,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.restrict-height {
-  height: 600px;
-  overflow: scroll;
-}
-</style>
