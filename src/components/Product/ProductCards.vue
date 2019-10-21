@@ -40,7 +40,8 @@ export default {
           bouncable: false,
           lastProductID: '',
           lastInterest: 10000,
-          lastScore: 10000
+          lastScore: 10000,
+          localSearchTerm: ''
         }
     },
     computed: {
@@ -54,9 +55,10 @@ export default {
         this.lastInterest = 10000;
         this.products = [];
         this.fetchProductList();
-        this.searchTerm = '';
+        this.localSearchTerm = '';
       },
-      searchTerm: function () {
+      searchTerm: function (term) {
+        this.localSearchTerm = term;
         this.lastProductID = '';
         this.lastInterest = 10000;
         this.lastScore = 10000;
@@ -162,18 +164,18 @@ export default {
                 compound: {
                   must: {
                     search: {
-                      query: this.searchTerm, 
+                      query: this.localSearchTerm, 
                       path: 'description'
                     }
                   }, 
                   should: {
                     search: {
-                      query: this.searchTerm, 
+                      query: this.localSearchTerm, 
                       path: 'productName'
                     },
                     // eslint-disable-next-line
                     search: {
-                      query: this.searchTerm, 
+                      query: this.localSearchTerm, 
                       path: 'category'
                     }
                   }
@@ -261,7 +263,7 @@ export default {
           const height = document.documentElement.offsetHeight;
           if (position >= height) {
             if (this.bouncable) {
-              if (this.searchTerm === '') {
+              if (this.localSearchTerm === '') {
                 this.fetchProductList();
               } else {
                 this.searchProducts();
@@ -270,6 +272,9 @@ export default {
           }
         }
       }
+    },
+    created() {
+      this.localSearchTerm = this.searchTerm;
     },
     mounted() {
       this.fetchProductList();
