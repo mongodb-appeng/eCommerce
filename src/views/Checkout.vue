@@ -76,15 +76,7 @@
           </div>
         </div>
       </div>
-        <div v-if="progress" class="notification is-info">
-            {{ progress }}
-        </div>
-        <div v-if="error" class="notification is-danger">
-            <strong>{{ error }}</strong>
-        </div>
-        <div v-if="success" class="notification is-success">
-            {{ success }}
-        </div>
+      <Status v-bind:status="status"></Status>
     </section>
   </div>
 </template>
@@ -96,6 +88,7 @@ import {
     mapMutations
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
+import Status from '../components/Status.vue'
 import BasketCards from '../components/Basket/BasketCards.vue'
 import { setTimeout } from 'timers';
 import config from '../config';
@@ -105,13 +98,12 @@ export default {
   name: 'checkout',
   components: {
     MyHeader,
+    Status,
     BasketCards
   },
   data() {
     return {
-        error: '',
-        progress: '',
-        success: '',
+        status: null,
         stitchReady: false,
         // TODO
         paymentMethods: [
@@ -156,33 +148,27 @@ export default {
             this.emptyBasket(this.$root.$data.database);
             this.fetchOrders(this.$root.$data.database)
             .then (() => {
-                this.progress = '';
+                this.status = null;
                 this.$router.push({name: 'home'});
             },
-            (err) => {
-                this.progress = '';
-                this.error = `Failed to fetch list of orders: ${err}`;
+            (error) => {
+                this.status = {state: 'oror', text: `Failed to fetch list of orders: ${error}`};
             })
         } else {
-            this.progress = '';
+            this.status = null;
             if (results) {
-                this.error = `Error, failed to submit order: ${results.error}`;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(this.error);
+                this.status = {state: 'error', text: `Error, failed to submit order: ${results.error}`};
             }
         }
       },
-        (err) => {
-          this.progress = '';
-          this.error = `Error: failed to submit order: ${err.message}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.error(this.error);
+        (error) => {
+          this.status = {state: 'error', text: `Error: failed to submit order: ${error}`};
         }
       )
     },
 
     checkout () {
-      this.progress = 'Submitting order';
+      this.status = {state: 'progress', text: 'Submitting order'};
       if (this.paymentMethod === 'Credit or debit card') {
         this.$root.$data.stitchClient.callFunction(
           "stripeCreateCheckoutSession",
@@ -193,18 +179,12 @@ export default {
             const stripe = Stripe(config.stripePublicKey);
             stripe.redirectToCheckout({sessionId: checkoutID});
           } else {
-            this.progress = '';
-            this.error = 'Failed to process payment';
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.error(this.error);
+            this.status = {state: 'error', text: 'Failed to process payment'};
           }
         },
         (error) => {
-          this.error = `Error, failed to create Stripe checkout session: ${error}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-          console.error(this.error);
+          this.status = {state: 'error', text: `Error, failed to create Stripe checkout session: ${error}`};
         })
-        // TODO the order is only created once the payment has been processed
       } else {
         this.submitOrder();        
       }

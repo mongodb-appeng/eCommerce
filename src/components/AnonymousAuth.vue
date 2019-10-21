@@ -1,20 +1,12 @@
 <template>
     <div>
-      <!-- TODO: Move these to a status component -->
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
+        <Status v-bind:status="status"></Status>
     </div>
 </template>
 
 <script>
 import config from '../config'
+import Status from './Status.vue'
 import {
     Stitch,
     AnonymousCredential,
@@ -26,11 +18,12 @@ import {
 
 export default {
     name: "AnonymousAuth",
+    components: {
+        Status
+    },
     data() {
         return {
-            error: '',
-            progress: '',
-            success: '',
+            status: null,
             localStitchClient: {}
         }
     },
@@ -40,16 +33,15 @@ export default {
         ]),
         anonymousLogin() {
             if (!this.localStitchClient.auth.isLoggedIn) {
-                this.progress = 'Authing app...';
+                this.status = {state: 'progress', text: `Authing app...`};
                 this.localStitchClient.auth.loginWithCredential(new AnonymousCredential())
                 .then(() => {
-                    this.progress = '';
+                    this.status = null;
                     this.connectDatabase();
                     this.$root.$data.stitchClient = this.localStitchClient;
                 })
                 .catch(error => {
-                    this.progress = '';
-                    this.error = `Anonymous Stitch authentication failed: ${error}`;
+                    this.status = {state: 'error', text: `Anonymous Stitch authentication failed: ${error}`};
                 });
             } else {
                 this.$root.$data.stitchClient = this.localStitchClient;
@@ -64,9 +56,7 @@ export default {
                 this.refreshCustomer(this.$root.$data.database);
             }
             catch (error) {
-                this.error = `Failed to connect to the database: ${error}`;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(this.error);
+                this.status = {state: 'error', text: `Failed to connect to the database: ${error}`};
             }
         }
     },

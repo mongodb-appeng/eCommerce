@@ -52,19 +52,12 @@
                 </p>
             </div>
         </div>      
-        <div v-if="error" class="notification is-danger">
-            <strong>{{ error }}</strong>
-        </div>
-        <div v-if="error" class="notification is-primary">
-            <strong>{{ progress }}</strong>
-        </div>
-        <div v-if="success" class="notification is-success">
-            {{ success }}
-        </div>
+        <Status v-bind:status="status"></Status>
     </div>
 </template>
 
 <script>
+import Status from './Status.vue'
 import { UserPasswordCredential } from "mongodb-stitch-browser-sdk"
 import {
     mapActions
@@ -72,13 +65,12 @@ import {
 
 export default {
     name: "UserLogin",
-    props: [
-    ], 
+    components: {
+        Status
+    },
     data() {
         return {
-            error: '',
-            success: '',
-            progress: '',
+            status: null,
             email: '',
             password: ''
         }
@@ -88,9 +80,7 @@ export default {
             'setUserLoggedIn'
         ]),
         Login() {
-            this.error = '';
-            this.success = '';
-            this.progress = 'Attempting to log you in...'
+            this.status = {state: 'progress', text: 'Attempting to log you in...'};
             const credential = new UserPasswordCredential(this.email, this.password);
             this.$root.$data.stitchClient.auth.loginWithCredential(credential)
             .then (authedUser => {
@@ -99,21 +89,15 @@ export default {
                     user: authedUser
                 })
                 .then (() => {
-                    this.progress = '';
+                    this.status = null;
                     this.$emit("close-modal");
                 },
                 (error => {
-                    this.progress = '';
-                    this.error = `Failed to log in user: ${error}`;
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.error(this.error);
+                    this.status = {state: 'error', text: `Failed to log in user: ${error}`};
                 }))
             },
             (error) => {
-                this.error = `Failed to log in user: ${error}`;
-                this.progress = '';
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(this.error);
+                this.status = {state: 'error', text: `Failed to log in user: ${error}`};
             })
         },
         quit () {

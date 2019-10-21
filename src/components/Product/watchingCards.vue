@@ -16,16 +16,6 @@
         </div>
       </section>
       <br>
-      <!-- TODO: Move these to a status component -->
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
     </div>
 </template>
 
@@ -38,13 +28,11 @@ import {
 export default {
     name: "WatchingCards",
     components: {
-        WatchingCard,
+        WatchingCard
     },
     data() {
         return {
-          error: '',
-          progress: '',
-          success: ''
+          status: null
         }
     },
     computed: {
@@ -63,5 +51,4 @@ export default {
     overflow-y: auto;
     flex-direction: column;
   }
-
 </style>

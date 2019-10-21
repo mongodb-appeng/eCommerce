@@ -50,33 +50,25 @@
                 </button>
             </p>
         </div>
-        <div v-if="error" class="notification is-danger">
-            <strong>{{ error }}</strong>
-        </div>
-        <div v-if="success" class="notification is-success">
-            {{ success }}
-        </div>
-        <div v-if="progress" class="notification is-primary">
-            {{ progress }}
-        </div>
+        <Status v-bind:status="status"></Status>
     </div>
 </div>
 </template>
 
 <script>
 import MyHeader from '../components/Header.vue'
+import Status from '../components/Status.vue'
 import {UserPasswordAuthProviderClient} from "mongodb-stitch-browser-sdk"
 
 export default {
     name: 'register',
     components: {
-        MyHeader
+        MyHeader,
+        Status
     },
     data() {
         return {
-            error: '',
-            success: '',
-            progress: '',
+            status: null,
             email: '',
             password: '',
             password2: ''
@@ -85,28 +77,24 @@ export default {
     methods: {
 
         register() {
-            this.error = '';
-            this.progress = '';
+            this.status = null;
             if (this.password != this.password2)
             {
-                this.error = 'Error, passwords must match.';
+                this.status = {state: 'error', text: 'Error, passwords must match.'};                
             } else {
-                this.progress = `Registering ${this.email}`;
+                this.status = {state: 'progress', text: `Registering ${this.email}`};
                 const emailPassClient = this.$root.$data.stitchClient.auth.getProviderClient(
                     UserPasswordAuthProviderClient.factory);
                 emailPassClient.registerWithEmail(this.email, this.password)
                 .then(() => {
-                    this.success = "Registration complete";
+                    this.status = {state: 'success', text: 'Registration complete'};
                     let _this = this;
                     setTimeout(function(){
                         _this.$router.push({name: 'home'});
                     }, 1000);
                 },
                 (err) => {
-                    this.progress = '';
-                    this.error = `Could not register user: ${err.message}`;
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                    console.error(this.error);
+                    this.status = {state: 'error', text: `Could not register user: ${err.message}`};
                 });
             }
         }

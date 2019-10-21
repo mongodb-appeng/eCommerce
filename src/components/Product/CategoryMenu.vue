@@ -20,32 +20,23 @@
     >
     </CategoryNode>
   </div>
-  <!-- TODO: Move these to a status component -->
-  <div v-if="error" class="notification is-danger">
-      <strong>{{ error }}</strong>
-  </div>
-  <div v-if="success" class="notification is-success">
-      {{ success }}
-  </div>
-  <div v-if="progress" class="notification is-primary">
-      {{ progress }}
-  </div>
+  <Status v-bind:status="status"></Status>
 </div>
 </template>
 
 <script>
 import CategoryNode from './CategoryNode.vue'
+import Status from '../Status.vue'
 
 export default {
   name: 'CategoryMenu',
   components: {
-    CategoryNode
+    CategoryNode,
+    Status
   },
   data() {
     return {
-      error: '',
-      progress: '',
-      success: '',
+      status: null,
       categoryTree: null,
       saleCategoryTree: null
     }
@@ -53,12 +44,12 @@ export default {
   methods: {
     fetchTree() {
       if (!this.categoryTree) {
-        this.progress = 'Fetching product categories';
+        this.status = {state: 'progress', text: 'Fetching product categories'};
         this.$root.$data.database.collection('meta').findOne(
           {name: 'categoryTree'}
         )
         .then ((tree) => {
-          this.progress = '';
+          this.status = null;
           // Root node just identifies that the tree contains
           // categories
           if (tree && tree.children) {
@@ -67,22 +58,17 @@ export default {
           this.categoryTree = tree;
         },
         (error) => {
-          this.progress = '';
-          this.error = `Failed to fetch the product categories: ${error}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
-          console.error(this.error);
+          this.status = {state: 'error', text: `Failed to fetch the product categories: ${error}`};
         })
       }
     },
 
     fetchSaleTree() {
       if (!this.saleCategoryTree) {
-        this.progress = 'Fetching sales product categories';
         this.$root.$data.database.collection('meta').findOne(
           {name: 'saleCategoryTree'}
         )
         .then ((tree) => {
-          this.progress = '';
           // Root node just identifies that the tree contains
           // categories
           if (tree && tree.children) {
@@ -91,17 +77,14 @@ export default {
           this.saleCategoryTree = tree;
         },
         (error) => {
-          this.progress = '';
-          this.error = `Failed to fetch the sales product categories: ${error}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */ 
-          console.error(this.error);
+          this.status = {state: 'error', text: `Failed to fetch the sales product categories: ${error}`};
         })
       }
     }
   },
   mounted() {
-    this.fetchSaleTree();
     this.fetchTree();
+    this.fetchSaleTree();
   }
 }
 </script>

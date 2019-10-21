@@ -7,12 +7,7 @@
       </div>
     </section>
     <div class="container">
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
+      <Status v-bind:status="status"></Status>
     </div>
   </div>
 </template>
@@ -23,6 +18,7 @@ import {
     mapActions
     } from 'vuex';
 import MyHeader from '../components/Header.vue'
+import Status from '../components/Status.vue'
 import { setTimeout } from 'timers';
 
 export default {
@@ -30,12 +26,12 @@ export default {
   props: [
   ],
   components: {
-    MyHeader
+    MyHeader,
+    Status
   },
   data() {
     return {
-      progress: '',
-      error: ''
+      status: null
     }
   },
   methods: {
@@ -52,14 +48,13 @@ export default {
       this.calcBasketStats();
       this.fetchOrders(this.$root.$data.database)
       .then(() => {
+        this.status = {state: 'progress', text: 'Taking you back to the store...'};
         this.progress = 'Taking you back to the store...';
         let _this = this;
-        setTimeout(function () {_this.$router.push({name: 'home'})}, 3000);
+        setTimeout(function () {_this.$router.push({name: 'home'})}, 2000);
       },
       (error) => {
-        this.error = `Failed to fetch your orders from the database: ${error}`;
-        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-        console.log(this.error);
+        this.status = {state: 'error', text: `Failed to fetch your orders from the database: ${error}`};
       });
     },
 

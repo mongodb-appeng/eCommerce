@@ -43,16 +43,7 @@
         ></ProductReviews>
       </div>
     </section>
-    <!-- TODO: Move these to a status component -->
-    <div v-if="error" class="notification is-danger">
-        <strong>{{ error }}</strong>
-    </div>
-    <div v-if="success" class="notification is-success">
-        {{ success }}
-    </div>
-    <div v-if="progress" class="notification is-primary">
-        {{ progress }}
-    </div>
+    <Status v-bind:status="status"></Status>
   </div>
 </template>
 
@@ -62,12 +53,14 @@ import ImageBox from '../components/Product/ImageBox.vue'
 import ProductSummary from '../components/Product/ProductSummary.vue'
 import PurchaseBox from '../components/Product/PurchaseBox.vue'
 import ProductReviews from '../components/Product/Reviews.vue'
+import Status from '../components/Status.vue'
 import { setTimeout } from 'timers';
 
 export default {
   name: 'product',
   components: {
     MyHeader,
+    Status,
     ImageBox,
     ProductSummary,
     PurchaseBox,
@@ -75,9 +68,7 @@ export default {
   },
   data() {
     return {
-      error: '',
-      progress: '',
-      success: '',
+      status: null,
       stitchReady: false,
       productID: null,
       product: null
@@ -87,26 +78,22 @@ export default {
 
     fetchProduct() {
       if (this.productID) {
-        this.progress = 'Fetching product details';
+        this.status = {state: 'progress', text: 'Fetching product details'};
         this.$root.$data.database.collection('products').findOne({productID: this.productID})
         .then ((doc) => {
           if (doc) {
-            this.progress = '';
+            this.status = null;
             this.product = doc;
           }
           else {
-            this.progress = '';
-            this.error = `No product found with productId ${this.productID}`;
+            this.status = {state: 'error', text: `No product found with productId ${this.productID}`};
           }
         },
         (error) => {
-          this.progress = '';
-          this.error = `Error: failed to read product data: ${error.message}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-          console.error(this.error);
+          this.status = {state: 'error', text: `Error: failed to read product data: ${error.message}`};
         })
       } else {
-        this.error = 'Error, no productID included in URL query parameters';
+        this.status = {state: 'error', text: `Error, no productID included in URL query parameters`};
       }
     },
 

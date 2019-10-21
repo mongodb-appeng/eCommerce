@@ -270,19 +270,12 @@
                 </button>
             </p>
         </div>
-        <div v-if="progress" class="notification is-info">
-            {{ progress }}
-        </div>
-        <div v-if="error" class="notification is-danger">
-            <strong>{{ error }}</strong>
-        </div>
-        <div v-if="success" class="notification is-success">
-            {{ success }}
-        </div>
+        <Status v-bind:status="status"></Status>
     </div>
 </template>
 
 <script>
+import Status from './Status.vue'
 import {
   AwsServiceClient,
   AwsRequest
@@ -296,11 +289,12 @@ import config from '../config';
 
 export default {
     name: 'user-profile',
+    components: {
+        Status
+    },
     data() {
         return {
-            error: '',
-            success: '',
-            progress: '',
+            status: null,
             localCustomer: {},
             countries: [],
             mugshotFile: {},
@@ -326,14 +320,12 @@ export default {
                 this.countries = results;
             },
             (error) => {
-                this.error = `Error: failed to fetch country list: ${error}`
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(this.error);
+                this.status = {state: 'error', text: `Error: failed to fetch country list: ${error}`};
             })
         },
 
         fetchCustomer () {
-            this.progress = 'Looking for existing user profile.';
+            this.status = {state: 'progress', text: `Looking for existing user profile.`};
             this.$root.$data.database.collection("customers")
             .findOne({"contact.email": this.customer.contact.email}) 
             .then (customerDoc => {
@@ -342,39 +334,28 @@ export default {
                     this.progress = '';
                 } else {
                     // No record found for this customer – doesn't mean that it's a problem
-                    this.progress = ''
+                    this.status = null;
                 }
             }, (error) => {
-                this.error = `Error: attempt to read customer document failed: ${error}`;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(this.error);
+                this.status = {state: 'error', text: `Error: attempt to read customer document failed: ${error}`};
             })
         },
 
-        saveProfile () {   
-            this.progress = 'Writing profile to database.';
-            this.error = '';
-            this.success = '';
+        saveProfile () {
+            this.status = {state: 'progress', text: 'Writing profile to database.'};
             this.$root.$data.database.collection("customers").updateOne(
                 {"contact.email": this.localCustomer.contact.email},
                 this.localCustomer,
                 {upsert: true}
             ).then (() => {
-                this.progress = '';
+                this.status = null;
                 this.setCustomer(this.localCustomer);
                 if (this.localCustomer.name.first) {
                     this.setUserFirstName(this.localCustomer.name.first)
                 }
-                this.success = "User profile updated.";
-                const _this = this;
-                setTimeout(function(){
-                    _this.success = '';
-                }, 1000);                
+                this.status = {state: 'success', text: `User profile updated.`,time: 1000};             
             }, (error) => {
-                this.progress = '';
-                this.error = `Error: Writing profile to the database - ${error}`;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(this.error);
+                this.status = {state: 'error', text: `Error: Writing profile to the database - ${error}`};
             })
         },
 
@@ -392,11 +373,10 @@ export default {
         },
 
         uploadMugshot (event) {
-            this.error = '';
-            this.progress = '';
-            this.success = '';
+            this.status = null;
             const files = event.target.files || event.dataTransfer.files;
             if (files.length) {
+                this.status = {state: 'progress', text: `Uploading image`};
                 this.allowSubmit = false;
                 this.mugshotFile = files[0];
                 const s3 = this.$root.$data.stitchClient.getServiceClient(
@@ -405,7 +385,7 @@ export default {
                 const cleanEmail = this.customer.contact.email.replace("+", "_");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {
-                        let now = Date.now();
+                    let now = Date.now();
                     const s3Args = { 
                         ACL: "public-read",
                         Bucket: config.aws.bucket,
@@ -419,28 +399,22 @@ export default {
                         .withArgs(s3Args);
                     s3.execute(request.build())
                     .then (() => {
+                        this.status = null;
                         this.localCustomer.mugshotURL = 
                             `https://${config.aws.bucket}.s3.amazonaws.com/mug_${cleanEmail}_${now}`;
                         this.allowSubmit = true;
                     },
                     (error) => {
-                        this.error = `Failed to upload image file: ${error}`;
-                        /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                        console.error(this.error);
-                        this.allowSubmit = true;
+                        this.status = {state: 'error', text: `Failed to upload image file: ${error}`};
                     })
                 },
                 (error) => {
-                    this.error = `Error: Failed to convert image file: ${error}.`;
-                    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                    console.error(this.error);
+                    this.status = {state: 'error', text: `Error: Failed to convert image file: ${error}`};
                     this.allowSubmit = true;
                 })
             } else {
-                this.error = "Failed to select a file";
+                this.status = {state: 'error', text: `Failed to select a file`};
                 this.allowSubmit = true;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(this.error);
             }
         }
     },
@@ -453,9 +427,7 @@ export default {
             this.fetchCustomer();
             this.originalEmail = this.localCustomer.contact.email;
         } else {
-            this.error = "Cannot access customer profile until user is logged in";
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.error(this.error);
+            this.status = {state: 'error', text: `Cannot access customer profile until user is logged in`};
         }
     }
 }
