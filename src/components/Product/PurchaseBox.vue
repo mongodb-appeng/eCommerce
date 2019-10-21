@@ -60,20 +60,13 @@
             Notify me when back in stock
         </label>
       </div>
-      <div v-if="progress" class="notification is-info">
-          {{ progress }}
-      </div>
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
+      <Status v-bind:status="status"></Status>
     </section>
   </div>
 </template>
 
 <script>
+import Status from '../Status.vue'
 import {
     mapState,
     mapMutations,
@@ -82,6 +75,9 @@ import {
 
 export default {
   name: 'purchase-box',
+  components: {
+      Status
+  },
   props: [
     'stockLevel',
     'productID',
@@ -91,9 +87,7 @@ export default {
   ],
   data() {
     return {
-      progress: '',
-      error: '',
-      success: '',
+      status: null,
       notifyMe: false,
       quantity: 0
     }
@@ -123,34 +117,22 @@ export default {
           let index = this.customer.waitingOnProducts.indexOf(this.productID);
           this.customer.waitingOnProducts.splice(index, 1);
         }
-        this.progress = "Updating customer"
+        this.status = {state: 'progress', text: 'Updating customer'};
         this.$root.$data.database.collection("customers").updateOne(
           {"contact.email": this.customer.contact.email},
           {$set: {waitingOnProducts: this.customer.waitingOnProducts}}
         )
         .then (() => {
           this.setWaitingOnProducts(this.customer.waitingOnProducts);
-          this.progress = '';
-          this.success = 'Customer document updated';
-          const _this = this;
-          setTimeout(function(){
-            _this.success = '';
-          }, 2000);
+          this.status = {state: 'success', text: 'Customer document updated', time: 2000};
         }, (error => {
-          this.progress = '';
-          this.error = `Failed to update the customer document: ${error}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-          console.error(this.error);
+          this.status = {state: 'error', text: `Failed to update the customer document: ${error}`};
           this.notifyMe = !this.notifyMe;
         })
       )
       } else {
-        this.error = "You must log in first";
+        this.status = {state: 'error', text: 'You must log in first', time: 2000};
         this.notifyMe = false;
-        const _this = this;
-        setTimeout(function(){
-          _this.error = '';
-        }, 2000);
       } 
     },
 

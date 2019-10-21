@@ -64,34 +64,25 @@
                 </p>
             </div>
         </div>
-        <div v-else class="notification is-warning">
-            <strong>You must be logged in to submit a review</strong>
-        </div>
-        <div v-if="error" class="notification is-danger">
-            <strong>{{ error }}</strong>
-        </div>
-        <div v-if="error" class="notification is-primary">
-            <strong>{{ progress }}</strong>
-        </div>
-        <div v-if="success" class="notification is-success">
-            {{ success }}
-        </div>
+        <Status v-bind:status="status"></Status>
     </div>
 </template>
 
 <script>
+import Status from '../Status.vue'
 
 export default {
     name: "addReview",
+    components: {
+        Status
+    },
     props: [
         'productID',
         'reviews'
     ], 
     data() {
         return {
-            error: '',
-            success: '',
-            progress: '',
+            status: null,
             comment: '',
             stars: 0,
         }
@@ -117,9 +108,7 @@ export default {
                 }
             },
             (error) => {
-                this.error = `Error: failed to post review: ${error}`;
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-                console.error(this.error);
+                this.status = {state: 'error', text: `Error: failed to post review: ${error}`};
             })
         }
     }

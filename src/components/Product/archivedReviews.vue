@@ -19,20 +19,12 @@
             </div>
         </li>
       </ul>
-      <!-- TODO: Move these to a status component -->
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
+      <Status v-bind:status="status"></Status>
   </div>
 </template>
 
 <script>
+import Status from '../Status.vue'
 
 export default {
   name: 'archived-reviews',
@@ -40,12 +32,11 @@ export default {
     'productID'
 ],
   components: {
+    Status
   },
   data() {
     return {
-        error: '',
-        progress: '',
-        success: '',
+        status: null,
         reviews: [],
         lastId: null,
         bouncable: true
@@ -53,9 +44,7 @@ export default {
   },
   methods: {
     fetchReviews () {
-        this.error = '';
-        this.success = '';
-        this.progress = "Fetching more reviews";
+        this.status = {state: 'progress', text: 'Fetching more reviews'};
         this.bouncable = false;
         let query = null;
         if (this.lastId) {
@@ -88,10 +77,7 @@ export default {
             }
         },
         (error => {
-            this.progress = '';
-            this.error = `Error: Failed to read archived reviews – ${error}`;
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.error(this.error);
+            this.status = {state: 'error', text: `Error: Failed to read archived reviews – ${error}`};
         }))
     },
     scroll () {

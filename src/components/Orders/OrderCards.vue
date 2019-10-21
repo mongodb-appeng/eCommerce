@@ -6,8 +6,7 @@
             <li
                 v-for="order in customer.orders"
                 v-bind:key="order.orderId">
-                    <OrderCard v-bind:order="order">
-                    </OrderCard>
+                  <OrderCard v-bind:order="order"></OrderCard>
             </li>
             </ul>
         </div>
@@ -16,16 +15,6 @@
         </div>
       </section>
       <br>
-      <!-- TODO: Move these to a status component -->
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
     </div>
 </template>
 
@@ -43,26 +32,11 @@ export default {
     components: {
         OrderCard,
     },
-    data() {
-        return {
-          error: '',
-          progress: '',
-          success: ''
-        }
-    },
     computed: {
       ...mapState([
         'customer'
       ])
     },
-    watch: {
-    },
-    methods: {
-      // ...mapMutations([
-      //   ]),
-    },
-    mounted() {
-  }
 }
 </script>
 

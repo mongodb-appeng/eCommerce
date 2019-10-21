@@ -24,15 +24,6 @@
                             v-bind:numberReviews="product.reviews.numberOfReviews"
                         ></Rank>
                     </div>
-                    <div v-if="progress" class="notification is-info">
-                        {{ progress }}
-                    </div>
-                    <div v-if="error" class="notification is-danger">
-                        <strong>{{ error }}</strong>
-                    </div>
-                    <div v-if="success" class="notification is-success">
-                        {{ success }}
-                    </div>
                 </div>
             </article>
         </div>
@@ -52,10 +43,7 @@ export default {
     },
     data() {
         return {
-            success: '',
-            progress: '',
-            error: '',
-            productSummary: ""
+            productSummary: ''
         }
     },
     methods: {

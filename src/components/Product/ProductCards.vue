@@ -15,20 +15,12 @@
       </section>
 
       <br>
-      <!-- TODO: Move these to a status component -->
-      <div v-if="error" class="notification is-danger">
-          <strong>{{ error }}</strong>
-      </div>
-      <div v-if="success" class="notification is-success">
-          {{ success }}
-      </div>
-      <div v-if="progress" class="notification is-primary">
-          {{ progress }}
-      </div>
+      <Status v-bind:status="status"></Status>
     </div>
 </template>
 
 <script>
+import Status from '../Status.vue'
 import ProductCard from "./ProductCard.vue"
 import {mapState} from 'vuex';
 
@@ -39,12 +31,11 @@ export default {
     ], 
     components: {
         ProductCard,
+        Status
     },
     data() {
         return {
-          error: '',
-          progress: '',
-          success: '',
+          status: null,
           products: [],
           bouncable: false,
           lastProductID: '',
@@ -86,6 +77,7 @@ export default {
       fetchProductList () {
         this.error = '';
         this.success = '';
+        this.status = {state: 'progress', text: 'Fetching product list'};
         this.progress = "Fetching product list";
         this.bouncable = false;
         let query = {
@@ -144,30 +136,24 @@ export default {
             
             docArray.forEach((item) => {
               this.products.push(item);
-            })
-            this.progress = '';
+            });
+            this.status = null;
             const _this = this;
             // Wait half a second before allowing a request to fetch more products
             setTimeout(function(){        
                 _this.bouncable = true;
               }, 500);
             } else {
-              this.progress = '';
-              this.success = 'No more matching products.';
+              this.status = {state: 'success', text: 'No more matching products.'};
             }
         },
         (error) => {
-          this.progress = '';
-          this.error = `Error: Failed to read the list of products – ${error}`;
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.error(this.error);
+          this.status = {state: 'error', text: `Error: Failed to read the list of products – ${error}`};
         })
       },
 
       searchProducts () {
-        this.error = '';
-        this.success = '';
-        this.progress = "Searching for matching products";
+        this.status = {state: 'progress', text: 'Searching for matching products'};
         this.bouncable = false;
         // TODO move this to a system-user Stitch function so that the `product.internal`
         // attribute can be hidden by a rule
@@ -255,22 +241,18 @@ export default {
             docArray.forEach((item) => {
               this.products.push(item);
             })
-            this.progress = '';
+            this.status = null;
             const _this = this;
             // Wait half a second before allowing a request to fetch more products
             setTimeout(function(){        
                 _this.bouncable = true;
               }, 500);
             } else {
-              this.progress = '';
-              this.success = 'No more matching products.';
+              this.status = {state: 'success', text: 'No more matching products', time: 2000};
             }
         },
         (error) => {
-          this.progress = '';
-          this.error = `Error: Failed to read the list of products – ${error}`;
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-            console.error(this.error);
+          this.status = {state: 'error', text: `Error: Failed to read the list of products – ${error}`};
         })
       },
       scroll () {

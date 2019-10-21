@@ -4,9 +4,17 @@ import Vuex from 'vuex';
 import router from './router'
 import 'bulma/css/bulma.css'
 import './main.scss'
+import config from './config.js'
 import createPersistedState from 'vuex-persistedstate'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+function flagError (error) {
+  if (config.logErrors) {
+    /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+    console.error(error);
+  }
+}
 
 const nullCustomer =  {
   name: {
@@ -148,8 +156,7 @@ const store = new Vuex.Store({
               {$set: {shoppingBasket: state.customer.shoppingBasket}}
             )
             .catch ((error) => {
-              /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-              console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+              flagError(`Failed to update the shopping basket in the database: ${error}`);
             });
           }
         }        
@@ -178,8 +185,7 @@ const store = new Vuex.Store({
                 {$set: {shoppingBasket: newBasket}}
               )
               .catch ((error) => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+                flagError(`Failed to update the shopping basket in the database: ${error}`);
               });
             }
           }
@@ -206,8 +212,7 @@ const store = new Vuex.Store({
                 {$set: {shoppingBasket: state.customer.shoppingBasket}}
               )
               .catch ((error) => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+                flagError(`Failed to update the shopping basket in the database: ${error}`);
               });
             }
           }
@@ -227,8 +232,7 @@ const store = new Vuex.Store({
             {$set: {shoppingBasket: state.customer.shoppingBasket}}
           )
           .catch ((error) => {
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.error(`Failed to update the shopping basket in the database: ${error.message}`);
+            flagError(`Failed to update the shopping basket in the database: ${error}`);
           });
         }
       }
@@ -262,7 +266,6 @@ const store = new Vuex.Store({
           .findOne({"contact.email": payload.user.profile.data.email}) 
           .then (customerDoc => {
             if (customerDoc) {
-              console.log(`logging in; ${state.customer.shoppingBasket.length} items in temp basket`);
                 let localBasket = [];
                 state.customer.shoppingBasket.forEach((item) => {localBasket.push(item)});
                 commit('setCustomer', customerDoc);
@@ -274,16 +277,14 @@ const store = new Vuex.Store({
             }
               resolve();
           }, (error) => {
-            let errorMessage = `Error: attempt to read customer document failed: ${error}`;
-              /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-              console.error(errorMessage);
+            let errorMessage = `Error: attempt to read customer document failed: ${error}`;   
+              flagError(errorMessage);
               reject (errorMessage);
           }) 
         }
         catch (error) {
-          let errorMessage = `Error: Call to fetch customer document failed: ${error.message}`;
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */   
-          console.error(errorMessage);
+          let errorMessage = `Error: Call to fetch customer document failed: ${error}`;   
+          flagError(errorMessage);
           reject(errorMessage);
         }
       })
@@ -297,8 +298,7 @@ const store = new Vuex.Store({
           commit('setCustomer', customer);
         },
         (error) => {
-          /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-          console.error(`Error, failed to fetch the customer document: ${error}`);
+          flagError(`Error, failed to fetch the customer document: ${error}`);
         })
       }
     },
@@ -318,32 +318,40 @@ const store = new Vuex.Store({
     },
 
     deleteOrder ({commit, state}, payload) {
-      // `payload` = {database, orderID} 
-      if (payload.orderID) {
-        const existingIndex = state.customer.orders.findIndex((entry) => {
-          return entry.orderID === payload.orderID;
-        });
-        if (existingIndex >= 0) {
-          let newOrders = state.customer.orders.slice();
-          newOrders.splice(existingIndex, 1);
-          commit('setOrders', {orders: newOrders, orderOverflow: state.customer.orderOverflow});
-          if (state.userLoggedIn) {
-            // If not already logged in then the basket will be written to the database
-            // when the customer logs in
-            if (payload.database) {
-              const customers = payload.database.collection('customers');
-              customers.updateOne(
-                {"contact.email": state.customer.contact.email},
-                {$set: {orders: newOrders}}
-              )
-              .catch ((error) => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(`Failed to update the order list in the database: ${error.message}`);
-              });
+      // `payload` = {database, orderID}
+      return new Promise ((resolve, reject) => {
+        if (payload.orderID) {
+          const existingIndex = state.customer.orders.findIndex((entry) => {
+            return entry.orderID === payload.orderID;
+          });
+          if (existingIndex >= 0) {
+            let newOrders = state.customer.orders.slice();
+            newOrders.splice(existingIndex, 1);
+            commit('setOrders', {orders: newOrders, orderOverflow: state.customer.orderOverflow});
+            if (state.userLoggedIn) {
+              // If not already logged in then the basket will be written to the database
+              // when the customer logs in
+              if (payload.database) {
+                const customers = payload.database.collection('customers');
+                customers.updateOne(
+                  {"contact.email": state.customer.contact.email},
+                  {$set: {orders: newOrders}}
+                )
+                .then (() => {
+                  resolve();
+                },
+                (error) => {
+                  resolve(`Failed to update the order list in the database: ${error}`);
+                });
+              }
             }
+          } else {
+            resolve();
           }
+        } else {
+          reject('Order ID not provided');
         }
-      }
+      })
     },
 
     unWatch ({commit, state}, payload) {
@@ -367,8 +375,7 @@ const store = new Vuex.Store({
                 {$set: {waitingOnProducts: newList}}
               )
               .catch ((error) => {
-                /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-                console.error(`Failed to update the order list in the database: ${error.message}`);
+                flagError(`Failed to update the order list in the database: ${error}`);
               });
             }
           }

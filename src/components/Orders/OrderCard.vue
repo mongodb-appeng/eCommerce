@@ -36,15 +36,7 @@
                             </a>
                         </div>
                     </nav>
-                    <div v-if="progress" class="notification is-info">
-                        {{ progress }}
-                    </div>
-                    <div v-if="error" class="notification is-danger">
-                        <strong>{{ error }}</strong>
-                    </div>
-                    <div v-if="success" class="notification is-success">
-                        {{ success }}
-                    </div>
+                    <Status v-bind:status="status"></Status>
                 </div>
             </article>
         </div>
@@ -52,10 +44,9 @@
 </template>
 
 <script>
+import Status from '../Status.vue'
 import { 
-    mapState,
-    mapActions,
-    // mapMutations 
+    mapActions
     } from 'vuex';
 
 export default {
@@ -64,34 +55,31 @@ export default {
         'order',
     ], 
     components: {
+        Status
     },
     data() {
         return {
-            success: '',
-            progress: '',
-            error: ''
+            status: null
         }
-    },
-    computed: {
-        ...mapState([
-        ]),
     },
     methods: {
         ...mapActions([
             'deleteOrder'
         ]),
         removeOrder () {
-            this.progress = 'Deleting order';
+            this.status = {state: 'progress', text: 'Deleting order'};
             this.deleteOrder ({
                 database: this.$root.$data.database,
-                orderID: this.order
-            });
-            this.progress = '';
+                orderID: this.order.orderID
+            })
+            .then(() => {
+                this.status = {state: 'success', text: 'Order deleted', time: 2000};
+            },
+            (error) => {
+                this.status = {state: 'error', text: `Failed to delete the order: ${error}`};
+            })
         }
-    },
-    mounted() {
-
-  }
+    }
 }
 </script>
 <style scoped>

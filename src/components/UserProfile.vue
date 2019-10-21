@@ -331,7 +331,7 @@ export default {
             .then (customerDoc => {
                     if (customerDoc) {
                     this.localCustomer = customerDoc;
-                    this.progress = '';
+                    this.status = null;
                 } else {
                     // No record found for this customer – doesn't mean that it's a problem
                     this.status = null;

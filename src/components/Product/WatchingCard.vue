@@ -25,15 +25,7 @@
                             </a>
                         </div>
                     </nav>
-                    <div v-if="progress" class="notification is-info">
-                        {{ progress }}
-                    </div>
-                    <div v-if="error" class="notification is-danger">
-                        <strong>{{ error }}</strong>
-                    </div>
-                    <div v-if="success" class="notification is-success">
-                        {{ success }}
-                    </div>
+                    <Status v-bind:status="status"></Status>
                 </div>
             </article>
         </div>
@@ -41,20 +33,22 @@
 </template>
 
 <script>
+import Status from '../Status.vue'
 import { 
     mapActions
     } from 'vuex';
 
 export default {
     name: "watchingCard",
+    components: {
+        Status
+    },
     props: [
         'productID',
     ], 
      data() {
         return {
-            success: '',
-            progress: '',
-            error: '',
+            status: null,
             product: null
         }
     },
@@ -64,31 +58,28 @@ export default {
         ]),
 
         stopWatching () {
-            this.progress = 'Unwatching product';
+            this.status = {state: 'progress', text: 'Unwatching product'};
             this.unWatch ({
                 database: this.$root.$data.database,
                 productID: this.productID
             })
             .then (() => {
-                this.progress = '';
+                this.status = {state: 'success', text: `Unwatched product`, time: 1000};
                 this.product = null;
             })
         }
     },
     mounted() {
-        this.progress = 'Fetching product';
+        this.status = {state: 'progress', text: 'Fetching product'};
         this.$root.$data.database.collection('products').findOne(
                 {productID: this.productID}
             )
         .then ((product) => {
             this.product = product;
-            this.progress = '';
+            this.status = null;
         },
         (error) => {
-            this.progress = '';
-            this.error = `Failed to fetch document for productID ${this.productID}: ${error}`;
-            /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
-            console.error(this.error);
+            this.status = {state: 'error', text: `Failed to fetch document for productID ${this.productID}: ${error}`};
         })
   }
 }
