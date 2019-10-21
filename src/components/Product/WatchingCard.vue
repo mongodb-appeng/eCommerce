@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div>
         <div v-if="product" class="box">
             <article class="media">
