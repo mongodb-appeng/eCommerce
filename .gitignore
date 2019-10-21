@@ -25,3 +25,4 @@ yarn-error.log*
 *.sw?
 .code-workspace
 ecommerce-workspace.code-workspace
+src/config.js

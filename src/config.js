@@ -7,7 +7,8 @@ const config = {
         bucket: 'ecommerce-mongodb-mugshots',
         productBucket: 'ecommerce-mongodb-products'
     },
-    stripePublicKey: 'pk_test_RkoUKX2VFhJ2hxKW4mNIXrXr00ZUnlTUep'
+    stripePublicKey: 'pk_test_RkoUKX2VFhJ2hxKW4mNIXrXr00ZUnlTUep',
+    logErrors: true
 }
 
 module.exports = config;
