@@ -49,7 +49,6 @@ export default {
       this.fetchOrders(this.$root.$data.database)
       .then(() => {
         this.status = {state: 'progress', text: 'Taking you back to the store...'};
-        this.progress = 'Taking you back to the store...';
         let _this = this;
         setTimeout(function () {_this.$router.push({name: 'home'})}, 2000);
       },

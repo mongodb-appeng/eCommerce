@@ -66,14 +66,14 @@ export default {
                 docArray.forEach((item) => {
                     this.reviews.push(item);
                 });
-                this.progress = '';
+                this.status = null;
                 let _this = this;
                 // Wait half a second before allowing a request to fetch more products
                 setTimeout(function(){
                     _this.bouncable = true;
                 }, 500);
             } else {
-                this.progress = '';
+                this.status = null;
             }
         },
         (error => {

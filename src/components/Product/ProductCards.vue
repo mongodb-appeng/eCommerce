@@ -75,10 +75,7 @@ export default {
           );
       },
       fetchProductList () {
-        this.error = '';
-        this.success = '';
         this.status = {state: 'progress', text: 'Fetching product list'};
-        this.progress = "Fetching product list";
         this.bouncable = false;
         let query = {
           $or: [
