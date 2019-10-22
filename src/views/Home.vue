@@ -1,4 +1,8 @@
 <template>
+<!-- Home 'page' for the application. This is the store front where you:
+- View and select products to look at in more detail
+- Filter based on product categories
+- Search for products using MongoDB Atlas full-text search -->
   <div class="home">
     <MyHeader
       v-bind:homePage="true"
@@ -47,7 +51,10 @@ export default {
     }
   },
   methods: {
-
+    /**
+     * Hold off on rendering anything until we've authenticated with Stitch and have a client
+     * connection to use
+     */
     waitUntilStitchReady() {
        if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;

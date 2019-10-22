@@ -1,4 +1,8 @@
 <template>
+<!-- Vue.js view. Rather than the user explicitly navigating to this 'page',
+Stripe redirects their browser here once they've successfuly made the
+payment. Before being directed here a Stitch webhook will aready have
+received and acted on the payment confirmation. -->
   <div class="checked-out">
     <MyHeader></MyHeader>
     <section class="section">
@@ -43,6 +47,10 @@ export default {
         'calcBasketStats'
     ]),
     
+    /**
+     * Empty the shopping basket and fetch the updated list of orders (for this customer)
+     * from the datanbase
+     */
     updateBasketAndOrders () {
       this.clearBasket();
       this.calcBasketStats();
@@ -57,6 +65,10 @@ export default {
       });
     },
 
+    /**
+     * Hold off on rendering anything until we've authenticated with Stitch and have a client
+     * connection to use
+     */
     waitUntilStitchReady() {
       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
         this.updateBasketAndOrders();

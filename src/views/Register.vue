@@ -1,4 +1,6 @@
 <template>
+<!-- Registers a new user with MongoDB Stitch (using username/password),
+but DOES NOT create the customer document in Atlas. -->
   <div class="register">
     <MyHeader></MyHeader>
     <div class="section">
@@ -75,7 +77,10 @@ export default {
         }
     },
     methods: {
-
+        /**
+         * Register with Stitch using the provided email address and password. DOES NOT
+         * create the customer document in Atlas
+         */
         register() {
             this.status = null;
             if (this.password != this.password2)
@@ -90,6 +95,7 @@ export default {
                     this.status = {state: 'success', text: 'Registration complete'};
                     let _this = this;
                     setTimeout(function(){
+                        // Return to the home 'page'
                         _this.$router.push({name: 'home'});
                     }, 1000);
                 },

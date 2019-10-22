@@ -1,7 +1,9 @@
 <template>
-  <div class="profile">
+<!-- Vue.js view to view and manage data associated with the customer account.
+Includes profile data, current and past orders, and items being watched for 
+back-in-stock notifications. -->
+  <div class="user-account">
     <MyHeader></MyHeader>
-
     <div v-if="stitchReady" class="section">
         <h1 class="title is-3">{{ userFirstName }}'s Account</h1>
         <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
@@ -81,24 +83,37 @@ export default {
     },
     methods: {
 
+        /**
+         * Show profile tab
+         */
         pickProfile () {
             this.profileTab = true;
             this.ordersTab = false;
             this.watchingTab = false;
         },
 
+        /**
+         * Show orders tab
+         */
             pickOrders () {
             this.profileTab = false;
             this.ordersTab = true;
             this.watchingTab = false;
         },
 
-            pickWatching () {
+        /**
+         * Show watching tab
+         */
+        pickWatching () {
             this.profileTab = false;
             this.ordersTab = false;
             this.watchingTab = true;
         },
 
+        /**
+         * Hold of on rendering anything until we've authenticated with Stitch and have a client
+         * connection to use
+         */
         waitUntilStitchReady() {
             if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
                 this.stitchReady = true;

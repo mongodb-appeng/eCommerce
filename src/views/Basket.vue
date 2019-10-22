@@ -1,4 +1,6 @@
 <template>
+<!-- Vue.js view to display the customer (or user if they haven't yet registered their
+profile) shopping basket so that they can opt to checkout and purchase the contents. -->
   <div class="basket">
     <MyHeader></MyHeader>
     <section class="section">
@@ -67,6 +69,10 @@ export default {
       ])
   },
   methods: {
+    /**
+     * Hold off on rendering anything until we've authenticated with Stitch and have a client
+     * connection to use
+     */
     waitUntilStitchReady() {
        if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
@@ -75,6 +81,10 @@ export default {
          setTimeout(_this.waitUntilStitchReady, 100);
        }
     },
+
+    /**
+     * Open the 'checkout' view
+     */
     checkout () {
       this.$router.push({name: 'checkout'})
     }

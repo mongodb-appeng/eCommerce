@@ -1,4 +1,7 @@
 <template>
+<!-- Vue.js view to display the contents of this user's (or customer's) shopping basket. It 
+gives them the option to adjust the quantity of any product (or delete the item from 
+the basket) before checking out. -->
   <div class="checkout">
     <MyHeader></MyHeader>
     <section class="section">
@@ -133,6 +136,11 @@ export default {
     ...mapMutations([
         'setCheckoutID'
     ]),
+
+    /**
+     * Hold off on rendering anything until we've authenticated with Stitch and have a client
+     * connection to use
+     */
     waitUntilStitchReady() {
        if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
          this.stitchReady = true;
@@ -142,10 +150,19 @@ export default {
        }
     },
 
+    /**
+     * If the user indicates that they want to change the delivery address, go to the
+     * user account page so that they can do so.
+     */
     editAddress () {
         this.$router.push({name: 'account'})
     },
 
+    /**
+     * Call a Stitch function to submit the order in the backend. If that is succesful then
+     * empty the the shopping basked and fetch the new list of orders from the database to 
+     * update the frontend state.
+     */
     submitOrder () {
       this.$root.$data.stitchClient.callFunction("placeOrder", [this.paymentMethod])
       .then ((results) => {
@@ -172,6 +189,11 @@ export default {
       )
     },
 
+    /**
+     * If the customer has opted to pay by credit/debit card then call a Stitch function to
+     * create a checkout context with the Stripe service and then make the call Stripe
+     * service to take the payment.
+     */
     checkout () {
       this.status = {state: 'progress', text: 'Submitting order'};
       if (this.paymentMethod === 'Credit or debit card') {

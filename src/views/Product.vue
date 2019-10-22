@@ -1,4 +1,7 @@
 <template>
+<!-- Vue.js view that displays information about a single product.
+The product's `productID` is passed in via the `productID` query
+parameter. -->
   <div class="home">
     <MyHeader></MyHeader>
     <section class="section">
@@ -76,6 +79,9 @@ export default {
   },
   methods: {
 
+    /**
+     * Use the `productID` to fetch the product details from the database
+     */
     fetchProduct() {
       if (this.productID) {
         this.status = {state: 'progress', text: 'Fetching product details'};
@@ -97,11 +103,22 @@ export default {
       }
     },
 
+    /**
+     * Store the review meta data for this product
+     * @param {object} reviewStats - sent via an event from the `ProductReviews` component as a 
+     * result of this user submitting a new review
+     * @param {number} reviewStats.averageReviewScore - Average score from all reviews for this produc
+     * @param {number} reviewStats.averageRevienumberOfReviewswScore - Number of reviews for this produc
+     */
     newReviewStats(reviewStats) {
       this.product.reviews.averageReviewScore = reviewStats.averageReviewScore;
       this.product.reviews.numberOfReviews = reviewStats.numberOfReviews;
     },
 
+    /**
+     * Hold off on rendering anything until we've authenticated with Stitch and have a client
+     * connection to use
+     */
     waitUntilStitchReady() {
       if (this.$root.$data.stitchClient && this.$root.$data.stitchClient.auth.isLoggedIn) {
         this.stitchReady = true;
@@ -113,6 +130,7 @@ export default {
     }
   },
   mounted() {
+    // Extract the `productID` from the URL query parameter.
     this.productID = this.$route.query.productID;
     this.waitUntilStitchReady();
   }
