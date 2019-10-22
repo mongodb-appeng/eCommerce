@@ -72,13 +72,13 @@ export default {
     }
   },
   methods: {
-      ...mapMutations([
-        'setCategoryFilter'
-      ]),
-      categoryClicked() {
-        this.showChildren = !this.showChildren;
-        this.$emit('set-category-filter', this.newPath);
-      }
+    ...mapMutations([
+      'setCategoryFilter'
+    ]),
+    categoryClicked() {
+      this.showChildren = !this.showChildren;
+      this.$emit('set-category-filter', this.newPath);
+    }
   }
 };
 </script>

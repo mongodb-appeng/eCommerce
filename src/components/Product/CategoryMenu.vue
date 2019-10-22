@@ -17,6 +17,7 @@
       v-bind:count="categoryTree.count"
       v-bind:depth="0"
       v-bind:path="[]"
+      v-on:set-category-filter="setCategoryFilter"
     >
     </CategoryNode>
   </div>
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex";
 import CategoryNode from './CategoryNode.vue'
 import Status from '../Status.vue'
 
@@ -42,6 +44,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setCategoryFilter'
+    ]),
+    
     fetchTree() {
       if (!this.categoryTree) {
         this.status = {state: 'progress', text: 'Fetching product categories'};

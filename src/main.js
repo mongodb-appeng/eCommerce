@@ -74,7 +74,8 @@ const store = new Vuex.Store({
 
     setUserFirstName (state, payload) {state.userFirstName = payload},
     
-    setCategoryFilter (state, payload) {state.categoryFilter = payload},
+    setCategoryFilter (state, payload) {
+      state.categoryFilter = payload},
     
     setCustomer (state, payload) {state.customer = payload},
     
@@ -113,6 +114,9 @@ const store = new Vuex.Store({
     signout (state) {
       Vue.set(state, 'customer', nullCustomer);
       Vue.set(state.customer, 'contact', {});
+      Vue.set(state.customer, 'shoppingBasket', []);
+      Vue.set(state.customer, 'orders', []);
+      Vue.set(state.customer, 'orderOverflow', false);
       state.metaCustomer.shoppingBasketSize = 0;
       state.metaCustomer.shoppingBasketValue = 0;
       state.userLoggedIn = false;
@@ -295,7 +299,9 @@ const store = new Vuex.Store({
         return database.collection('customers').findOne(
           {"contact.email": state.customer.contact.email})
         .then ((customer) => {
-          commit('setCustomer', customer);
+          if (customer) {
+            commit('setCustomer', customer);
+          }
         },
         (error) => {
           flagError(`Error, failed to fetch the customer document: ${error}`);
@@ -305,6 +311,7 @@ const store = new Vuex.Store({
 
     fetchOrders ({commit, state}, database) {
       const customers = database.collection('customers');
+      /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
       return customers.findOne(
         {"contact.email": state.customer.contact.email},
         {$projection: {

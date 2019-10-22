@@ -7,7 +7,7 @@
           <div class="container">
             <h3 class="title is-4">Delivery Address</h3>
                 <div class="columns container">
-                    <div class="column is-9">
+                    <div v-if="customer.contact.deliveryAddress" class="column is-9">
                         {{ customer.name.title}} {{ customer.name.first }} {{ customer.name.last }}
                         <br/>
                         {{ customer.contact.deliveryAddress.number }}
@@ -18,6 +18,11 @@
                         {{ customer.contact.deliveryAddress.state }}
                         <br/>
                         {{ customer.contact.deliveryAddress.postalCode }}
+                    </div>
+                    <div v-else class="column is-9">
+                      <h4 class="title is-5"><a v-on:click="editAddress">
+                        Please provide address
+                      </a></h4>
                     </div>
                     <div class="column is-2">
                         <a  v-on:click="editAddress" 
@@ -58,7 +63,7 @@
             <div class="buttons">
             <p>
               <a 
-                v-if="metaCustomer.shoppingBasketSize > 0" 
+                v-if="metaCustomer.shoppingBasketSize > 0 && customer.contact.deliveryAddress"
                 v-on:click="checkout" 
                 class="button is-primary  is-focused">
                   <span class="icon">

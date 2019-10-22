@@ -329,11 +329,25 @@ export default {
             this.$root.$data.database.collection("customers")
             .findOne({"contact.email": this.customer.contact.email}) 
             .then (customerDoc => {
-                    if (customerDoc) {
+                if (customerDoc) {
                     this.localCustomer = customerDoc;
                     this.status = null;
                 } else {
                     // No record found for this customer – doesn't mean that it's a problem
+                    this.localCustomer.contact.phone = {
+                        home: '',
+                        work: '',
+                        mobile: ''
+                    };
+                    this.localCustomer.deliveryAddress = {
+                        number: '',
+                        street: '',
+                        city: '',
+                        state: '',
+                        postalCode: '',
+                        country: ''
+                    };
+                    this.localCustomer.mugshotURL = '',
                     this.status = null;
                 }
             }, (error) => {
