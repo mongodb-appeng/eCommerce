@@ -113,7 +113,6 @@ export default {
     return {
         status: null,
         stitchReady: false,
-        // TODO
         paymentMethods: [
             {name: 'Scooby snacks'},
             {name: 'Leafies'},

@@ -484,21 +484,20 @@ const store = new Vuex.Store({
             let newOrders = state.customer.orders.slice();
             newOrders.splice(existingIndex, 1);
             commit('setOrders', {orders: newOrders, orderOverflow: state.customer.orderOverflow});
-            if (state.userLoggedIn) {
-              if (payload.database) {
-                const customers = payload.database.collection('customers');
-                customers.updateOne(
-                  {"contact.email": state.customer.contact.email},
-                  {$set: {orders: newOrders}}
-                )
-                .then (() => {
-                  resolve();
-                },
-                (error) => {
-                  resolve(`Failed to update the order list in the database: ${error}`);
-                });
+            // TODO call a `cancelOrder` Stitch function instead so that it can change the stock levels back for
+            // the products in the order.
+            this.$root.$data.stitchClient.callFunction('cancelOrder', [payload.orderID])
+            .then ((result) => {
+              if (result.result) {
+                resolve();
+              } else {
+                reject(`Failed to cancel the order: ${result.error}`);
               }
+            },
+            (error) => {
+              reject(`Cancel order failed: ${error}`);
             }
+            )
           } else {
             resolve();
           }
