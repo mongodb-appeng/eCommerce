@@ -1,4 +1,9 @@
 <template>
+<!-- Vue.js component for the product category hierarchy menu. Embeds  
+`CategoryNode` components to recursively present category trees for
+all products and for items on sale.
+The category hierarchies have been pre-built and are fetched from MongoDB
+Atlas. -->
 <div>
   <div v-if="saleCategoryTree">
     <CategoryNode
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import { mapMutations } from "vuex";
 import CategoryNode from './CategoryNode.vue'
 import Status from '../Status.vue'
 
@@ -48,6 +53,9 @@ export default {
       'setCategoryFilter'
     ]),
     
+    /**
+     * Fetch the product category tree from the `meta` Atlas collection.
+     */
     fetchTree() {
       if (!this.categoryTree) {
         this.status = {state: 'progress', text: 'Fetching product categories'};
@@ -69,6 +77,9 @@ export default {
       }
     },
 
+    /**
+     * Fetch the product category tree for on-sale from the `meta` Atlas collection.
+     */
     fetchSaleTree() {
       if (!this.saleCategoryTree) {
         this.$root.$data.database.collection('meta').findOne(
@@ -88,6 +99,7 @@ export default {
       }
     }
   },
+  
   mounted() {
     this.fetchTree();
     this.fetchSaleTree();

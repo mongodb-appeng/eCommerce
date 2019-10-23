@@ -1,4 +1,7 @@
 <template>
+<!-- Vue.js component which renders a list of a customer's most recent orders, 
+using the `OrderCard` component to render each order. Note that the older orders
+(stored in the `orderOverflow` are not currently included. -->
     <div>
       <section class="section" id="order-cards">
         <div v-if="customer.orders.length > 0">
@@ -20,10 +23,7 @@
 
 <script>
 import OrderCard from "./OrderCard.vue"
-import { 
-    mapState
-    // mapMutations 
-    } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     name: "OrderCards",

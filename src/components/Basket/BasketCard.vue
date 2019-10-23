@@ -1,4 +1,7 @@
 <template>
+<!-- A Vue.js component to render a single product within the customer's shopping
+basket. It also allows the customer to adjust the quantuty of this product in
+the basket, or remove it from the basket all together. -->
     <div>
         <div class="box">
             <article class="media">
@@ -65,6 +68,9 @@ export default {
         'deleteFromBasket',
         'updateBasketItemQuantity'
     ]),
+        /**
+         * Remove the product from the shopping basket
+         */
         deleteItem () {
             this.deleteFromBasket({
                 database: this.$root.$data.database,
@@ -72,6 +78,9 @@ export default {
             });
         },
 
+        /**
+         * Increment the quantity of this product in the basket by 1
+         */
         incrementItem () {
             this.updateBasketItemQuantity(
                 {
@@ -82,6 +91,10 @@ export default {
             )
         },
 
+        /**
+         * Decrememt the quantity of this product in the basket by 1. Does
+         * nothing if the quantity has already been reduced to 0.
+         */
         decrementItem () {
             if (this.product.quantity > 0) {
                 this.updateBasketItemQuantity(

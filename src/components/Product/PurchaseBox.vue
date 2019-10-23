@@ -1,4 +1,7 @@
 <template>
+<!-- View.js component to add one or more instances of a single product to
+the shopping basket. The user doesn't need to log in to add items to
+the basket. -->
   <div>
     <section class="section">
       <div v-if="stockLevel > 0">
@@ -106,6 +109,12 @@ export default {
         'addToBasket'
     ]),
 
+    /**
+     * The user has toggled the button to indicate that they want to start or stop
+     * watching an item (i.e. wait for a notification when the product is back) in
+     * stock. Updates both the `customer` document in Atlas and the frontend Vuex
+     * state.
+     */
     notificationChange () {
       if (this.userLoggedIn) {
         if (!this.customer.waitingOnProducts) {
@@ -136,6 +145,10 @@ export default {
       } 
     },
 
+    /**
+     * Add one or more instances of the product to the shopping basket. Updates both the `
+     * customer` document in Atlas and the frontend Vuex state (via the `addToBasket` action).
+     */
     newBasketItem () {
       const quantityToAdd = parseInt(this.quantity);
       this.quantity = 0;

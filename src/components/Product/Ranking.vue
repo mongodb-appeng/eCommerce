@@ -1,4 +1,5 @@
 <template>
+<!-- Vue.js component to render a products review rating out of 5. -->
     <div>
         <div v-if="numberReviews > 0" class="columns">
             <div class="column" id="review-bar">

@@ -1,4 +1,7 @@
 <template>
+<!-- View.js component to show all of the products within the customer's shopping
+basket. Embeds an instance of the `BasketCard` to render the details of
+each product in the basket. -->
     <div>
       <section class="section" id="basket-cards">
         <ul id="basket-list">

@@ -1,4 +1,7 @@
 <template>
+<!-- Vue.js component which presents a modal for a user to log into their existing
+account or redirects them to the `Register` view if they need to register a 
+new account. -->
     <div class="container" id="login" tabindex="0" v-on:keydown.esc="quit">
         <div class="notification is-primary">
             <h1 class="title is-2">Log into your existing account</h1>
@@ -59,9 +62,7 @@
 <script>
 import Status from './Status.vue'
 import { UserPasswordCredential } from "mongodb-stitch-browser-sdk"
-import {
-    mapActions
-    } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
     name: "UserLogin",
@@ -79,6 +80,11 @@ export default {
         ...mapActions([
             'setUserLoggedIn'
         ]),
+
+        /**
+         * Logs the user into Stitch using their username and password.
+         * Once logged in, updates the frontend Vuex state with the user information.
+         */
         Login() {
             this.status = {state: 'progress', text: 'Attempting to log you in...'};
             const credential = new UserPasswordCredential(this.email, this.password);

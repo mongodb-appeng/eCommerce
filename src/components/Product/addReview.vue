@@ -1,4 +1,8 @@
 <template>
+<!-- Vue.js component to add a new product review to the database (via a
+Stitch function). The review includes a rating which impacts the summary
+review stats for the product and so those are passed back to the 
+enclosing component. -->
     <div class="container" id="add-review">
         <div v-if="userLoggedIn" class="notification">
             <h1 class="title is-2">Review this product</h1>
@@ -88,9 +92,16 @@ export default {
         }
     },
     methods: {
+
         setStars(stars) {
             this.stars = stars;
         },
+        
+        /**
+         * Call a Stitch function to record the new review, and pass the updated
+         * product review statistics back up to the enclosing view/component tother
+         * with the new review for rendering.
+         */
         postReview () {
             this.$root.$data.stitchClient.callFunction("addReview", [
                 this.productID,

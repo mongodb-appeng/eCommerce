@@ -1,5 +1,8 @@
 <template>
-    <div> 
+<!-- View.js component to display all of the products that the current user is "wathcing"
+(waiting for a notification when the product is back in stock). Also gives the 
+option to stop watching a product. -->
+  <div> 
       <section class="section" id="watching-cards">
         <div v-if="customer.waitingOnProducts.length > 0">
             <ul id="watch-list">
@@ -21,9 +24,7 @@
 
 <script>
 import WatchingCard from "./WatchingCard.vue"
-import { 
-    mapState
-    } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     name: "WatchingCards",

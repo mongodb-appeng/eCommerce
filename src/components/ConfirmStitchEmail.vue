@@ -1,4 +1,8 @@
 <template>
+<!-- Vue.js component that's used if the Stitch application has been configured to
+requires a user to confirm their email address when registering (an email will
+have been sent to them that included a url with `token` and `tokenId` query
+paramaters).  -->
     <div class="container">
         <h1 class="title is-1">Confirming email address</h1>
         <Status v-bind:status="status"></Status>

@@ -1,4 +1,5 @@
 <template>
+<!-- Vue.js component which lets the user view and edit their profile details -->
     <div class="container">
         <div class="field is-horizontal">
             <div class="field-label is-normal">
@@ -314,6 +315,9 @@ export default {
             'setUserFirstName'
         ]),
 
+        /**
+         * Fetches a list of countries via a Stitch function
+         */
         getCountriesList () {
             this.$root.$data.stitchClient.callFunction("getCountriesList")
             .then ((results) => {
@@ -324,6 +328,11 @@ export default {
             })
         },
 
+        /**
+         * Uses the user's email address to retrieve a `customer` document from the database.
+         * The user only has a customer document after they've submited their profile details
+         * through this component for the first time.
+         */
         fetchCustomer () {
             this.status = {state: 'progress', text: `Looking for existing user profile.`};
             this.$root.$data.database.collection("customers")
@@ -333,7 +342,9 @@ export default {
                     this.localCustomer = customerDoc;
                     this.status = null;
                 } else {
-                    // No record found for this customer – doesn't mean that it's a problem
+                    // No record found for this customer – doesn't mean that it's a problem, just
+                    // that they haven't yet submited their profile details.
+                    // Initialise some default data to avoid rendering errors.
                     this.localCustomer.contact.phone = {
                         home: '',
                         work: '',
@@ -355,6 +366,10 @@ export default {
             })
         },
 
+        /**
+         * Store the profile data in the `customer` collection in teh database, as well as
+         * in the frontend Vuex state.
+         */
         saveProfile () {
             this.status = {state: 'progress', text: 'Writing profile to database.'};
             this.$root.$data.database.collection("customers").updateOne(
@@ -373,6 +388,10 @@ export default {
             })
         },
 
+        /**
+         * @param {string} file - The local file name for the file to be converted
+         * @returns {Promise} - Resolves to a BSON file containing the image data
+         */
         convertImageToBSON (file) {
             return new Promise(
                 resolve => {
@@ -386,6 +405,12 @@ export default {
             )
         },
 
+        /**
+         * Uploads the requested image file to Amazon S3 (via MongoDB Stitch), and stores its
+         * resulting URL in the frontend Vuex state. It is not sent to the Atlas `customer`
+         * document at this point.
+         * @param {event} event - Vue.js event containing the file path
+         */
         uploadMugshot (event) {
             this.status = null;
             const files = event.target.files || event.dataTransfer.files;
@@ -396,6 +421,9 @@ export default {
                 const s3 = this.$root.$data.stitchClient.getServiceClient(
                     AwsServiceClient.factory, 
                     config.aws.serviceName);
+                // It's common to use email addresses of the form
+                // `first.last+test-string@domain.com` when testing but S3 doesn't like
+                // `+` in file names.
                 const cleanEmail = this.customer.contact.email.replace("+", "_");
                 this.convertImageToBSON (this.mugshotFile)
                 .then ((bsonFile) => {

@@ -1,4 +1,5 @@
 <template>
+<!-- Vue.js component to display the product summary for a single product. -->
     <div>
         <div class="box">
             <article class="media">
@@ -29,7 +30,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import Rank from './Ranking.vue';
 

@@ -1,4 +1,6 @@
 <template>
+<!-- Vue.js component that displays thumbnails for all of a product's images and
+a larger image for the image that the mouse is hovering over. -->
   <div class>
     <section class="section">
       <div class="columns">

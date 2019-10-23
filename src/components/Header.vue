@@ -1,4 +1,10 @@
 <template>
+<!-- Vue.js to be included in every view.
+It includes the 'Hero' at the top of the page which in turn includes menus
+and header content to be displayed.
+It also embeds the `AnonymousAuth` component that ensures that the application
+is always authenticated with MongoDB Stitch (either anonymously or a registered
+user). -->
 <div>
 <header>
     <section class="hero is-primary is-small">
@@ -15,7 +21,8 @@
                     v-on:click="showBurgerNav = !showBurgerNav"
                     v-bind:class="{ 'is-active': showBurgerNav }"
                     >
-                        <!-- These spans are only there for the 3 stripes of the burger icon -->
+                        <!-- These spans are only there for the 3 stripes of the burger icon 
+                        and should be left empty-->
                         <span></span>
                         <span></span>
                         <span></span>
@@ -128,7 +135,6 @@ export default {
     },
     computed: {
         ...mapState([
-            // 'stitchClient',
             'customer',
             'metaCustomer',
             'userFirstName',

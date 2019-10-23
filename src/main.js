@@ -382,7 +382,7 @@ const store = new Vuex.Store({
      * @param {object} payload 
      * @param {object} payload.database - The database from where the customer data can be read 
      * @param {object} payload.user - The user that is logging in
-     * @return {Promise}
+     * @returns {Promise}
      */
     setUserLoggedIn ({commit, state, dispatch}, payload) {
       commit('setLoggedIn', true);
@@ -426,7 +426,7 @@ const store = new Vuex.Store({
      * Reload the customer's VueX state using data read from the database.
      * @param {*} param0 - Supplied by Vuex
      * @param {object} database - The database from where the customer data can be read from
-     * @return {Promise}
+     * @returns {Promise}
      */
     refreshCustomer ({commit, state}, database) {
       if (state.customer.contact.email) {
@@ -448,7 +448,7 @@ const store = new Vuex.Store({
      * customer's email address).
      * @param {*} param0 - Supplied by Vuex
      * @param {object} database - The database from where the customer data can be read from
-     * @return {Promise}
+     * @returns {Promise}
      */
     fetchOrders ({commit, state}, database) {
       const customers = database.collection('customers');
@@ -471,7 +471,7 @@ const store = new Vuex.Store({
      * @param {object} payload
      * @param {object} payload.database - The database where the data should be used
      * @param {string} payload.orderID - Identifies the order to be removed.
-     * @return {Promise}
+     * @returns {Promise}
      */
     deleteOrder ({commit, state}, payload) {
       return new Promise ((resolve, reject) => {

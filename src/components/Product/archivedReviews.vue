@@ -1,4 +1,10 @@
 <template>
+<!-- To prevent a product document growing indefinitely, only the most recent 
+reviews are held in the product document. When a new review is added, an
+oleder review might be moved to its own review document in the `reviewOverflow`
+collection.
+This Vue.js component fetches and renders the next 20 reviews from `reviewOverflow`
+whenever the user scrolls to the bottom of the list. -->
   <div class="container">
       <ul id="review-list">
         <li
@@ -43,6 +49,11 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * Fetch the next 20 archived reviews and add each of them to `doArray` so they
+     * they're rendered.
+     */
     fetchReviews () {
         this.status = {state: 'progress', text: 'Fetching more reviews'};
         this.bouncable = false;
@@ -80,6 +91,10 @@ export default {
             this.status = {state: 'error', text: `Error: Failed to read archived reviews – ${error}`};
         }))
     },
+
+    /**
+     * When the user scrolls to the bottom of the page, fetch the next set of review
+     */
     scroll () {
         window.onscroll = () => {
           const position = 750 + Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight;
@@ -92,6 +107,7 @@ export default {
         }
     }
   },
+
   mounted() {
       this.scroll();
   }

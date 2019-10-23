@@ -1,4 +1,6 @@
 <template>
+<!-- Vue.js component to render an individual order. If an order hasn't yet shipped
+then the customer is able to click on an icon to cancel the order. -->
     <div>
         <div class="box">
             <article class="media">
@@ -45,9 +47,7 @@
 
 <script>
 import Status from '../Status.vue'
-import { 
-    mapActions
-    } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
     name: "OrderCard",
@@ -66,6 +66,11 @@ export default {
         ...mapActions([
             'deleteOrder'
         ]),
+
+        /**
+         * Remove the order from the customer document in the database, as
+         * well as from the frontend Vuex state.
+         */
         removeOrder () {
             this.status = {state: 'progress', text: 'Deleting order'};
             this.deleteOrder ({

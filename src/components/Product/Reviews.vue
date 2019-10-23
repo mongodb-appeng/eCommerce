@@ -1,4 +1,8 @@
 <template>
+<!-- Vue.js component to display the most recent reviews for a product. It embeds
+the `ArchivedReviews` component which gives the user the option to access older
+reviews (which are no longer held in the `customer` document). Provides a button
+to allow a customer to add a new review for the product. -->
   <div class="container">
     <section class="section">
       <h3 class="title is-3">Reviews</h3>
@@ -69,6 +73,9 @@ export default {
       this.showReviewForm = true;
     },
 
+    /**
+     * Include the recently submitted review in the rendered list
+     */
     postedReview (review) {
       this.reviews.unshift(review);
       this.reviewSubmited = true;
@@ -78,6 +85,10 @@ export default {
       this.$emit('reviewStats', stats);
     },
 
+    /**
+     * The customer has submitted a new review for this product and so this
+     * component needs to reflect the effects of that review.
+     */
     newReview(review) {
       this.reviews.recentReviews.unshift(review);
       this.showReviewForm = false;

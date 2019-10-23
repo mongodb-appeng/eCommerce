@@ -1,4 +1,6 @@
 <template> 
+<!-- View.js component to display a single "wathced" product (user waiting for a notification 
+when this product is back in stock). Also gives the option to stop watching the product. -->
     <div>
         <div v-if="product" class="box">
             <article class="media">
@@ -34,9 +36,7 @@
 
 <script>
 import Status from '../Status.vue'
-import { 
-    mapActions
-    } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
     name: "watchingCard",
@@ -46,7 +46,7 @@ export default {
     props: [
         'productID',
     ], 
-     data() {
+    data() {
         return {
             status: null,
             product: null

@@ -1,4 +1,7 @@
 <template>
+<!-- Vue.js component to render a single node in the product category menu
+hierarchy, and when this node is clicked, it recursively includes other instances
+of this component for each child node. -->
   <div>
     <div class="category-menu">
       <div
@@ -31,7 +34,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import {mapMutations } from "vuex";
 
 export default {
   name: "CategoryNode",
@@ -49,22 +52,26 @@ export default {
     };
   },
   computed: {
+
+    /**
+     * Indent each child node by 10 pixels * depth in the tree
+     */
     indent() {
         return {
             transform: `translate(${this.depth * 10}px)`
         }
     },
-    labelClasses() {
-      return { 'has-children': this.$children }
-    },
+
     iconClasses() {
       return {
         'far fa-plus-square': !this.showChildren,
         'far fa-minus-square': this.showChildren
       }
     },
+
     newPath() {
       let path = [...this.path];
+      // Don't include the root in the path
       if (this.depth > 0) {
         path.push(this.name);
       }
@@ -75,6 +82,7 @@ export default {
     ...mapMutations([
       'setCategoryFilter'
     ]),
+    
     categoryClicked() {
       this.showChildren = !this.showChildren;
       this.$emit('set-category-filter', this.newPath);
