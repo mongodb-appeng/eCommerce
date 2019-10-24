@@ -35,3 +35,5 @@ npm run serve
 ```
 npm run build
 ```
+## The application backend
+This project is the frontend application for an eCommerce site, it depends on a backend application running on MongoDB Stitch and Atlas. The code, sample data, and instructions for the backen can be found in the [eCommerce-Realm repo](https://github.com/am-MongoDB/eCommerce-Realm).
