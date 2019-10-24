@@ -471,6 +471,7 @@ const store = new Vuex.Store({
      * @param {object} payload
      * @param {object} payload.database - The database where the data should be used
      * @param {string} payload.orderID - Identifies the order to be removed.
+     * @param {object} stitchClient - Used to interact with Stitch in the backend
      * @returns {Promise}
      */
     deleteOrder ({commit, state}, payload) {
@@ -486,7 +487,7 @@ const store = new Vuex.Store({
             commit('setOrders', {orders: newOrders, orderOverflow: state.customer.orderOverflow});
             // TODO call a `cancelOrder` Stitch function instead so that it can change the stock levels back for
             // the products in the order.
-            this.$root.$data.stitchClient.callFunction('cancelOrder', [payload.orderID])
+            payload.stitchClient.callFunction('cancelOrder', [payload.orderID])
             .then ((result) => {
               if (result.result) {
                 resolve();

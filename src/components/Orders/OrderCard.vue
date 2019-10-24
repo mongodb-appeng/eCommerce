@@ -75,6 +75,7 @@ export default {
             this.status = {state: 'progress', text: 'Deleting order'};
             this.deleteOrder ({
                 database: this.$root.$data.database,
+                stitchClient: this.$root.$data.stitchClient,
                 orderID: this.order.orderID
             })
             .then(() => {
