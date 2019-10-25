@@ -1,6 +1,8 @@
-# MongoDB eCommerce reference web app
+# MongoDB eCommerce reference web app – frontend
 
 This is an example of how to build an eCommerce app using MongoDB Atlas and MongoDB Stitch/Realm.
+
+[Try out the app](https://ecommerce-iukkg.mongodbstitch.com/#/) before recreating it for yourself.
 
 ## Stack
 
