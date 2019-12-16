@@ -74,6 +74,9 @@ enclosing component. -->
 
 <script>
 import Status from '../Status.vue'
+import { 
+    mapState
+    } from 'vuex';
 
 export default {
     name: "addReview",
@@ -90,6 +93,11 @@ export default {
             comment: '',
             stars: 0,
         }
+    },
+    computed: {
+        ...mapState([
+            'userLoggedIn'
+        ]),
     },
     methods: {
 
