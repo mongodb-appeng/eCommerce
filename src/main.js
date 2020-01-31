@@ -31,15 +31,15 @@ const nullCustomer =  {
     phone: {
       home: '',
       work: '',
-      mobile: ''
-    },
-    deliveryAddress: {
-      number: '',
-      street: '',
-      city: '',
-      state: '',
-      postalCode: '',
-      country: ''
+      mobile: '',
+      deliveryAddress: {
+        number: '',
+        street: '',
+        city: '',
+        state: '',
+        postalCode: '',
+        country: ''
+      }
     }
   },
   marketingPreferences: {
