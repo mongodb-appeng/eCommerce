@@ -166,7 +166,11 @@ export default {
 
         openBasket () {
             if (this.userLoggedIn) {
-                this.$router.push({name: 'basket'})
+                if (this.customer.contact && this.customer.contact.deliveryAddress && this.customer.contact.deliveryAddress.city != '') {
+                    this.$router.push({name: 'basket'})
+                } else {
+                    this.$router.push({name: 'account'}) 
+                }
             } else {
                 this.showLoginModal()
             }
